@@ -1,0 +1,456 @@
+{
+  "domain": "china_ecommerce",
+  "model": {
+    "big": "deepseek-chat",
+    "small": "qwen-turbo"
+  },
+  "embedding": "text-embedding-v3",
+  "routing": {
+    "deterministic": {
+      "mode": "deterministic",
+      "n": 33,
+      "accuracy": 1.0,
+      "graded": 33,
+      "deterministic_decision_rate": 1.0,
+      "tiebreak_calls": 0,
+      "tiebreak_cost_usd": 0.0,
+      "by_stratum": {
+        "answers": 1.0,
+        "care": 1.0,
+        "complaint": 1.0,
+        "escalation": 1.0,
+        "stylist": 1.0
+      },
+      "escalation": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 4,
+        "fp": 0,
+        "fn": 0
+      },
+      "confusion": {}
+    },
+    "tiebreak_qwen_turbo": {
+      "mode": "tiebreak_qwen_turbo",
+      "n": 33,
+      "accuracy": 1.0,
+      "graded": 33,
+      "deterministic_decision_rate": 0.7879,
+      "tiebreak_calls": 7,
+      "tiebreak_cost_usd": 3e-05,
+      "by_stratum": {
+        "answers": 1.0,
+        "care": 1.0,
+        "complaint": 1.0,
+        "escalation": 1.0,
+        "stylist": 1.0
+      },
+      "escalation": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 4,
+        "fp": 0,
+        "fn": 0
+      },
+      "confusion": {}
+    },
+    "tiebreak_qwen_plus": {
+      "mode": "tiebreak_qwen_plus",
+      "n": 33,
+      "accuracy": 1.0,
+      "graded": 33,
+      "deterministic_decision_rate": 0.7879,
+      "tiebreak_calls": 7,
+      "tiebreak_cost_usd": 8.6e-05,
+      "by_stratum": {
+        "answers": 1.0,
+        "care": 1.0,
+        "complaint": 1.0,
+        "escalation": 1.0,
+        "stylist": 1.0
+      },
+      "escalation": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 4,
+        "fp": 0,
+        "fn": 0
+      },
+      "confusion": {}
+    }
+  },
+  "ragas": {
+    "subset_size": 12,
+    "items": [
+      {
+        "id": "G009",
+        "question": "Align瑜伽裤穿着怎么样？",
+        "answer": "Align瑜伽裤的口碑真的很好，核心就是它的Nulu裸感面料，穿上像没穿一样舒服，高腰设计也不勒肚子，做瑜伽下犬式都不掉[2][3]。虽然价格偏高，但大家都说“贵但值得”，甚至有人回购了好几条[4][5]。\n\n如果你在纠结，可以这样看：\n\n- **Lululemon Align高腰紧身裤（850元）**：裸感舒适，瑜伽首选，日常居家穿也完全没问题[1][7]\n- **Lululemon Wunder Train（750元）**：如果想要更多支撑感，这款更合适[7]\n\n需要我帮你搭配上衣或外套吗？😊",
+        "contexts": [
+          "Lululemon Align裸感面料确实是最舒服的瑜伽裤，居家穿也完全没问题。比Nike的瑜伽裤软太多了。",
+          "Align的Nulu面料太舒服了，像没穿一样裸感。高腰设计肚子不勒，瑜伽首选。",
+          "Align的Nulu面料真的是裸感，穿上像没穿一样。高腰不勒肚子，做瑜伽下犬式也不掉。贵但值得。",
+          "虽然贵但值得，瑜伽裤天花板。已经买了三条。——阿静",
+          "Lululemon的瑜伽裤确实比其他牌子舒服，包裹感好不卷边。黑色百搭，已经回购第二条。",
+          "高腰设计舒服不勒，日常也能穿。比Nike的瑜伽裤软。——阿丽",
+          "瑜伽装备推荐：Lululemon Align高腰紧身裤（850元）是首选，Nulu裸感面料舒适；追求支撑选Wunder Train（750元）。上衣选Swiftly长袖T恤（450元）无缝不磨皮，搭配Energy运动内衣（380元）。热身时穿Define瑜伽外套（980元）。",
+          "送瑜伽/普拉提爱好者礼物：Lululemon Align高腰紧身裤（850元）是经典之选，Nulu裸感面料无与伦比；搭配Energy运动内衣（380元）和Swiftly长袖T恤（450元）组成完整套装。热身时加一件Define瑜伽外套（980元）。预算有限先从Align开始。"
+        ],
+        "ground_truth": "答案应包含：裸感、舒服 涉及实体：P049",
+        "lang": "zh",
+        "difficulty": "common",
+        "route": "qualitative",
+        "abstained": false,
+        "confidence": 0.75,
+        "grounding": 0.6,
+        "latency_s": 2.76
+      },
+      {
+        "id": "G006",
+        "question": "Adidas Ultraboost是哪个供应商生产的？",
+        "answer": "Adidas Ultraboost Light 跑鞋的 Boost 中底和 Primeknit 鞋面由越南的宝成工业（SUP04）供应 [1]。",
+        "contexts": [
+          "供应商SUP04宝成工业（越南）：位于越南，是Adidas Boost中底科技的核心供应商，供应Adidas Ultraboost Light（P025）等跑鞋的Boost中底和Primeknit鞋面制造。宝成工业是全球最大运动鞋代工厂之一。",
+          "供应商SUP01裕元工业（越南）：位于越南，是Nike运动鞋缓震科技的核心供应商，供应Nike Air Zoom Pegasus、Nike React Infinity等跑鞋的中底和缓震组件。与Nike有长期合作关系。",
+          "供应商SUP02丰泰企业（中国）：位于中国，是Nike Dri-FIT速干面料和运动鞋的主要供应商。丰泰企业生产Nike Dri-FIT短袖T恤（P007）等产品，同时供应Nike部分篮球鞋和训练鞋制造。",
+          "供应商SUP05宁波申洲针织：位于中国宁波，是Primegreen环保面料供应商，为Adidas和Nike供应运动服装面料，包括Adidas AeroReady训练T恤（P037）等速干面料产品。",
+          "供应商SUP03昌信制鞋（印尼）：位于印尼，专业生产休闲鞋橡胶大底，供应Nike Air Force 1板鞋（P013）等休闲鞋款的鞋底组件。",
+          "Adidas Ultraboost Light 跑步鞋。Adidas旗舰缓震跑鞋，Light Boost中底比传统Boost轻30%且回弹更佳，Primeknit+鞋面袜套般贴合，Continental橡胶大底湿地抓地力强。适合长距离跑步和日常通勤穿着，男款。价格1099元，有黑色、白色、灰色三色。取出鞋垫后冷水轻柔洗涤，阴干。",
+          "Adidas Ultraboost Light 跑步鞋。Adidas旗舰缓震跑鞋，Light Boost中底比传统Boost轻30%，Primeknit+鞋面袜套般贴合，Continental橡胶大底湿地抓地。适合长距离跑步和日常通勤。价格1099元，有黑色、白色、灰色三色。男款。"
+        ],
+        "ground_truth": "答案应包含：宝成 涉及实体：SUP04",
+        "lang": "zh",
+        "difficulty": "semi",
+        "route": "relational",
+        "abstained": false,
+        "confidence": 0.8333333333333334,
+        "grounding": 1.0,
+        "latency_s": 1.15
+      },
+      {
+        "id": "G003",
+        "question": "Lululemon Align紧身裤多少钱？",
+        "answer": "Lululemon Align 高腰紧身裤是 **850元** [1][3]。它采用 Nulu 裸感面料，轻盈柔软，适合瑜伽、普拉提和日常休闲，有黑色、深灰、藏青三色可选 [3][4]。",
+        "contexts": [
+          "紧身裤价格指南：最便宜的是Nike Pro紧身长裤（299元），最贵的是Lululemon Align高腰紧身裤（850元）。男款紧身裤价格区间为299-349元，女款瑜伽裤为750-850元。预算有限选Nike Pro，追求舒适选Lululemon Align。",
+          "紧身裤/运动长裤共有4款：Nike Pro紧身长裤（299元，男款）、Adidas Tiro足球训练裤（349元，男款）、Lululemon Align高腰紧身裤（850元，女款）、Lululemon Wunder Train紧身裤（750元，女款）。价格从299元到850元。Nike和Adidas适合运动打底，Lululemon两款分别适合瑜伽和高强度训练。",
+          "Lululemon Align 高腰紧身裤。Lululemon最受欢迎的Nulu裸感面料，轻盈柔软如第二层肌肤，高腰设计收腹不提臀，无侧缝剪裁减少摩擦。适合瑜伽、普拉提、日常休闲和轻运动，女款。价格850元，有黑色、深灰、藏青三色。冷水轻柔机洗，反面洗涤，避免烘干和柔顺剂。",
+          "Lululemon Align 高腰紧身裤。Nulu裸感面料轻盈柔软如第二层肌肤，高腰设计收腹不提臀，无侧缝剪裁减少摩擦。适合瑜伽、普拉提、日常休闲和轻运动。价格850元，有黑色、深灰、藏青三色。女款。",
+          "供应商SUP06江苏晨风集团：位于中国江苏，是Lululemon Nulu裸感面料的核心供应商，供应Lululemon Align高腰紧身裤（P049）等瑜伽服饰产品的专利面料。晨风集团与Lululemon有深度合作。",
+          "Lululemon Wunder Train 紧身裤。Everlux面料兼顾速干和支撑，比Align更有压缩感，高腰设计稳固不下滑，深蹲不透光。适合中高强度训练、HIIT、跑步和健身房，女款。价格750元，有深绿、黑色、紫红三色。冷水机洗，反面洗涤，避免柔顺剂。",
+          "Lululemon Wunder Train 紧身裤。Everlux面料兼顾速干和支撑，比Align更有压缩感，高腰设计稳固不下滑，深蹲不透光。适合中高强度训练、HIIT、跑步和健身房。价格750元，有深绿、黑色、紫红三色。女款。",
+          "送瑜伽/普拉提爱好者礼物：Lululemon Align高腰紧身裤（850元）是经典之选，Nulu裸感面料无与伦比；搭配Energy运动内衣（380元）和Swiftly长袖T恤（450元）组成完整套装。热身时加一件Define瑜伽外套（980元）。预算有限先从Align开始。"
+        ],
+        "ground_truth": "答案应包含：850 涉及实体：P049、P050、P051",
+        "lang": "zh",
+        "difficulty": "common",
+        "route": "factual",
+        "abstained": false,
+        "confidence": 0.5714285714285714,
+        "grounding": 1.0,
+        "latency_s": 1.3
+      },
+      {
+        "id": "G010",
+        "question": "Ultraboost和Pegasus哪个好？",
+        "answer": "这得看你的需求啦～两款都是好鞋，但性格很不一样：\n\n- **Nike Pegasus 40**：最均衡的跑鞋，缓震回弹都恰到好处，比Ultraboost更有跑步感，日常和跑步都能兼顾 [2]\n- **Adidas Ultraboost**：脚感更软，走路和慢跑都很舒服，日常穿一天脚不累 [8]，但鞋偏重，长距离跑有点累脚 [1]\n\n简单说：**想认真跑步、追求均衡**选Pegasus；**更看重日常舒适、走路多**选Ultraboost。另外脚宽的话Adidas更友好，正常脚型两家都可以 [5]。\n\n你是主要用来跑步，还是日常通勤穿？我可以帮你再细挑～ 😊",
+        "contexts": [
+          "鞋偏重，比Pegasus和Ultraboost都重。长距离跑有点累脚。日常走路和短距离慢跑还行。",
+          "Pegasus 40是最均衡的跑鞋，缓震回弹都恰到好处。比Ultraboost更有跑步感，比Adizero更日常。",
+          "React Infinity对新手和扁平足很友好，稳定性比Pegasus好。但想竞速的话Pegasus更合适。",
+          "Adizero Adios是竞速好鞋，但和Pegasus比它更挑人。新手选Pegasus，有基础想PB选Adizero。",
+          "Nike和Adidas跑鞋对比：Nike选择更多，Pegasus均衡、React稳定、Air Max潮流；Adidas的Boost中底脚感更软，Ultraboost适合长距离，Adizero适合竞速。鞋楦方面Nike偏窄，Adidas偏宽。建议脚宽的选Adidas，正常脚型两家都可以，最好试穿后决定。",
+          "Ultraboost Light比上一代轻太多了，跑步神器。——阿强",
+          "Ultraboost Light比上一代轻了很多，Boost中底回弹一如既往地好。马牌大底抓地力强。",
+          "Ultraboost Light走路和慢跑都很舒服，Boost中底比Nike的React软。日常穿一天脚不累。"
+        ],
+        "ground_truth": "答案应包含：Boost、软、Zoom 涉及实体：P001、P025",
+        "lang": "zh",
+        "difficulty": "semi",
+        "route": "qualitative",
+        "abstained": false,
+        "confidence": 1.0,
+        "grounding": 0.6,
+        "latency_s": 2.6
+      },
+      {
+        "id": "G024",
+        "question": "冬天跑步穿什么？",
+        "answer": "冬天跑步推荐分层穿搭，保暖又排汗，5度到0度都能扛住 🏃♂️\n\n- **Under Armour ColdGear紧身衣**：内层打底，双层保暖排汗，0度穿不冷，压缩感贴合肌肉跑起来不晃 [2][5]\n- **Nike Therma-FIT卫衣**：中层保暖，5度天气里一件长袖加它就够，抓绒柔软贴身不扎 [1][8]\n- **Adidas Z.N.E.外套**：外层防风，冷天跑步的收尾层 [4]\n\n脚上可以配 **Nike Pegasus** 或 **Adidas Ultraboost** 跑鞋 [4]。需要我帮你按性别或预算再挑具体款吗？😊",
+        "contexts": [
+          "Therma-FIT卫衣冬天跑步穿太合适了，5度的天气里面一件长袖加这件卫衣就够了。抓绒柔软贴身不扎。",
+          "ColdGear紧身衣冬天跑步太好用了，双层保暖排汗，0度穿不冷。压缩感贴合肌肉。",
+          "ColdGear冬天跑步神器，保暖排汗。——刘哥",
+          "冬天和寒冷天气推荐分层穿搭：内层穿Under Armour ColdGear紧身衣保暖排汗，中层穿Nike Therma-FIT卫衣或Adidas三叶草卫衣，外层可配Adidas Z.N.E.外套。脚上穿Nike Pegasus或Adidas Ultraboost跑步。",
+          "ColdGear紧身衣冬天跑步神器，双层保暖排汗，0度穿不冷不热。压缩感贴合肌肉，跑起来不晃。",
+          "Under Armour ColdGear紧身衣是我冬天户外跑步的必备打底，比Nike Pro更保暖。0度穿不冷，排汗也快。",
+          "夏天和炎热天气推荐透气速干装备：Nike Dri-FIT短袖T恤或Adidas AeroReady训练T恤速干排汗，搭配Nike或Adidas跑鞋。女士可选Lululemon Swiftly长袖T恤（防晒）和Energy运动内衣。夏天跑步首选Adidas Adizero Adios竞速鞋，轻量透气。",
+          "Therma-FIT保暖效果很好，5度左右穿着跑步不冷。内里抓绒很舒服。"
+        ],
+        "ground_truth": "答案应包含：ColdGear、保暖 涉及实体：P082",
+        "lang": "zh",
+        "difficulty": "semi",
+        "route": "stylist",
+        "abstained": false,
+        "confidence": 1.0,
+        "grounding": 0.5,
+        "latency_s": 2.22
+      },
+      {
+        "id": "G008",
+        "question": "Pegasus 40跑鞋偏码吗？",
+        "answer": "Pegasus 40 尺码正常，按平时码数买就行 😊 [1][3]。",
+        "contexts": [
+          "Pegasus 40穿着跑步很舒服，Zoom气垫回弹明显，跑了5公里脚不酸。尺码正常，按平时码数买就行。",
+          "Pegasus 40是最均衡的跑鞋，缓震回弹都恰到好处。比Ultraboost更有跑步感，比Adizero更日常。",
+          "Pegasus 40男款L码穿着正好，跑步日常都合适。灰色比黑色耐脏。",
+          "Nike Air Zoom Pegasus 40 跑步鞋。Nike经典跑鞋系列第40代，前后掌Zoom Air气垫提供灵敏回弹， engineered mesh工程网面鞋面透气贴合，React泡棉中底缓震耐久。适合日常慢跑和长距离训练，男款标准楦型。价格899元，有黑色、白色、灰色三色。建议用软毛刷轻刷鞋面，阴干避免暴晒。",
+          "Nike Air Zoom Pegasus 40 跑步鞋。Nike经典跑鞋系列第40代，前后掌Zoom Air气垫提供灵敏回弹，工程网面鞋面透气贴合，React泡棉中底缓震耐久。适合日常慢跑和长距离训练。价格899元，有黑色、白色、灰色三色。男款标准楦型。",
+          "Pegasus 40脚感很好，回弹明显，日常训练首选。——阿杰",
+          "平台跑鞋共有5款：Nike Air Zoom Pegasus 40（899元）、Nike React Infinity（999元）、Adidas Ultraboost Light（1099元）、Adidas Adizero Adios（899元）、Under Armour HOVR Phantom（899元）。尺码覆盖M到XL。Pegasus和Ultraboost适合日常慢跑，Adizero适合竞速，React Infinity适合需要稳定性的跑者。",
+          "鞋偏重，比Pegasus和Ultraboost都重。长距离跑有点累脚。日常走路和短距离慢跑还行。"
+        ],
+        "ground_truth": "答案应包含：窄、大半码 涉及实体：P001",
+        "lang": "zh",
+        "difficulty": "common",
+        "route": "qualitative",
+        "abstained": false,
+        "confidence": 0.8,
+        "grounding": 1.0,
+        "latency_s": 1.28
+      },
+      {
+        "id": "G031",
+        "question": "我的订单到哪了？",
+        "answer": "您的订单物流信息需要核实一下才能查看哦～为了保障您的账户安全，请提供一下**下单时填写的姓名**和**账户邮箱**，我马上帮您查询具体位置和最新状态。😊",
+        "contexts": [
+          "订单查询：下单后会收到确认邮件，发货后会收到物流单号。您也可以在账户页面查看订单状态和物流追踪。如果物流超过3天未更新，请联系客服，我们会联系快递公司查询或重新发货。"
+        ],
+        "ground_truth": "答案应包含：RF",
+        "lang": "zh",
+        "difficulty": "common",
+        "route": "care",
+        "abstained": false,
+        "confidence": 0.5,
+        "grounding": 0.0,
+        "latency_s": 1.69
+      },
+      {
+        "id": "G004",
+        "question": "Under Armour Curry篮球鞋价格？",
+        "answer": "Under Armour Curry 篮球鞋的价格是 **999元** [1][2]。这款鞋有黑白、蓝黄、全红三色可选，男款，适合后卫球员和追求速度的球员 [1][2]。",
+        "contexts": [
+          "Under Armour Curry 篮球鞋。Stephen Curry签名篮球鞋，HOVR+Flow科技缓震回弹，无橡胶外底设计减轻重量增强场地感。适合后卫球员和追求速度的球员。价格999元，有黑白、蓝黄、全红三色。男款。",
+          "Under Armour Curry 篮球鞋。Stephen Curry签名篮球鞋，UA HOVR+Flow科技缓震回弹，无橡胶外底设计减轻重量并增强场地感，编织鞋面贴合包裹。适合后卫球员和追求速度的球员，男款。价格999元，有黑白、蓝黄、全红三色。室内场使用后擦拭外底，避免粗糙水泥地。",
+          "篮球鞋共有2款：Nike LeBron（1299元）和Under Armour Curry（999元）。尺码覆盖M到XL。LeBron适合大体重锋线球员，缓震和包裹出色；Curry适合后卫球员，轻量贴地场地感好。两款都有多种配色。",
+          "Nike产品共8款，价格从199元到1299元，覆盖跑鞋、篮球鞋、休闲鞋、T恤、卫衣、紧身裤等品类，是品类最全的品牌。Adidas产品共7款，价格从199元到1099元，跑步和休闲鞋款突出，三叶草系列偏潮流。Lululemon产品共8款，价格从380元到980元，以女性瑜伽服饰为核心。Under Armour产品共6款，价格从249元到999元，训练和篮球装备见长。",
+          "送篮球爱好者礼物：大体重锋线球员选Nike LeBron篮球鞋（1299元），缓震包裹顶级；后卫球员选Under Armour Curry篮球鞋（999元），轻量贴地变向灵活。搭配Nike Dri-FIT T恤（199元）或UA Tech 2.0（249元），冬天加Nike Therma-FIT卫衣（499元）。",
+          "品牌价格区间对比：Nike为199-1299元，品类最全；Adidas为199-1099元，跑步和休闲鞋突出；Lululemon为380-980元，高端瑜伽和女性运动；Under Armour为249-999元，训练和篮球装备。预算200元内可选Nike或Adidas的速干T恤，预算500元内可选UA卫衣或Polo衫。",
+          "篮球装备推荐：大体重锋线球员选Nike LeBron篮球鞋（1299元），Max Air缓震顶级；后卫球员选Under Armour Curry篮球鞋（999元），轻量场地感好。上身配Nike Dri-FIT或UA Tech 2.0速干T恤，冬天加一件Nike Therma-FIT卫衣。",
+          "鞋类价格指南：最便宜的鞋是Adidas Gazelle（699元），最贵的是Nike LeBron篮球鞋（1299元）。跑鞋价格区间为899-1099元，篮球鞋为999-1299元，休闲鞋为699-1099元。如果追求性价比，Adidas Gazelle（699元）是最便宜的选择。"
+        ],
+        "ground_truth": "答案应包含：999 涉及实体：P079、P080、P081",
+        "lang": "zh",
+        "difficulty": "common",
+        "route": "factual",
+        "abstained": false,
+        "confidence": 1.0,
+        "grounding": 1.0,
+        "latency_s": 1.73
+      },
+      {
+        "id": "G005",
+        "question": "Nike Dri-FIT T恤是谁供应的？",
+        "answer": "Nike Dri-FIT 短袖T恤（P007）由供应商 **丰泰企业（中国）** 供应，这家供应商也是Nike Dri-FIT速干面料和部分运动鞋的主要生产方 [1]。",
+        "contexts": [
+          "供应商SUP02丰泰企业（中国）：位于中国，是Nike Dri-FIT速干面料和运动鞋的主要供应商。丰泰企业生产Nike Dri-FIT短袖T恤（P007）等产品，同时供应Nike部分篮球鞋和训练鞋制造。",
+          "Nike Dri-FIT 短袖T恤。Nike经典速干训练T恤，Dri-FIT科技面料快速导出汗液保持干爽，平缝结构减少摩擦。适合健身房训练、跑步和日常运动。价格199元，有黑色、白色、藏青三色。男款标准版型。",
+          "Nike Dri-FIT 短袖T恤。Nike经典速干训练T恤，Dri-FIT科技面料快速导出汗液保持干爽，平缝结构减少摩擦，标准版型舒适不紧绷。适合健身房训练、跑步和日常运动穿着，男款。价格199元，有黑色、白色、藏青三色。冷水机洗，不要使用柔顺剂以免影响速干功能。",
+          "AeroReady T恤L码合身，和Nike Dri-FIT差不多但便宜一点。",
+          "Dri-FIT T恤是健身房最常穿的，出汗后不粘身，洗了十几遍也没变形。199块钱性价比无敌，黑色白色各买了一件。",
+          "420一件T恤确实贵，比Nike和Adidas贵一倍。面料是好的，但预算有限的话Dri-FIT也够用。",
+          "AeroReady速干T恤和Nike Dri-FIT差不多，但价格便宜一点。健身房练完不粘身，版型也合身。"
+        ],
+        "ground_truth": "答案应包含：丰泰 涉及实体：SUP02",
+        "lang": "zh",
+        "difficulty": "semi",
+        "route": "relational",
+        "abstained": false,
+        "confidence": 1.0,
+        "grounding": 1.0,
+        "latency_s": 1.25
+      },
+      {
+        "id": "G001",
+        "question": "Nike Air Zoom Pegasus 40多少钱？",
+        "answer": "Nike Air Zoom Pegasus 40 是 899 元，有黑色、白色、灰色三色可选，适合日常慢跑和长距离训练 [1][2]。需要我帮你看看尺码或搭配吗？😊",
+        "contexts": [
+          "Nike Air Zoom Pegasus 40 跑步鞋。Nike经典跑鞋系列第40代，前后掌Zoom Air气垫提供灵敏回弹，工程网面鞋面透气贴合，React泡棉中底缓震耐久。适合日常慢跑和长距离训练。价格899元，有黑色、白色、灰色三色。男款标准楦型。",
+          "Nike Air Zoom Pegasus 40 跑步鞋。Nike经典跑鞋系列第40代，前后掌Zoom Air气垫提供灵敏回弹， engineered mesh工程网面鞋面透气贴合，React泡棉中底缓震耐久。适合日常慢跑和长距离训练，男款标准楦型。价格899元，有黑色、白色、灰色三色。建议用软毛刷轻刷鞋面，阴干避免暴晒。",
+          "平台跑鞋共有5款：Nike Air Zoom Pegasus 40（899元）、Nike React Infinity（999元）、Adidas Ultraboost Light（1099元）、Adidas Adizero Adios（899元）、Under Armour HOVR Phantom（899元）。尺码覆盖M到XL。Pegasus和Ultraboost适合日常慢跑，Adizero适合竞速，React Infinity适合需要稳定性的跑者。",
+          "Pegasus 40穿着跑步很舒服，Zoom气垫回弹明显，跑了5公里脚不酸。尺码正常，按平时码数买就行。",
+          "跑步装备推荐：入门跑者选Nike Air Zoom Pegasus 40（899元），均衡缓震适合大多数人；追求稳定选Nike React Infinity（999元）；长距离慢跑选Adidas Ultraboost Light（1099元），脚感柔软；竞速PB选Adidas Adizero Adios（899元），碳板推进。上衣选Nike Dri-FIT或Adidas AeroReady速干T恤。",
+          "Nike Air Max 270 运动鞋。Nike Air Max系列首款以生活方式为定位的鞋款，后跟270度超大Air气垫提供出色的视觉冲击和柔软脚感，网面和合成材质组合鞋面透气耐穿。男女同款，适合日常穿搭和轻运动。价格1099元，有黑白、灰蓝、全黑三色。湿布擦拭表面，避免浸泡。",
+          "Nike LeBron 篮球鞋。LeBron James签名战靴，Max Air气垫搭配Zoom Air单元全方位缓震，Kniteposite鞋面轻量支撑，高帮设计锁定脚踝。适合大体重球员和锋线球员。价格1299元，有黑红、白色、金色三色。男款。"
+        ],
+        "ground_truth": "答案应包含：899 涉及实体：P001、P002、P003",
+        "lang": "zh",
+        "difficulty": "common",
+        "route": "factual",
+        "abstained": false,
+        "confidence": 0.7142857142857143,
+        "grounding": 1.0,
+        "latency_s": 1.63
+      },
+      {
+        "id": "G002",
+        "question": "Adidas Ultraboost Light跑鞋价格是多少？",
+        "answer": "Adidas Ultraboost Light 跑鞋的价格是 **1099元**，有黑色、白色、灰色三色可选，男款，适合长距离跑步和日常通勤 [1][2]。",
+        "contexts": [
+          "Adidas Ultraboost Light 跑步鞋。Adidas旗舰缓震跑鞋，Light Boost中底比传统Boost轻30%，Primeknit+鞋面袜套般贴合，Continental橡胶大底湿地抓地。适合长距离跑步和日常通勤。价格1099元，有黑色、白色、灰色三色。男款。",
+          "Adidas Ultraboost Light 跑步鞋。Adidas旗舰缓震跑鞋，Light Boost中底比传统Boost轻30%且回弹更佳，Primeknit+鞋面袜套般贴合，Continental橡胶大底湿地抓地力强。适合长距离跑步和日常通勤穿着，男款。价格1099元，有黑色、白色、灰色三色。取出鞋垫后冷水轻柔洗涤，阴干。",
+          "平台跑鞋共有5款：Nike Air Zoom Pegasus 40（899元）、Nike React Infinity（999元）、Adidas Ultraboost Light（1099元）、Adidas Adizero Adios（899元）、Under Armour HOVR Phantom（899元）。尺码覆盖M到XL。Pegasus和Ultraboost适合日常慢跑，Adizero适合竞速，React Infinity适合需要稳定性的跑者。",
+          "鞋类价格指南：最便宜的鞋是Adidas Gazelle（699元），最贵的是Nike LeBron篮球鞋（1299元）。跑鞋价格区间为899-1099元，篮球鞋为999-1299元，休闲鞋为699-1099元。如果追求性价比，Adidas Gazelle（699元）是最便宜的选择。",
+          "Adidas Adizero Adios 跑步鞋。Adidas竞速跑鞋，Lightstrike Pro超轻发泡中底，碳板推进力强，Celermesh 2.0鞋面轻薄透气。专为竞速和PB打造。价格899元，有白色、黑色、荧光绿三色。男款。",
+          "Adidas Adizero Adios 跑步鞋。Adidas竞速跑鞋，Lightstrike Pro超轻发泡中底提供能量回馈，Celermesh 2.0鞋面轻薄透气，碳板推进力强。专为竞速和PB打造，适合有一定基础的跑者，男款。价格899元，有白色、黑色、荧光绿三色。仅用湿布擦拭，不要机洗。",
+          "1000元以上预算：Nike LeBron篮球鞋（1299元）顶级缓震；Adidas Ultraboost Light跑鞋（1099元）旗舰脚感；Nike Air Max 270（1099元）气垫潮流；Lululemon Define瑜伽外套（980元）高端剪裁；Adidas Z.N.E.外套（799元）加一套Lululemon Align（850元）。"
+        ],
+        "ground_truth": "答案应包含：1099 涉及实体：P025、P026、P027",
+        "lang": "zh",
+        "difficulty": "common",
+        "route": "factual",
+        "abstained": false,
+        "confidence": 0.8571428571428571,
+        "grounding": 1.0,
+        "latency_s": 1.56
+      },
+      {
+        "id": "G025",
+        "question": "入门跑者选什么跑鞋？",
+        "answer": "入门跑者选鞋,主要看缓震和稳定性,我帮你挑了三款 👟\n\n- **Nike Air Zoom Pegasus 40**:最均衡的日常训练鞋,前后掌气垫回弹好,适合大多数人 [1][8]\n- **Nike React Infinity**:加宽前掌增强落地稳定,能帮助减少跑步损伤,适合需要支撑的跑者 [2][3]\n- **Adidas Ultraboost Light**:脚感柔软,适合长距离慢跑 [1]\n\n如果预算在1000元以内,Pegasus 40(899元)和React Infinity(999元)都在范围内 [7]。你平时跑多长距离、更看重脚感还是稳定?我可以再帮你细选 😊",
+        "contexts": [
+          "跑步装备推荐：入门跑者选Nike Air Zoom Pegasus 40（899元），均衡缓震适合大多数人；追求稳定选Nike React Infinity（999元）；长距离慢跑选Adidas Ultraboost Light（1099元），脚感柔软；竞速PB选Adidas Adizero Adios（899元），碳板推进。上衣选Nike Dri-FIT或Adidas AeroReady速干T恤。",
+          "Nike React Infinity 跑步鞋。Nike稳定支撑跑鞋，React泡棉中底柔软脚感和流畅过渡，加宽前掌增强落地稳定性。适合入门跑者和需要支撑的跑者。价格999元，有粉色、白色、黑色三色。女款剪裁。",
+          "Nike React Infinity 跑步鞋。Nike稳定支撑跑鞋，React泡棉中底提供柔软脚感和流畅过渡，加宽前掌设计增强落地稳定性，帮助减少跑步损伤。适合入门跑者和需要支撑的跑者，女款剪裁。价格999元，有粉色、白色、黑色三色。鞋面可机洗（冷水轻柔档），取出鞋垫后自然晾干。",
+          "送跑步爱好者礼物：入门跑者推荐Nike Air Zoom Pegasus 40（899元），最均衡的日常训练鞋；进阶跑者推荐Adidas Ultraboost Light（1099元），长距离脚感舒适；竞速跑者推荐Adidas Adizero Adios（899元），碳板推进力强。搭配Nike Dri-FIT或Adidas AeroReady速干T恤（各199元）。",
+          "Adidas Adizero Adios 跑步鞋。Adidas竞速跑鞋，Lightstrike Pro超轻发泡中底提供能量回馈，Celermesh 2.0鞋面轻薄透气，碳板推进力强。专为竞速和PB打造，适合有一定基础的跑者，男款。价格899元，有白色、黑色、荧光绿三色。仅用湿布擦拭，不要机洗。",
+          "平台跑鞋共有5款：Nike Air Zoom Pegasus 40（899元）、Nike React Infinity（999元）、Adidas Ultraboost Light（1099元）、Adidas Adizero Adios（899元）、Under Armour HOVR Phantom（899元）。尺码覆盖M到XL。Pegasus和Ultraboost适合日常慢跑，Adizero适合竞速，React Infinity适合需要稳定性的跑者。",
+          "1000元以内预算：Adidas Gazelle休闲鞋（699元）复古好搭；Nike Air Force 1（799元）或Adidas Superstar（799元）经典款；Adidas Adizero Adios跑鞋（899元）竞速之选；UA HOVR Phantom跑鞋（899元）智能缓震。",
+          "Nike Air Zoom Pegasus 40 跑步鞋。Nike经典跑鞋系列第40代，前后掌Zoom Air气垫提供灵敏回弹， engineered mesh工程网面鞋面透气贴合，React泡棉中底缓震耐久。适合日常慢跑和长距离训练，男款标准楦型。价格899元，有黑色、白色、灰色三色。建议用软毛刷轻刷鞋面，阴干避免暴晒。"
+        ],
+        "ground_truth": "答案应包含：Pegasus 涉及实体：P001",
+        "lang": "zh",
+        "difficulty": "semi",
+        "route": "stylist",
+        "abstained": false,
+        "confidence": 1.0,
+        "grounding": 0.6666666666666666,
+        "latency_s": 2.75
+      }
+    ],
+    "scores": {
+      "count": 12,
+      "overall": {
+        "faithfulness": 0.917,
+        "answer_relevance": 0.831,
+        "context_precision": 0.91,
+        "context_recall": 0.222
+      },
+      "by_language": {
+        "zh": {
+          "faithfulness": 0.917,
+          "answer_relevance": 0.831,
+          "context_precision": 0.91,
+          "context_recall": 0.222
+        }
+      },
+      "by_difficulty": {
+        "common": {
+          "faithfulness": 0.857,
+          "answer_relevance": 0.852,
+          "context_precision": 0.953,
+          "context_recall": 0.334
+        },
+        "semi": {
+          "faithfulness": 1.0,
+          "answer_relevance": 0.802,
+          "context_precision": 0.849,
+          "context_recall": 0.0
+        }
+      }
+    }
+  },
+  "ablation": {
+    "hybrid": {
+      "hit@8": 0.885,
+      "entity_recall@8": 0.744,
+      "mrr": 0.659,
+      "n": 26
+    },
+    "dense": {
+      "hit@8": 0.885,
+      "entity_recall@8": 0.756,
+      "mrr": 0.665,
+      "n": 26
+    },
+    "by_route": {
+      "factual": {
+        "hybrid": {
+          "hit@8": 0.714,
+          "entity_recall@8": 0.333,
+          "mrr": 0.619,
+          "n": 7
+        },
+        "dense": {
+          "hit@8": 0.714,
+          "entity_recall@8": 0.381,
+          "mrr": 0.714,
+          "n": 7
+        }
+      },
+      "qualitative": {
+        "hybrid": {
+          "hit@8": 1.0,
+          "entity_recall@8": 0.9,
+          "mrr": 0.767,
+          "n": 10
+        },
+        "dense": {
+          "hit@8": 1.0,
+          "entity_recall@8": 0.9,
+          "mrr": 0.75,
+          "n": 10
+        }
+      },
+      "relational": {
+        "hybrid": {
+          "hit@8": 1.0,
+          "entity_recall@8": 1.0,
+          "mrr": 0.8,
+          "n": 5
+        },
+        "dense": {
+          "hit@8": 1.0,
+          "entity_recall@8": 1.0,
+          "mrr": 0.667,
+          "n": 5
+        }
+      },
+      "stylist": {
+        "hybrid": {
+          "hit@8": 0.75,
+          "entity_recall@8": 0.75,
+          "mrr": 0.281,
+          "n": 4
+        },
+        "dense": {
+          "hit@8": 0.75,
+          "entity_recall@8": 0.75,
+          "mrr": 0.362,
+          "n": 4
+        }
+      }
+    }
+  },
+  "duration_s": 121.5
+}

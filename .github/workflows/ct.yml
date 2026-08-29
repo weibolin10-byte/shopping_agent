@@ -1,0 +1,54 @@
+name: CT
+
+# Continuous Training, distinct from CI. CI runs on every push and asks "is the code correct?".
+# CT runs on a cadence (and can be triggered by hand) and asks "as new data and drift arrive, is a
+# RETRAINED candidate better, and safe to promote?". It re-optimizes the prompts against the
+# ground-truth eval, gates the candidate on held-out accuracy and safety, and PROPOSES a promotion
+# as an artifact for a human to approve. It never self-deploys. See mlops/ct.py.
+on:
+  schedule:
+    - cron: "0 6 * * 1" # every Monday 06:00 UTC
+  workflow_dispatch: {}  # CT only ever PROPOSES; a human approves promotion, so there is no input
+
+# One CT run at a time; do not cancel an in-flight retrain when a manual run overlaps the cron.
+concurrency:
+  group: continuous-training
+  cancel-in-progress: false
+
+jobs:
+  continuous-training:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: make setup
+
+      # A cycle runs offline: without model credentials the prompt-optimization training step is
+      # skipped and CT runs the eval gate as a health check, so the workflow always produces an
+      # auditable report. Wire GROQ_API_KEY as a repo secret to run the full retraining loop.
+      - name: Run one CT cycle (retrain, gate, propose promotion)
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          LLM_PROVIDER: ${{ secrets.GROQ_API_KEY && 'groq' || 'fake' }}
+        run: |
+          make ct CT_ARGS="--scheduled"
+
+      - name: Upload the CT report + model registry (the promotion proposal for human review)
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ct-report
+          # the registry is the audit trail: every cycle's record + any proposed version. On the
+          # ephemeral runner it is per-run; a real deployment persists it to a durable store (or the
+          # MLflow Model Registry via make promote), which is the documented scale-up.
+          path: |
+            evaluation/reports/ct_report.json
+            evaluation/reports/model_registry.json
+          if-no-files-found: warn

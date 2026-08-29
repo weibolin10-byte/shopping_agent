@@ -1,0 +1,43 @@
+{
+  "stack": {
+    "generation": "deepseek-chat",
+    "routing": "deterministic regex",
+    "embedding": "qwen-text-embedding-v3",
+    "reranker": "none"
+  },
+  "assumptions": {
+    "prompt_tokens": 1500,
+    "completion_tokens": 250,
+    "query_embed_tokens": 25,
+    "session_turns": 8,
+    "usd_cny_rate": 7.2,
+    "human_cny_per_hour": 30.0,
+    "human_avg_minutes_per_turn": 4.0
+  },
+  "pricing_usd_per_1m": {
+    "deepseek-chat": {
+      "input": 0.27,
+      "output": 1.1
+    },
+    "qwen-text-embedding-v3": 0.097
+  },
+  "per_turn_breakdown": {
+    "routing": 0.0,
+    "embedding": 2e-06,
+    "rerank": 0.0,
+    "generation": 0.00068,
+    "total": 0.000682
+  },
+  "per_turn": {
+    "ai_assistant": 0.000682,
+    "human_agent": 0.278
+  },
+  "per_session": {
+    "ai_assistant": 0.0055,
+    "human_agent": 2.224
+  },
+  "cost_ratio": {
+    "human_vs_ai": 407.6,
+    "note": "Human agent is 407.6× more expensive per turn than the AI assistant"
+  }
+}

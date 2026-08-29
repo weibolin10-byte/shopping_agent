@@ -1,0 +1,79 @@
+{
+  "generated_sessions": 1080,
+  "kpis": {
+    "sessions": 1080,
+    "visitors": 856,
+    "searches": 1240,
+    "questions": 723,
+    "add_to_cart": 298,
+    "orders": 128,
+    "revenue": 89560,
+    "conversion": 11.9,
+    "aov": 700
+  },
+  "sessions_by_day": [
+    {"day": "06-01", "count": 38},
+    {"day": "06-02", "count": 42},
+    {"day": "06-03", "count": 35},
+    {"day": "06-04", "count": 48},
+    {"day": "06-05", "count": 41},
+    {"day": "06-06", "count": 33},
+    {"day": "06-07", "count": 45},
+    {"day": "06-08", "count": 50},
+    {"day": "06-09", "count": 37},
+    {"day": "06-10", "count": 44},
+    {"day": "06-11", "count": 39},
+    {"day": "06-12", "count": 46},
+    {"day": "06-13", "count": 40},
+    {"day": "06-14", "count": 35},
+    {"day": "06-15", "count": 43},
+    {"day": "07-01", "count": 41},
+    {"day": "07-02", "count": 38},
+    {"day": "07-03", "count": 45},
+    {"day": "07-04", "count": 36},
+    {"day": "07-05", "count": 42},
+    {"day": "07-06", "count": 39},
+    {"day": "07-07", "count": 47},
+    {"day": "07-08", "count": 44},
+    {"day": "07-09", "count": 38},
+    {"day": "07-10", "count": 41},
+    {"day": "07-11", "count": 35},
+    {"day": "07-12", "count": 43},
+    {"day": "07-13", "count": 40},
+    {"day": "07-14", "count": 46},
+    {"day": "07-15", "count": 39}
+  ],
+  "top_products": [
+    {"product_id": "P001", "name": "Nike Air Zoom Pegasus 40 跑步鞋", "units_sold": 86},
+    {"product_id": "P025", "name": "Adidas Ultraboost Light 跑步鞋", "units_sold": 74},
+    {"product_id": "P007", "name": "Nike Dri-FIT 短袖T恤", "units_sold": 112},
+    {"product_id": "P049", "name": "Lululemon Align 高腰紧身裤", "units_sold": 65},
+    {"product_id": "P013", "name": "Nike Air Force 1 板鞋", "units_sold": 92},
+    {"product_id": "P073", "name": "Under Armour Tech 2.0 短袖T恤", "units_sold": 78},
+    {"product_id": "P031", "name": "Adidas Superstar 经典鞋", "units_sold": 68},
+    {"product_id": "P016", "name": "Nike Therma-FIT 连帽卫衣", "units_sold": 55},
+    {"product_id": "P010", "name": "Nike LeBron 篮球鞋", "units_sold": 42},
+    {"product_id": "P037", "name": "Adidas AeroReady 训练T恤", "units_sold": 88}
+  ],
+  "brand_distribution": [
+    {"brand": "Nike", "products": 24, "revenue_share": 38.5},
+    {"brand": "Adidas", "products": 21, "revenue_share": 28.2},
+    {"brand": "Lululemon", "products": 24, "revenue_share": 20.1},
+    {"brand": "Under Armour", "products": 18, "revenue_share": 13.2}
+  ],
+  "category_distribution": [
+    {"category": "shoes", "revenue_share": 52.3},
+    {"category": "tops", "revenue_share": 15.8},
+    {"category": "leggings", "revenue_share": 11.2},
+    {"category": "hoodies", "revenue_share": 10.5},
+    {"category": "jackets", "revenue_share": 6.8},
+    {"category": "bras", "revenue_share": 1.8},
+    {"category": "shorts", "revenue_share": 1.6}
+  ],
+  "return_rate_by_size": [
+    {"size": "S", "return_rate": 0.08},
+    {"size": "M", "return_rate": 0.06},
+    {"size": "L", "return_rate": 0.12},
+    {"size": "XL", "return_rate": 0.15}
+  ]
+}

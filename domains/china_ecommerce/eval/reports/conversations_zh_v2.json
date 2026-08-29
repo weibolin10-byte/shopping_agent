@@ -1,0 +1,1059 @@
+{
+  "summary": {
+    "scenarios": 8,
+    "gender_leaks": 0,
+    "repeat_asks": 1,
+    "errors": 0
+  },
+  "results": [
+    {
+      "name": "core_gift_father_running",
+      "recipient_gender": "men",
+      "brain": "omni",
+      "turns": [
+        {
+          "i": 0,
+          "user": "你好，我想给我爸买双跑鞋",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "你好呀，给爸爸挑跑鞋真是贴心～😊 我先问两个小问题，好帮你选得更准：\n\n- 爸爸平时是**日常慢跑**，还是**想竞速/提速**？\n- 预算大概在**多少以内**？\n\n如果只是日常慢跑，我推荐这两款：\n\n- **Nike Air Zoom Pegasus 40**：经典稳妥，缓震回弹均衡，适合日常慢跑和长距离训练，899元 [2][6]\n- **Adidas Ultraboost Light**：旗舰缓震，脚感软弹，长跑和日常通勤都舒服，1099元 [8]\n\n如果爸爸有竞速需求，可以看 **Adidas Adizero Adios**（899元），碳板推进力强，适合有一定基础的跑者 [3]。\n\n你先告诉我上面两个问题，我再帮你锁定最合适的一双～",
+          "cited": [
+            {
+              "id": "PD001",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PD010",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PC001",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PD009",
+              "doc_type": "product",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 1,
+          "user": "他每天早上在公园跑五公里，今年55岁",
+          "lane": "answers",
+          "persona": null,
+          "tier": "auto",
+          "answer": "明白了,爸爸55岁、每天公园跑5公里,这个强度属于**日常慢跑+长距离训练**,不需要竞速鞋,重点看缓震和舒适度就好。😊\n\n推荐这两双,都适合他:\n\n- **Nike Air Zoom Pegasus 40**:缓震回弹均衡,日常5公里和长距离都稳,899元,有黑/白/灰三色 [1][2]\n- **Adidas Ultraboost Light**:脚感更软弹,对膝盖友好,长跑和走路都舒服,1099元 [3][8]\n\n如果预算想控制在千元内,选Pegasus 40就很好;如果想让爸爸脚感更软、更护膝,可以上Ultraboost Light。你倾向哪个价位?我帮你确认尺码~",
+          "cited": [
+            {
+              "id": "PD001",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PC001",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "OC03",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "R0058",
+              "doc_type": "review",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 2,
+          "user": "预算一千块以内吧",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "好的,预算千元以内,那 **Nike Air Zoom Pegasus 40(899元)** 就很合适,缓震均衡、日常5公里和长距离都稳,而且有黑/白/灰三色可选 [1][2]。😊\n\n如果爸爸想要更软弹的脚感,也可以看 **Under Armour HOVR Phantom(899元)**,智能缓震,同样在预算内 [5][6]。\n\n你倾向哪一双?我帮你确认尺码~",
+          "cited": [
+            {
+              "id": "PD001",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "EX01",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "CF01",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "EX10",
+              "doc_type": "guide",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 3,
+          "user": "Nike和Adidas哪个更适合他这个年纪",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "好的,针对爸爸55岁、每天公园跑5公里这个情况,我的建议是:**Nike Air Zoom Pegasus 40 更合适** 😊\n\n- **Nike Air Zoom Pegasus 40**:缓震回弹均衡,日常5公里和长距离都稳,对膝盖冲击小,899元,有黑/白/灰三色可选 [2][3]\n- **Adidas Ultraboost Light**:脚感更软弹,但价格1099元,超出你千元预算 [4][8]\n\n所以综合**预算和日常慢跑需求**,Pegasus 40 是更稳妥的选择。需要我帮你确认爸爸的尺码吗?",
+          "cited": [
+            {
+              "id": "PD001",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PC001",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "OC03",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "EX12",
+              "doc_type": "guide",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        }
+      ],
+      "gender_leaks": 0,
+      "repeat_asks": 0,
+      "errors": 0
+    },
+    {
+      "name": "core_yoga_beginner_gear",
+      "recipient_gender": "women",
+      "brain": "omni",
+      "turns": [
+        {
+          "i": 0,
+          "user": "我刚开始练瑜伽，需要买什么装备",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "欢迎入坑瑜伽！🧘‍♀️ 刚开始练，不用一次买齐，先抓最核心的几件就好。\n\n- **Lululemon Align 高腰紧身裤（850元）**：Nulu裸感面料，舒适度公认第一，居家穿也舒服，适合入门和低强度练习 [1][6]\n- **Swiftly 长袖T恤（450元）**：无缝设计不磨皮肤，练完直接穿出门也好看 [1]\n- **Energy 运动内衣（380元）**：支撑够用，和Align、Swiftly能凑成完整套装 [1][2]\n\n如果预算有限，**先从Align紧身裤开始**，这是最经典、最值得投资的一件 [2]。热身或日常穿，可以再加一件 **Define 瑜伽外套（980元）**，修身剪裁，有黑色、深灰、深蓝三色可选 [3][4]。\n\n⚠️ 小提醒：Align面料偏薄娇贵，穿两次可能被瑜伽垫磨起球，不适合高强度训练 [8]。如果你打算练力量或流瑜伽，建议选 **Wunder Train（750元）**，支撑更好更耐造 [1]。\n\n要不要我帮你按预算搭配一套？😊",
+          "cited": [
+            {
+              "id": "OC04",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "EX02",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "PD018",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PC018",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "RC007",
+              "doc_type": "review",
+              "gender": null
+            },
+            {
+              "id": "RV034",
+              "doc_type": "review",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 1,
+          "user": "主要是瑜伽裤和运动内衣",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "好的,瑜伽裤和运动内衣这两件确实是入门最核心的装备,选对了练起来舒服很多!😊\n\n- **Lululemon Align 高腰紧身裤(850元)**:Nulu裸感面料,舒适度公认第一,最适合瑜伽和普拉提,有黑色、深灰、藏青三色可选 [3][4]\n- **Lululemon Wunder Train 紧身裤(750元)**:如果你之后想练流瑜伽或力量,这款支撑性更好,更耐穿 [1][7]\n- **Energy 运动内衣(380元)**:支撑够用,和Align是经典搭配,适合瑜伽这种低强度练习 [1][2]\n\n如果预算有限,可以先从 **Align紧身裤** 入手,这是最值得投资的一件 [2]。内衣方面,Energy 380元性价比很高,和Align凑成一套刚刚好 [8]。\n\n需要我帮你看看这两件具体有哪些颜色吗?😊",
+          "cited": [
+            {
+              "id": "OC04",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "EX02",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "PC017",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PD017",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "CF06",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "EX04",
+              "doc_type": "guide",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 2,
+          "user": "预算一千左右，Lululemon的怎么样",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "一千左右的预算,选Lululemon完全够,而且能拿下入门最核心的两件!😊\n\n- **Lululemon Align 高腰紧身裤(850元)**:Nulu裸感面料,瑜伽和普拉提首选,舒适度公认第一 [3][4]\n- **Lululemon Wunder Train 紧身裤(750元)**:如果你之后想练流瑜伽或力量,这款支撑更好、更耐穿 [1][7]\n\n两件加起来正好在预算内,还能剩一点。如果只选一件,**Align 850元**最经典、最值得投资 [2];想省一点就选 **Wunder Train 750元**,性能更全面 [1]。\n\n需要我帮你看看这两款具体有哪些颜色吗?😊",
+          "cited": [
+            {
+              "id": "OC04",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "EX02",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "PD017",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PC017",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PD018",
+              "doc_type": "product",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 3,
+          "user": "Align和Wunder Train哪个更适合新手",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "对于新手来说,**Align 更适合你** 😊\n\n- **Align 高腰紧身裤(850元)**:Nulu裸感面料,轻盈柔软如第二层肌肤,专为瑜伽和普拉提设计,低强度练习舒适度第一 [3][5]\n- **Wunder Train 紧身裤(750元)**:Everlux面料更速干、更有压缩感,适合中高强度训练,新手如果只练瑜伽会有点\"过剩\" [7][8]\n\n简单说:**纯瑜伽入门选 Align**,舒适感无可替代;如果你之后打算加练力量或流瑜伽,再考虑 Wunder Train 也不迟 [1][2]。",
+          "cited": [
+            {
+              "id": "OC04",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "EX02",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "PD017",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PC017",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PD019",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PC019",
+              "doc_type": "product",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        }
+      ],
+      "gender_leaks": 0,
+      "repeat_asks": 0,
+      "errors": 0
+    },
+    {
+      "name": "core_basketball_shoes_compare",
+      "recipient_gender": "men",
+      "brain": "omni",
+      "turns": [
+        {
+          "i": 0,
+          "user": "想买双篮球鞋，在外场打",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "外场打的话，这两款篮球鞋都不太建议直接上——它们都是为室内场设计的，粗糙水泥地会加速外底磨损，尤其Curry的Flow无橡胶底更娇贵一些[2][8]。不过如果你还是想选一双，我帮你按打法挑：\n\n- **Nike LeBron 篮球鞋（1299元）**：大体重或锋线打法选它，Max Air+Zoom Air缓震顶级，高帮锁脚踝，外场耐磨性相对好一点[8]\n- **Under Armour Curry 篮球鞋（999元）**：后卫或追求速度选它，轻量贴地、变向灵活，但Flow底在水泥地磨损快，建议只在干净外场偶尔穿[2]\n\n如果你常打粗糙外场，我更推荐你考虑**Adidas Gazelle（699元）**——它是休闲鞋里最便宜的，外底更耐造，日常穿或轻运动都合适[6]。不过它不是专业篮球鞋，如果你坚持要篮球鞋，那还是上面两款里选，记得打完擦干净外底[2][8]。\n\n你平时打外场多吗？是偏突破的后卫还是靠身体打法的锋线？告诉我我帮你再精准推荐～ 😊",
+          "cited": [
+            {
+              "id": "PD027",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PR01",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "PD004",
+              "doc_type": "product",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 1,
+          "user": "Nike LeBron和Under Armour Curry哪个好",
+          "lane": "answers",
+          "persona": null,
+          "tier": "auto",
+          "answer": "两款都是好鞋,但“哪个好”要看你的打法和体重——没有绝对答案,我帮你直接对比一下:\n\n- **Nike LeBron(1299元)**:缓震是两双里最好的,Max Air+Zoom Air顶级,适合大体重或锋线球员,高帮锁脚踝[1][8]\n- **Under Armour Curry(999元)**:更轻更灵活,场地感好,适合后卫或追求速度的球员,但缓震少一些[1][8]\n\n简单说:**体重180斤以上或打锋线,选LeBron;后卫或偏突破,选Curry**[8]。\n\n你平时打外场多吗?如果常打粗糙水泥地,这两款都不太耐造,我可以再帮你看看更耐穿的替代款😊",
+          "cited": [
+            {
+              "id": "CF02",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "RC016",
+              "doc_type": "review",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": true,
+          "error": null
+        },
+        {
+          "i": 2,
+          "user": "我打后卫位置，体重70公斤",
+          "lane": "answers",
+          "persona": null,
+          "tier": "auto",
+          "answer": "后卫、70公斤的话,那答案很明确:**Under Armour Curry(999元)**更适合你——轻量贴地、变向灵活,正是后卫打法需要的[1][8]。LeBron那款缓震虽好,但偏重、适合大体重锋线,对你来说会有点“拖”[1][4]。\n\n- **Under Armour Curry(999元)**:轻、场地感好,突破变向跟脚,后卫首选[1][8]\n- **Nike LeBron(1299元)**:缓震顶级但偏重,更适合180斤以上或锋线,你这体重穿会偏闷[1][4]\n\n不过提醒一句:Curry的Flow底在粗糙水泥地磨损快,外场打记得打完擦干净外底[2][8]。你常打的外场是干净塑胶还是粗糙水泥?我可以帮你看看要不要配双更耐穿的替代款😊",
+          "cited": [
+            {
+              "id": "CF02",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "PD004",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "RC016",
+              "doc_type": "review",
+              "gender": null
+            },
+            {
+              "id": "PC027",
+              "doc_type": "product",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 3,
+          "user": "那双保护性更好一些",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "保护性上,这两双各有侧重,但按你的后卫打法,我直接给你结论:\n\n- **Nike LeBron(1299元)**:保护性更强——高帮设计锁定脚踝,加上Kniteposite鞋面支撑,防侧翻和抗扭转都更扎实[7][8]\n- **Under Armour Curry(999元)**:保护性偏轻量,编织鞋面贴合但支撑感不如LeBron,胜在灵活[2][5]\n\n简单说:**如果你更看重脚踝保护和整体安全感,选LeBron;如果更看重速度和变向,选Curry**[3][8]。你70公斤打后卫,如果外场地面不太平整,LeBron的高帮会更稳一些😊",
+          "cited": [
+            {
+              "id": "PD027",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "RC015",
+              "doc_type": "review",
+              "gender": null
+            },
+            {
+              "id": "PC027",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PD004",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PC004",
+              "doc_type": "product",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        }
+      ],
+      "gender_leaks": 0,
+      "repeat_asks": 1,
+      "errors": 0
+    },
+    {
+      "name": "core_order_delay_complaint",
+      "recipient_gender": null,
+      "brain": "omni",
+      "turns": [
+        {
+          "i": 0,
+          "user": "我的订单RF100012怎么还没发货",
+          "lane": "care",
+          "persona": null,
+          "tier": "auto",
+          "answer": "您好！😊 我来帮您查一下订单RF100012的发货情况。\n\n不过为了确保订单信息安全，我需要先确认一下您的身份：请提供下单时使用的**姓名**和**邮箱地址**，核对无误后我马上为您查询具体状态。🔍\n\n（如果您已登录账户，直接告诉我一声，我就能直接查看啦～）",
+          "cited": [],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 1,
+          "user": "下单都快一个星期了，之前说三天内发",
+          "lane": "complaint",
+          "persona": null,
+          "tier": "abstain",
+          "answer": "真的很抱歉给您带来不好的体验🙏。这个问题需要我们的客服同事直接为您处理。请您提供订单号和下单时使用的邮箱，我马上为您转接专员，尽快帮您解决。",
+          "cited": [],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 2,
+          "user": "我急着穿去参加比赛的",
+          "lane": "care",
+          "persona": null,
+          "tier": "auto",
+          "answer": "真的很抱歉让您着急了🙏 比赛要紧,我完全理解您的心情。\n\n不过您的订单信息我这边还无法直接查看,需要您提供**下单时使用的姓名和邮箱**,我马上为您转接人工专员小晴,帮您加急处理发货问题[3]。\n\n请您放心,专员会尽快帮您跟进物流或安排补发,确保您能赶上比赛💪",
+          "cited": [
+            {
+              "id": "CK19",
+              "doc_type": "guide",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 3,
+          "user": "再不到我就退货了",
+          "lane": "complaint",
+          "persona": null,
+          "tier": "auto",
+          "answer": "真的很抱歉让您这么着急🙏 您的心情我完全理解,比赛前等不到货确实很煎熬。\n\n不过您的订单信息我这边还无法直接查看,需要您提供**下单时使用的姓名和邮箱**,我马上为您转接人工专员小晴,帮您加急处理发货或退货问题[2]。专员会尽快帮您跟进,确保您能赶上比赛💪",
+          "cited": [
+            {
+              "id": "CK19",
+              "doc_type": "guide",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        }
+      ],
+      "gender_leaks": 0,
+      "repeat_asks": 0,
+      "errors": 0
+    },
+    {
+      "name": "core_running_shoes_cross_brand",
+      "recipient_gender": "men",
+      "brain": "omni",
+      "turns": [
+        {
+          "i": 0,
+          "user": "想入一双日常训练跑鞋",
+          "lane": "answers",
+          "persona": null,
+          "tier": "auto",
+          "answer": "日常训练跑鞋,首选就是 Nike Air Zoom Pegasus 40 🏃‍♂️ 它缓震和回弹最均衡,是公认的日常训练主力款 [1][5]。\n\n- **Nike Air Zoom Pegasus 40**:前后掌 Zoom Air 气垫回弹灵敏,React 泡棉缓震耐久,日常慢跑和长距离都稳,899 元 [2][4]\n- **Adidas Ultraboost Light**:Boost 中底脚感更柔软,适合喜欢软弹脚感的长距离训练,1099 元 [1]\n\n如果预算想控制在千元内,Pegasus 40 就是最划算的选择;想要更软的长距离脚感,再考虑 Ultraboost Light。需要我帮你看看配色吗?",
+          "cited": [
+            {
+              "id": "EX12",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "PD001",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PC001",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "RG001",
+              "doc_type": "review",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 1,
+          "user": "每周跑三次，每次十公里左右",
+          "lane": "answers",
+          "persona": null,
+          "tier": "auto",
+          "answer": "每周三次、每次十公里,这个量很扎实,Pegasus 40 完全扛得住 💪 它缓震和回弹最均衡,十公里日常训练正好,不会太软也不会太硬 [1][6]。\n\n- **Nike Air Zoom Pegasus 40**:前后掌 Zoom Air 回弹灵敏,React 泡棉缓震耐久,十公里日常训练最稳的选择,899 元 [1][2]\n- **Adidas Ultraboost Light**:Boost 中底脚感更软,长距离更舒服,适合你这种固定十公里的节奏,1099 元 [1][3]\n\n如果预算想控制在千元内,Pegasus 40 就是最划算的;想要更软的长距离脚感,再考虑 Ultraboost Light。需要我帮你看看配色吗?",
+          "cited": [
+            {
+              "id": "PC001",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PD001",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "EX12",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "RC013",
+              "doc_type": "review",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 2,
+          "user": "Nike Pegasus 40和Adidas Ultraboost Light怎么选",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "两款都是很棒的日常训练鞋,区别主要在脚感取向 👟\n\n- **Nike Air Zoom Pegasus 40**:前后掌 Zoom Air 回弹更灵敏,React 泡棉缓震均衡,跑步感更直接,十公里日常训练最稳,899 元 [1][4]\n- **Adidas Ultraboost Light**:Light Boost 中底更软更弹,长距离脚感更舒适,适合喜欢软弹包裹感的朋友,1099 元 [3][8]\n\n简单说:**想要更利落、有跑步感,选 Pegasus 40;想要更软、更舒服的长距离脚感,选 Ultraboost Light**。预算千元内就 Pegasus 40,不差这 200 元想要更软就 Ultraboost Light [3][4]。\n\n需要我帮你看看具体配色吗?",
+          "cited": [
+            {
+              "id": "PD001",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "EX12",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "RC013",
+              "doc_type": "review",
+              "gender": null
+            },
+            {
+              "id": "PD009",
+              "doc_type": "product",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 3,
+          "user": "哪个缓震更好，更适合长跑",
+          "lane": "answers",
+          "persona": null,
+          "tier": "auto",
+          "answer": "两款里,**Adidas Ultraboost Light 的缓震更软、更适合长跑** 👟\n\n- **Adidas Ultraboost Light**:Light Boost 中底比传统 Boost 轻 30% 且回弹更佳,脚感柔软,长距离跑步更舒服,1099 元 [3][5]\n- **Nike Air Zoom Pegasus 40**:前后掌 Zoom Air 回弹灵敏,React 泡棉缓震均衡,跑步感更直接,十公里日常训练很稳,899 元 [1][2]\n\n简单说:想要更软、更舒适的缓震脚感跑长距离,选 Ultraboost Light;想要更利落、有跑步感的均衡缓震,选 Pegasus 40 [3][4]。需要我帮你看看具体配色吗?",
+          "cited": [
+            {
+              "id": "PD001",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PC001",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PD009",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "EX01",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "PC009",
+              "doc_type": "product",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        }
+      ],
+      "gender_leaks": 0,
+      "repeat_asks": 0,
+      "errors": 0
+    },
+    {
+      "name": "core_lululemon_sizing",
+      "recipient_gender": "women",
+      "brain": "omni",
+      "turns": [
+        {
+          "i": 0,
+          "user": "Lululemon的Align裤子尺码怎么选",
+          "lane": "answers",
+          "persona": null,
+          "tier": "auto",
+          "answer": "Align 裤子是 Lululemon 偏修身的版型，正常码就行，不用特意买大 [1][2]。不过如果你习惯叠穿或者喜欢更宽松的感觉，可以选大一码 [1]。\n\n简单说：\n- 正常体型：按平时穿的码数选 [1]\n- 想宽松或叠穿：选大一码 [1]\n- 不确定的话，参考商品页的尺码表最准 [2]\n\n需要我帮你看看具体哪个颜色或搭配吗？😊",
+          "cited": [
+            {
+              "id": "EX20",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "CK10",
+              "doc_type": "guide",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 1,
+          "user": "我身高165体重55公斤",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "好的,按你的身高165cm、体重55kg来看,Align 裤子选 **S码** 就刚好 [3][6]。这款是修身版型,正常码穿起来贴合又舒服,不用特意买大 [1]。\n\n如果之后想叠穿或喜欢更松一点的感觉,再考虑 M 码 [1]。需要我帮你看看颜色或搭配吗?😊",
+          "cited": [
+            {
+              "id": "EX20",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "CK11",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "PD017",
+              "doc_type": "product",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 2,
+          "user": "平时穿M码，但看评论有人说偏大",
+          "lane": "answers",
+          "persona": null,
+          "tier": "auto",
+          "answer": "好的,你平时穿M码,但看到评论说Align偏大——那建议你选 **S码** 更稳妥 😊\n\n- 评论里有人反馈“平时穿M,买M太大,换了S才合适”[7]\n- Align本身是修身版型,正常码贴合舒服,不用特意买大[1]\n- 你的身高165cm/体重55kg,按尺码对照也落在S码范围[2]\n\n如果之后想叠穿或喜欢更松一点,再考虑M码就好[1]。需要我帮你看看颜色或搭配吗?",
+          "cited": [
+            {
+              "id": "EX20",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "CK11",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "RV042",
+              "doc_type": "review",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 3,
+          "user": "Define外套也一起推荐个尺码",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "好的,按你的身高165cm/体重55kg,Define外套建议选 **S码** 就刚好 😊\n\n- **S码**:修身但不紧绷,贴合你的身形 [2][8]\n- 如果想叠穿厚内搭或喜欢更宽松的感觉,再考虑 **M码** [1]\n\n这款是修身版型,正常码穿起来最显气质 [8]。需要我帮你看看Define外套的颜色或搭配吗?",
+          "cited": [
+            {
+              "id": "EX20",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "CK11",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "R0082",
+              "doc_type": "review",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        }
+      ],
+      "gender_leaks": 0,
+      "repeat_asks": 0,
+      "errors": 0
+    },
+    {
+      "name": "core_winter_running_layers",
+      "recipient_gender": "men",
+      "brain": "omni",
+      "turns": [
+        {
+          "i": 0,
+          "user": "冬天在户外跑步穿什么",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "冬天户外跑步，推荐分层穿搭，保暖又排汗 👟\n\n- **内层**：Under Armour ColdGear紧身衣，双层保暖排汗，0度穿不冷，压缩感贴合肌肉 [1][3]\n- **中层**：Nike Therma-FIT卫衣，抓绒柔软贴身不扎，5度天气一件长袖加它就够 [2]\n- **外层**：Adidas Z.N.E.外套，防风挡寒 [4]\n- **脚上**：Nike Pegasus或Adidas Ultraboost跑步鞋 [4]\n\n如果怕腿冷，可以加一条Nike Pro紧身裤，穿在运动短裤里面，肌肉不抖也保暖 [7][8]。",
+          "cited": [
+            {
+              "id": "RC005",
+              "doc_type": "review",
+              "gender": null
+            },
+            {
+              "id": "RV011",
+              "doc_type": "review",
+              "gender": null
+            },
+            {
+              "id": "R0061",
+              "doc_type": "review",
+              "gender": null
+            },
+            {
+              "id": "OC02",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "R0016",
+              "doc_type": "review",
+              "gender": null
+            },
+            {
+              "id": "RV013",
+              "doc_type": "review",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 1,
+          "user": "北京的冬天零下五六度",
+          "lane": "answers",
+          "persona": null,
+          "tier": "auto",
+          "answer": "北京的冬天零下五六度,光靠刚才那套可能不够,得把保暖再往上提一档 ❄️\n\n- **内层**:Under Armour ColdGear紧身衣,0度穿不冷,零下五六度打底依然稳,压缩贴合不晃 [1][4]\n- **中层**:Nike Therma-FIT卫衣,抓绒贴身保暖,5度一件长袖加它就够,低温下再叠一层更安心 [2][3]\n- **外层**:Adidas Z.N.E.外套,防风挡寒,零下天气风是最大敌人,这件能扛 [1][2]\n- **下装**:Nike Pro紧身裤,穿在运动短裤里面,腿不抖也保暖 [2][7]\n- **脚上**:Nike Pegasus或Adidas Ultraboost跑步鞋,缓震抓地都够用 [1][2]\n\n零下五六度建议再加一顶保暖帽和手套,头部和手部散热最快,别让它们拖后腿 🧤 需要我帮你挑具体的帽子和手套吗?",
+          "cited": [
+            {
+              "id": "OC02",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "EX14",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "RV011",
+              "doc_type": "review",
+              "gender": null
+            },
+            {
+              "id": "R0061",
+              "doc_type": "review",
+              "gender": null
+            },
+            {
+              "id": "PD028",
+              "doc_type": "product",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 2,
+          "user": "Nike和Under Armour哪个保暖层更好",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "好问题!这两件都是我们冬天跑步的明星款,但定位不太一样 🔥\n\n- **Under Armour ColdGear紧身衣**:更偏**打底保暖**,双层结构内层保暖排汗、外层防风防冷,0度穿不冷,压缩剪裁贴合肌肉,跑起来不晃 [1][5][6]\n- **Nike Therma-FIT卫衣**:更偏**中层锁温**,抓绒柔软贴身,5度天气里面一件长袖加它就够,居家穿也舒服 [3][7]\n\n简单说:**要贴身打底选ColdGear,要外搭锁温选Therma-FIT**。零下五六度的话,建议两件叠穿,效果最好 ❄️ 需要我帮你看看具体尺码或颜色吗?",
+          "cited": [
+            {
+              "id": "RC005",
+              "doc_type": "review",
+              "gender": null
+            },
+            {
+              "id": "RV011",
+              "doc_type": "review",
+              "gender": null
+            },
+            {
+              "id": "PD028",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "RV055",
+              "doc_type": "review",
+              "gender": null
+            },
+            {
+              "id": "RC001",
+              "doc_type": "review",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 3,
+          "user": "ColdGear和Pro紧身衣有什么区别",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "好问题!这两件都是我们冬天跑步的热门打底,但定位确实不一样 🔥\n\n- **Under Armour ColdGear紧身衣**:更偏**冬季保暖打底**,双层面料内层保暖排汗、外层防风防冷,0度穿不冷,压缩剪裁贴合肌肉,跑起来不晃 [2][6]\n- **Nike Pro紧身裤**:更偏**基础压缩打底**,适合叠穿在运动短裤里面,给腿部保暖和支撑,但保暖性不如ColdGear [3][7]\n\n简单说:**要更暖、扛零下,选ColdGear;要轻便叠穿、日常训练,选Nike Pro**。零下五六度的话,建议ColdGear上身 + Nike Pro下身,这样搭配最稳 ❄️\n\n需要我帮你看看具体尺码或颜色吗?",
+          "cited": [
+            {
+              "id": "PD028",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "EX14",
+              "doc_type": "guide",
+              "gender": null
+            },
+            {
+              "id": "PC028",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "R0061",
+              "doc_type": "review",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        }
+      ],
+      "gender_leaks": 0,
+      "repeat_asks": 0,
+      "errors": 0
+    },
+    {
+      "name": "core_casual_sneakers_style",
+      "recipient_gender": null,
+      "brain": "omni",
+      "turns": [
+        {
+          "i": 0,
+          "user": "想买双日常穿的运动鞋",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "日常穿的运动鞋,我推荐这两款,都是百搭又舒服的经典款 👟\n\n- **Nike Air Force 1 板鞋**:经典街头款,皮革耐穿有型,厚底还有增高效果,日常休闲都合适,799元 [3]\n- **Nike Air Max 270 运动鞋**:后跟大Air气垫,脚感软弹,网面透气,日常穿搭和轻运动都能兼顾,1099元 [1]\n\n两款都有黑白等百搭色。如果你更看重舒适缓震选 Air Max 270,想要经典耐看又实惠选 Air Force 1。需要我帮你看看具体颜色吗?",
+          "cited": [
+            {
+              "id": "PD008",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PD005",
+              "doc_type": "product",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 1,
+          "user": "要百搭一点的，配牛仔裤和运动裤都行",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "百搭的话,这两款都很合适,配牛仔裤和运动裤都好看 👟\n\n- **Nike Air Force 1 板鞋**:经典白色款配牛仔裤或运动裤都干净利落,厚底增高,799元 [2]\n- **Nike Air Max 270 运动鞋**:黑白配色更休闲,气垫脚感软弹,日常走路舒服,1099元 [1]\n\n如果预算想省一点,Air Force 1 更实惠;想要脚感更软就选 Air Max 270。需要我帮你确认具体颜色吗?",
+          "cited": [
+            {
+              "id": "PD008",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PD005",
+              "doc_type": "product",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 2,
+          "user": "Air Force 1和Superstar哪个更经典",
+          "lane": "stylist",
+          "persona": null,
+          "tier": "auto",
+          "answer": "Air Force 1 更经典 👟 它是 Nike 1982 年诞生的传奇鞋款,从篮球场一路火到街头,是真正的文化符号 [4]。Superstar 也很经典,但鞋头偏窄,日常舒适度不如 AF1 [1]。如果你想要耐穿百搭又舒服,AF1 白色款 799 元是最稳的选择 [4]。需要我帮你看看具体颜色吗?",
+          "cited": [
+            {
+              "id": "RC017",
+              "doc_type": "review",
+              "gender": null
+            },
+            {
+              "id": "PD005",
+              "doc_type": "product",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        },
+        {
+          "i": 3,
+          "user": "这两双鞋码正不正",
+          "lane": "answers",
+          "persona": null,
+          "tier": "auto",
+          "answer": "这两双鞋都是标准码，按你平时穿的尺码选就行 👟\n\n- **Nike Air Force 1**:尺码正常，男女同款，按日常码数入手即可 [2]\n- **Adidas Superstar**:同样标准码，贝壳头设计鞋头略窄，脚宽的话建议大半码更舒服 [7]\n\n需要我帮你看看具体颜色吗？",
+          "cited": [
+            {
+              "id": "PD005",
+              "doc_type": "product",
+              "gender": null
+            },
+            {
+              "id": "PD011",
+              "doc_type": "product",
+              "gender": null
+            }
+          ],
+          "gender_leak": [],
+          "repeat_ask": false,
+          "error": null
+        }
+      ],
+      "gender_leaks": 0,
+      "repeat_asks": 0,
+      "errors": 0
+    }
+  ]
+}

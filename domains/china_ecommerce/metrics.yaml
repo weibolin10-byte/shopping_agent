@@ -1,0 +1,102 @@
+# 受治理的指标。AI 通过验证过的调用填充槽位，绝不拼接原始 SQL。
+# 每个来源都追溯到 domain.yaml 清单中的 role。引擎在只读 DuckDB 连接上运行。
+
+metrics:
+  - name: return_rate_by_size
+    grain: product size
+    source: sales
+    dimensions: [size]
+    params:
+      size: string
+    sql_template: |
+      select
+        p.size as size,
+        count(*) as n_sales,
+        sum(case when s.returned then 1 else 0 end)::float
+          / nullif(count(*), 0) as return_rate
+      from sales s
+      join products p on p.product_id = s.product_id
+      where (
+        $size is null
+        or lower($size) in ('all', 'any', 'overall', 'each', 'every', 'by size', '全部', '所有')
+        or upper(p.size) = upper($size)
+        or (lower($size) in ('medium', 'med', '中码', '中号', 'm') and p.size = 'M')
+        or (lower($size) in ('small', 'sm', '小码', '小号', 's') and p.size = 'S')
+        or (lower($size) in ('large', 'lg', '大码', '大号', 'l') and p.size = 'L')
+        or (lower($size) in ('extra large', 'x-large', 'xl', 'x large', '加大', '加大码', 'xl') and p.size = 'XL')
+        or (lower($size) in ('extra small', 'x-small', 'xs', '加小', '加小码', 'xs') and p.size = 'XS')
+        or (lower($size) in ('one size', 'os', 'onesize', '均码') and p.size = 'OS')
+      )
+      group by p.size
+      order by p.size
+
+  - name: units_sold
+    grain: product
+    source: sales
+    dimensions: [product_id]
+    params:
+      product_id: string
+    sql_template: |
+      select
+        s.product_id,
+        sum(s.quantity) as units_sold
+      from sales s
+      where ($product_id is null or s.product_id = $product_id)
+      group by s.product_id
+
+  - name: stock_by_size
+    grain: product size
+    source: products
+    dimensions: [name, size]
+    params:
+      product: string
+      size: string
+    sql_template: |
+      select
+        p.name as product,
+        p.size as size,
+        sum(p.stock) as units_in_stock
+      from products p
+      where ($product is null or lower(p.name) like '%' || lower($product) || '%')
+        and (
+          $size is null
+          or upper(p.size) = upper($size)
+          or (lower($size) in ('medium', 'med', '中码', '中号', 'm') and p.size = 'M')
+          or (lower($size) in ('small', 'sm', '小码', '小号', 's') and p.size = 'S')
+          or (lower($size) in ('large', 'lg', '大码', '大号', 'l') and p.size = 'L')
+          or (lower($size) in ('extra large', 'x-large', 'xl', 'x large', '加大', '加大码', 'xl') and p.size = 'XL')
+          or (lower($size) in ('extra small', 'x-small', 'xs', '加小', '加小码', 'xs') and p.size = 'XS')
+          or (lower($size) in ('one size', 'os', 'onesize', '均码') and p.size = 'OS')
+        )
+      group by p.name, p.size
+      order by p.name, p.size
+
+  - name: price_range_by_category
+    grain: category
+    source: products
+    dimensions: [category]
+    params:
+      category: string
+    sql_template: |
+      with ranked as (
+        select
+          p.category,
+          p.name,
+          p.price,
+          row_number() over (partition by p.category order by p.price asc, p.name) as lo,
+          row_number() over (partition by p.category order by p.price desc, p.name) as hi
+        from (select distinct category, name, price from products) p
+        where ($category is null
+               or lower(p.category) = lower($category)
+               or lower(p.category) = lower($category) || 's'
+               or lower(p.category) || 's' = lower($category))
+      )
+      select
+        category,
+        max(case when lo = 1 then name end) as cheapest,
+        max(case when lo = 1 then price end) as cheapest_price,
+        max(case when hi = 1 then name end) as priciest,
+        max(case when hi = 1 then price end) as priciest_price
+      from ranked
+      group by category
+      order by category

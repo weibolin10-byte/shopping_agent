@@ -1,0 +1,33 @@
+{"id": "r000", "query": "想给我爸买双跑鞋，他每天晨跑五公里，有什么推荐", "signed_in": false, "intended_lane": "stylist", "tags": ["gift", "running"], "stratum": "stylist"}
+{"id": "r001", "query": "Nike和Adidas的跑鞋哪个更适合新手跑步", "signed_in": false, "intended_lane": "stylist", "tags": ["cross-brand", "running"], "stratum": "stylist"}
+{"id": "r002", "query": "刚开始练瑜伽，需要买什么装备，预算一千以内", "signed_in": false, "intended_lane": "stylist", "tags": ["yoga", "budget"], "stratum": "stylist"}
+{"id": "r003", "query": "送男朋友生日礼物，他喜欢打篮球，有什么好选的", "signed_in": true, "intended_lane": "stylist", "tags": ["gift", "basketball"], "stratum": "stylist"}
+{"id": "r004", "query": "Lululemon的运动内衣和Nike的哪个支撑性更好", "signed_in": false, "intended_lane": "stylist", "tags": ["cross-brand", "sports-bra"], "stratum": "stylist"}
+{"id": "r005", "query": "冬天跑步穿什么比较保暖又不闷汗", "signed_in": false, "intended_lane": "stylist", "tags": ["winter", "running"], "stratum": "stylist"}
+{"id": "r006", "query": "帮我搭一套去健身房的衣服，要好看一点的", "signed_in": true, "intended_lane": "stylist", "tags": ["gym", "outfit"], "stratum": "stylist"}
+{"id": "r007", "query": "Under Armour和Nike的紧身衣哪个排汗更好", "signed_in": false, "intended_lane": "stylist", "tags": ["cross-brand", "base-layer"], "stratum": "stylist"}
+{"id": "r008", "query": "想买条瑜伽裤，Align和Wunder Train有什么区别", "signed_in": true, "intended_lane": "stylist", "tags": ["lululemon", "yoga-pants"], "stratum": "stylist"}
+{"id": "r009", "query": "周末要去爬山，推荐一套速干透气的穿搭", "signed_in": false, "intended_lane": "stylist", "tags": ["hiking", "outfit"], "stratum": "stylist"}
+{"id": "r010", "query": "我的订单RF100012发货了吗，等了好几天了", "signed_in": true, "intended_lane": "care", "tags": ["order-status"], "stratum": "care"}
+{"id": "r011", "query": "帮我查一下物流到哪了，单号RF100011", "signed_in": true, "intended_lane": "care", "tags": ["tracking"], "stratum": "care"}
+{"id": "r012", "query": "我之前退的那双鞋退款到账了吗", "signed_in": true, "intended_lane": "care", "tags": ["refund"], "stratum": "care"}
+{"id": "r013", "query": "我的会员积分有多少，能换什么", "signed_in": true, "intended_lane": "care", "tags": ["loyalty"], "stratum": "care"}
+{"id": "r014", "query": "能不能帮我改一下收货地址，刚搬家", "signed_in": true, "intended_lane": "care", "tags": ["address"], "stratum": "care"}
+{"id": "r015", "query": "我下了单但没收到确认邮件，帮我看看下单成功没", "signed_in": true, "intended_lane": "care", "tags": ["order-confirm"], "stratum": "care"}
+{"id": "r016", "query": "RF100012说好三天到货，现在一个星期了还没发，太离谱了", "signed_in": true, "intended_lane": "complaint", "tags": ["delay", "shipping"], "stratum": "complaint"}
+{"id": "r017", "query": "收到的Nike鞋盒里装的是Adidas的鞋，发错货了", "signed_in": true, "intended_lane": "complaint", "tags": ["wrong-item"], "stratum": "complaint"}
+{"id": "r018", "query": "衣服刚拆开就发现袖子开线了，这质量也太差了", "signed_in": true, "intended_lane": "complaint", "tags": ["defect"], "stratum": "complaint"}
+{"id": "r019", "query": "我的信用卡被扣了两次钱，但只下了一笔订单", "signed_in": true, "intended_lane": "complaint", "tags": ["double-charge"], "stratum": "complaint"}
+{"id": "r020", "query": "物流显示已签收但我根本没收到包裹，问了邻居也没有", "signed_in": true, "intended_lane": "complaint", "tags": ["missing-delivery"], "stratum": "complaint"}
+{"id": "r021", "query": "买的Lululemon裤子洗了一次就起球，按照洗标洗的", "signed_in": true, "intended_lane": "complaint", "tags": ["quality", "lululemon"], "stratum": "complaint"}
+{"id": "r022", "query": "退货政策是什么，签收后多少天内可以退", "signed_in": false, "intended_lane": "answers", "tags": ["return-policy"], "stratum": "answers"}
+{"id": "r023", "query": "Nike的鞋码偏不偏，我平时穿42码应该买多大", "signed_in": false, "intended_lane": "answers", "tags": ["sizing", "nike"], "stratum": "answers"}
+{"id": "r024", "query": "Lululemon的Align面料是什么材质", "signed_in": false, "intended_lane": "answers", "tags": ["material", "lululemon"], "stratum": "answers"}
+{"id": "r025", "query": "你们支持哪些支付方式，可以用微信支付吗", "signed_in": false, "intended_lane": "answers", "tags": ["payment"], "stratum": "answers"}
+{"id": "r026", "query": "满多少免运费，发什么快递", "signed_in": false, "intended_lane": "answers", "tags": ["shipping"], "stratum": "answers"}
+{"id": "r027", "query": "Adidas和Nike分别是哪个国家的品牌", "signed_in": false, "intended_lane": "answers", "tags": ["brand-info", "cross-brand"], "stratum": "answers"}
+{"id": "r028", "query": "打折商品可以退换吗", "signed_in": true, "intended_lane": "answers", "tags": ["sale", "return"], "stratum": "answers"}
+{"id": "r029", "query": "我要转人工客服", "signed_in": true, "intended_lane": "escalation", "tags": [], "stratum": "escalation"}
+{"id": "r030", "query": "别跟我扯这些没用的，找个真人来跟我说话", "signed_in": true, "intended_lane": "escalation", "tags": [], "stratum": "escalation"}
+{"id": "r031", "query": "能不能让你们主管给我回个电话", "signed_in": false, "intended_lane": "escalation", "tags": ["callback"], "stratum": "escalation"}
+{"id": "r032", "query": "这个问题机器人解决不了，帮我接人工", "signed_in": true, "intended_lane": "escalation", "tags": [], "stratum": "escalation"}

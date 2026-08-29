@@ -1,0 +1,109 @@
+"""Groq chat completions behind the LLMClient interface (hosted, OpenAI-compatible, fast)."""
+from __future__ import annotations
+
+import http.client
+import json
+import os
+import urllib.error
+import urllib.request
+from collections.abc import Iterator
+
+from ._http import _USER_AGENT, request_json
+from .base import LLMResult
+from .config import get_settings
+from .observability import observe, update_generation
+
+_DEFAULT_BASE = "https://api.groq.com/openai/v1"
+_DEFAULT_MODEL = "llama-3.3-70b-versatile"
+# Groq is seconds-scale, so a single call has no business taking a minute. 15s caps a hung call
+# ~4x tighter than the old 60s; the per-turn TurnBudget caps the whole turn on top of this.
+_CALL_TIMEOUT = 15
+
+
+class GroqClient:
+    def __init__(self, model: str | None = None, api_key: str | None = None,
+                 base_url: str | None = None) -> None:
+        settings = get_settings()
+        self.model = model or os.getenv("GROQ_MODEL_LARGE", _DEFAULT_MODEL)
+        self.api_key = api_key or settings.groq_api_key
+        self.base_url = (base_url or os.getenv("GROQ_BASE_URL", _DEFAULT_BASE)).rstrip("/")
+
+    def _messages(self, prompt: str, system: str | None) -> list[dict]:
+        messages = []
+        if system:
+            messages.append({"role": "system", "content": system})
+        messages.append({"role": "user", "content": prompt})
+        return messages
+
+    # capture_input/output off so `self` (which holds the API key) and the raw result are never
+    # serialized into the trace; the prompt and answer are set explicitly via update_generation.
+    @observe(as_type="generation", name="groq.generate",
+             capture_input=False, capture_output=False)
+    def generate(self, prompt: str, *, system: str | None = None,
+                 max_tokens: int = 512) -> LLMResult:
+        if not self.api_key:
+            raise RuntimeError("GROQ_API_KEY is not set; put it in .env")
+        body = {"model": self.model, "messages": self._messages(prompt, system),
+                "max_tokens": max_tokens, "temperature": 0}
+        resp = request_json("POST", self.base_url + "/chat/completions", body,
+                            {"Authorization": "Bearer " + self.api_key}, timeout=_CALL_TIMEOUT)
+        text = resp["choices"][0]["message"]["content"]
+        usage = resp.get("usage", {})
+        # record the model, prompt/answer, and token counts on the Langfuse generation (no-op when
+        # tracing is off). Cost is derived by Langfuse from the model and token counts.
+        update_generation(
+            model=self.model, input=prompt, output=text,
+            usage_details={"input": usage.get("prompt_tokens", 0),
+                           "output": usage.get("completion_tokens", 0)})
+        return LLMResult(text=text,
+                         prompt_tokens=usage.get("prompt_tokens", 0),
+                         completion_tokens=usage.get("completion_tokens", 0),
+                         model=self.model)
+
+    def stream(self, prompt: str, *, system: str | None = None,
+               max_tokens: int = 512, usage_out: dict | None = None) -> Iterator[str]:
+        if not self.api_key:
+            raise RuntimeError("GROQ_API_KEY is not set; put it in .env")
+        # stream_options.include_usage adds a final chunk carrying token usage (with cached tokens),
+        # so a streamed turn is metered exactly like a non-streamed one, not left at zero cost.
+        body = {"model": self.model, "messages": self._messages(prompt, system),
+                "max_tokens": max_tokens, "temperature": 0, "stream": True,
+                "stream_options": {"include_usage": True}}
+        req = urllib.request.Request(
+            self.base_url + "/chat/completions", data=json.dumps(body).encode(), method="POST")
+        req.add_header("Content-Type", "application/json")
+        req.add_header("User-Agent", _USER_AGENT)  # else Groq's Cloudflare 403s the stream (1010)
+        req.add_header("Authorization", "Bearer " + self.api_key)
+        try:
+            resp = urllib.request.urlopen(req, timeout=_CALL_TIMEOUT)  # noqa: S310
+        except urllib.error.HTTPError as exc:
+            detail = exc.read().decode(errors="replace")[:2000]
+            raise RuntimeError("groq stream -> HTTP {}: {}".format(exc.code, detail)) from exc
+        except urllib.error.URLError as exc:
+            raise RuntimeError("groq stream failed: {}".format(exc.reason)) from exc
+        with resp:
+            try:
+                for raw in resp:
+                    line = raw.decode("utf-8", errors="replace").strip()
+                    if not line.startswith("data:"):
+                        continue
+                    data = line[len("data:"):].strip()
+                    if data == "[DONE]":
+                        break
+                    try:
+                        chunk = json.loads(data)
+                    except json.JSONDecodeError:
+                        continue
+                    # the final chunk (include_usage) carries usage and an empty choices list
+                    if usage_out is not None:
+                        if isinstance(chunk.get("usage"), dict):
+                            usage_out.update(chunk["usage"])
+                        if chunk.get("model"):
+                            usage_out.setdefault("model", chunk["model"])
+                    choices = chunk.get("choices") or []
+                    piece = (choices[0].get("delta") or {}).get("content") if choices else None
+                    if piece:
+                        yield piece
+            except (OSError, http.client.HTTPException) as exc:
+                # mid-stream stall/reset/truncation: normalize so the endpoint can degrade
+                raise RuntimeError("groq stream failed: {}".format(exc)) from exc

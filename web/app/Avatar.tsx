@@ -1,0 +1,95 @@
+"use client";
+
+// A stylized, friendly assistant avatar drawn in SVG (no external assets). It animates by state:
+// idle blinks and gently breathes, thinking bobs with a soft pulse, speaking moves the mouth.
+// `level` (0..1) is the live audio amplitude, so the mouth opens in time with the spoken voice.
+// `persona` gives the two roles a distinct look: 小风使用温暖的绿色圆形形象，
+// 小晴作为升级服务角色使用更冷静的靛蓝色方圆形形象。
+// hair, so a handoff reads as a different person at a glance.
+export type AvatarState = "idle" | "thinking" | "speaking";
+export type AvatarPersona = "sara" | "tiffany";
+
+export default function Avatar({
+  state = "idle",
+  size = 34,
+  level = 0,
+  persona = "sara",
+}: {
+  state?: AvatarState;
+  size?: number;
+  level?: number;
+  persona?: AvatarPersona;
+}) {
+  // when speaking, drive the mouth from the audio level (real amplitude, or a faked oscillation on
+  // the browser-voice fallback); otherwise it rests as a soft smile
+  const open = state === "speaking" ? Math.max(0.08, Math.min(1, level)) : 0;
+  const mouthRy = 0.5 + open * 4.2; // vertical opening
+  const mouthRx = 3.6 - open * 0.7; // narrows slightly as it opens, like real speech
+
+  // per-persona look. Ids are suffixed by persona so a page showing both avatars does not have two
+  // clipPaths or gradients fighting over the same id.
+  const look =
+    persona === "tiffany"
+      ? { hair: "#4a3b30", fringe: "#3d3025", g0: "#5b63c4", g1: "#141420" }
+      : { hair: "#c98f52", fringe: "#bd8347", g0: "#2a8e77", g1: "#14140f" };
+  const clipId = `ava-clip-${persona}`;
+  const bgId = `ava-bg-${persona}`;
+
+  return (
+    <span className={`ava ava-${state}`} style={{ width: size, height: size }} aria-hidden="true">
+      <svg viewBox="0 0 64 64" width={size} height={size}>
+        <defs>
+          <clipPath id={clipId}>
+            {persona === "tiffany" ? (
+              <rect width="64" height="64" rx="18" ry="18" />
+            ) : (
+              <circle cx="32" cy="32" r="32" />
+            )}
+          </clipPath>
+          <linearGradient id={bgId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor={look.g0} />
+            <stop offset="1" stopColor={look.g1} />
+          </linearGradient>
+        </defs>
+        <g clipPath={`url(#${clipId})`}>
+          <rect width="64" height="64" fill={`url(#${bgId})`} />
+          {/* shoulders */}
+          <path d="M10 64 Q32 45 54 64 Z" fill="#f2f1ec" />
+          {/* neck */}
+          <rect x="29" y="42" width="6" height="8" fill="#eec0a0" />
+          {/* hair: light, open bob framing the face */}
+          <path className="ava-hair" d="M17 34 Q16 13 32 12 Q48 13 47 34 Q47 45 43 49 L43 30 Q43 21 32 21 Q21 21 21 30 L21 49 Q17 45 17 34 Z" fill={look.hair} />
+          {/* face */}
+          <ellipse className="ava-face" cx="32" cy="31" rx="13.5" ry="15" fill="#f4cdaa" />
+          {/* side-swept fringe */}
+          <path d="M20 30 Q23 18 33 19 Q44 20 44 30 Q40 24 31 24 Q25 24 20 30 Z" fill={look.fringe} />
+          {/* brows */}
+          <g className="ava-brows" stroke="#a5763f" strokeWidth="1.4" strokeLinecap="round">
+            <path d="M23 27 Q26 25.5 29 27" fill="none" />
+            <path d="M35 27 Q38 25.5 41 27" fill="none" />
+          </g>
+          {/* eyes */}
+          <g className="ava-eyes" fill="#40342b">
+            <ellipse cx="26.5" cy="31" rx="2" ry="2.6" />
+            <ellipse cx="37.5" cy="31" rx="2" ry="2.6" />
+          </g>
+          {/* blush */}
+          <circle cx="23.5" cy="36" r="2.1" fill="#f0a488" opacity="0.55" />
+          <circle cx="40.5" cy="36" r="2.1" fill="#f0a488" opacity="0.55" />
+          {/* mouth: a soft smile at rest, an open ellipse that tracks the voice while speaking */}
+          {open > 0 ? (
+            <g>
+              <ellipse cx="32" cy="40" rx={mouthRx} ry={mouthRy} fill="#7a3b39" />
+              <ellipse cx="32" cy={40 + mouthRy * 0.35} rx={mouthRx * 0.6} ry={mouthRy * 0.4} fill="#c46f6a" opacity="0.7" />
+            </g>
+          ) : (
+            <path className="ava-mouth" d="M28 39 Q32 42 36 39" stroke="#b5615a" strokeWidth="1.6" fill="none" strokeLinecap="round" />
+          )}
+        </g>
+      </svg>
+      <span className="ava-dots">
+        <i /><i /><i />
+      </span>
+    </span>
+  );
+}

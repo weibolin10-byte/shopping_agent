@@ -1,0 +1,90 @@
+[
+ {
+  "name": "core_gift_father_running",
+  "recipient_gender": "men",
+  "brain": "omni",
+  "turns": [
+   "你好，我想给我爸买双跑鞋",
+   "他每天早上在公园跑五公里，今年55岁",
+   "预算一千块以内吧",
+   "Nike和Adidas哪个更适合他这个年纪"
+  ]
+ },
+ {
+  "name": "core_yoga_beginner_gear",
+  "recipient_gender": "women",
+  "brain": "omni",
+  "turns": [
+   "我刚开始练瑜伽，需要买什么装备",
+   "主要是瑜伽裤和运动内衣",
+   "预算一千左右，Lululemon的怎么样",
+   "Align和Wunder Train哪个更适合新手"
+  ]
+ },
+ {
+  "name": "core_basketball_shoes_compare",
+  "recipient_gender": "men",
+  "brain": "omni",
+  "turns": [
+   "想买双篮球鞋，在外场打",
+   "Nike LeBron和Under Armour Curry哪个好",
+   "我打后卫位置，体重70公斤",
+   "那双保护性更好一些"
+  ]
+ },
+ {
+  "name": "core_order_delay_complaint",
+  "recipient_gender": "",
+  "brain": "omni",
+  "turns": [
+   "我的订单RF100012怎么还没发货",
+   "下单都快一个星期了，之前说三天内发",
+   "我急着穿去参加比赛的",
+   "再不到我就退货了"
+  ]
+ },
+ {
+  "name": "core_running_shoes_cross_brand",
+  "recipient_gender": "men",
+  "brain": "omni",
+  "turns": [
+   "想入一双日常训练跑鞋",
+   "每周跑三次，每次十公里左右",
+   "Nike Pegasus 40和Adidas Ultraboost Light怎么选",
+   "哪个缓震更好，更适合长跑"
+  ]
+ },
+ {
+  "name": "core_lululemon_sizing",
+  "recipient_gender": "women",
+  "brain": "omni",
+  "turns": [
+   "Lululemon的Align裤子尺码怎么选",
+   "我身高165体重55公斤",
+   "平时穿M码，但看评论有人说偏大",
+   "Define外套也一起推荐个尺码"
+  ]
+ },
+ {
+  "name": "core_winter_running_layers",
+  "recipient_gender": "men",
+  "brain": "omni",
+  "turns": [
+   "冬天在户外跑步穿什么",
+   "北京的冬天零下五六度",
+   "Nike和Under Armour哪个保暖层更好",
+   "ColdGear和Pro紧身衣有什么区别"
+  ]
+ },
+ {
+  "name": "core_casual_sneakers_style",
+  "recipient_gender": "",
+  "brain": "omni",
+  "turns": [
+   "想买双日常穿的运动鞋",
+   "要百搭一点的，配牛仔裤和运动裤都行",
+   "Air Force 1和Superstar哪个更经典",
+   "这两双鞋码正不正"
+  ]
+ }
+]

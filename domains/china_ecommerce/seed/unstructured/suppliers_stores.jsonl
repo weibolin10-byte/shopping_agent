@@ -1,0 +1,18 @@
+{"id": "SUP01", "lang": "zh", "doc_type": "supplier", "supplier_id": "SUP01", "text": "供应商SUP01裕元工业（越南）：位于越南，是Nike运动鞋缓震科技的核心供应商，供应Nike Air Zoom Pegasus、Nike React Infinity等跑鞋的中底和缓震组件。与Nike有长期合作关系。"}
+{"id": "SUP02", "lang": "zh", "doc_type": "supplier", "supplier_id": "SUP02", "text": "供应商SUP02丰泰企业（中国）：位于中国，是Nike Dri-FIT速干面料和运动鞋的主要供应商。丰泰企业生产Nike Dri-FIT短袖T恤（P007）等产品，同时供应Nike部分篮球鞋和训练鞋制造。"}
+{"id": "SUP03", "lang": "zh", "doc_type": "supplier", "supplier_id": "SUP03", "text": "供应商SUP03昌信制鞋（印尼）：位于印尼，专业生产休闲鞋橡胶大底，供应Nike Air Force 1板鞋（P013）等休闲鞋款的鞋底组件。"}
+{"id": "SUP04", "lang": "zh", "doc_type": "supplier", "supplier_id": "SUP04", "text": "供应商SUP04宝成工业（越南）：位于越南，是Adidas Boost中底科技的核心供应商，供应Adidas Ultraboost Light（P025）等跑鞋的Boost中底和Primeknit鞋面制造。宝成工业是全球最大运动鞋代工厂之一。"}
+{"id": "SUP05", "lang": "zh", "doc_type": "supplier", "supplier_id": "SUP05", "text": "供应商SUP05宁波申洲针织：位于中国宁波，是Primegreen环保面料供应商，为Adidas和Nike供应运动服装面料，包括Adidas AeroReady训练T恤（P037）等速干面料产品。"}
+{"id": "SUP06", "lang": "zh", "doc_type": "supplier", "supplier_id": "SUP06", "text": "供应商SUP06江苏晨风集团：位于中国江苏，是Lululemon Nulu裸感面料的核心供应商，供应Lululemon Align高腰紧身裤（P049）等瑜伽服饰产品的专利面料。晨风集团与Lululemon有深度合作。"}
+{"id": "STR01", "lang": "zh", "doc_type": "store", "store_id": "ST01", "brand": "Nike", "text": "ST01 Nike上海旗舰店：位于上海，是Nike在中国的首家旗舰店，销售全系列Nike产品包括跑鞋、篮球鞋、训练服和休闲装备。支持门店自提。"}
+{"id": "STR02", "lang": "zh", "doc_type": "store", "store_id": "ST02", "brand": "Nike", "text": "ST02 Nike北京王府井店：位于北京王府井商圈，是Nike在北京的核心门店，提供跑步、篮球、训练全品类产品和Nike By You定制服务。"}
+{"id": "STR03", "lang": "zh", "doc_type": "store", "store_id": "ST03", "brand": "Nike", "text": "ST03 Nike广州天河城店：位于广州天河商圈，销售Nike跑步、篮球、训练和运动休闲系列产品。"}
+{"id": "STR04", "lang": "zh", "doc_type": "store", "store_id": "ST04", "brand": "Nike", "text": "ST04 Nike深圳万象天地店：位于深圳万象天地，提供Nike最新产品和会员专属服务。"}
+{"id": "STR05", "lang": "zh", "doc_type": "store", "store_id": "ST05", "brand": "Nike", "text": "ST05 Nike成都太古里店：位于成都太古里商圈，是Nike在西南地区的旗舰门店。"}
+{"id": "STR06", "lang": "zh", "doc_type": "store", "store_id": "ST06", "brand": "Adidas", "text": "ST06 Adidas上海南京西路店：位于上海南京西路，是Adidas在上海的核心门店，销售跑步、足球、训练和三叶草复古系列。"}
+{"id": "STR07", "lang": "zh", "doc_type": "store", "store_id": "ST07", "brand": "Adidas", "text": "ST07 Adidas北京三里屯店：位于北京三里屯，是Adidas在北京的品牌中心店，提供全系列产品包括Ultraboost、三叶草等。"}
+{"id": "STR08", "lang": "zh", "doc_type": "store", "store_id": "ST08", "brand": "Adidas", "text": "ST08 Adidas杭州湖滨银泰店：位于杭州湖滨银泰，销售Adidas跑步、训练和Originals系列。"}
+{"id": "STR09", "lang": "zh", "doc_type": "store", "store_id": "ST09", "brand": "Lululemon", "text": "ST09 Lululemon上海环贸广场店：位于上海环贸广场（iapm），是Lululemon在上海的高端门店，提供Align、Scuba、Define等全系列瑜伽和运动休闲服饰。"}
+{"id": "STR10", "lang": "zh", "doc_type": "store", "store_id": "ST10", "brand": "Lululemon", "text": "ST10 Lululemon北京国贸店：位于北京国贸商城，销售Align瑜伽裤、Scuba卫衣、Define外套等Lululemon经典产品。"}
+{"id": "STR11", "lang": "zh", "doc_type": "store", "store_id": "ST11", "brand": "Lululemon", "text": "ST11 Lululemon深圳万象城店：位于深圳万象城，提供Lululemon瑜伽、跑步和训练系列产品。"}
+{"id": "STR12", "lang": "zh", "doc_type": "store", "store_id": "ST12", "brand": "Under Armour", "text": "ST12 Under Armour上海正大广场店：位于上海正大广场，是Under Armour在上海的门店，销售ColdGear保暖紧身衣、Curry篮球鞋、HOVR跑鞋等产品。"}

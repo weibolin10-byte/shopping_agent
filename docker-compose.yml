@@ -1,0 +1,95 @@
+# 本地基础设施。DeepSeek 与通义千问使用托管 API；这些容器提供向量库、图数据库和实验跟踪。
+# Bring the stack up with `make up`, stop it with `make down`.
+name: shopping-agent
+
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.12.4
+    restart: unless-stopped
+    ports:
+      - "6333:6333"   # REST API and dashboard
+      - "6334:6334"   # gRPC
+    volumes:
+      - qdrant_data:/qdrant/storage
+    # The qdrant image is minimal (no shell or curl), so readiness is checked from the host
+    # and the app (GET /readyz), not with a container healthcheck.
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: shopping_agent
+      POSTGRES_PASSWORD: shopping_agent
+      POSTGRES_DB: shopping_agent
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shopping_agent -d shopping_agent"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  neo4j:
+    image: neo4j:5-community
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: neo4j/shopping_agent_password
+    ports:
+      - "7474:7474"   # HTTP API and browser UI (the app uses this)
+      - "7687:7687"   # bolt (for cypher-shell / drivers, not required by the app)
+    volumes:
+      - neo4j_data:/data
+    healthcheck:
+      # the image ships wget; the HTTP endpoint is ready a little after the process starts
+      test: ["CMD-SHELL", "wget -qO- http://localhost:7474 || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # MLflow tracking server (M8). The app logs runs here when MLFLOW_TRACKING_URI points at it;
+  # locally the sink defaults to a ./mlruns file store instead, so this is optional.
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v3.4.0
+    restart: unless-stopped
+    # SQLite backend store (in the mlflow_data volume), not Postgres: the stock MLflow image ships no
+    # psycopg2, so a postgres backend crash-loops. SQLite needs no extra driver and is the right lean
+    # store for a single-node tracking server; artifacts live in the same volume.
+    command: >
+      mlflow server --host 0.0.0.0 --port 5000
+      --backend-store-uri sqlite:////mlruns/mlflow.db
+      --default-artifact-root /mlruns
+    ports:
+      # host 5001, not 5000: macOS AirPlay Receiver (ControlCenter) squats on 5000 and 403s every
+      # request, so MLflow calls never reach the container. 5001 sidesteps that. Set
+      # MLFLOW_TRACKING_URI=http://localhost:5001 to match.
+      - "5001:5000"
+    volumes:
+      - mlflow_data:/mlruns
+
+  # Batch enrichment worker. It reuses the app image with a different
+  # command and runs ON DEMAND, not as a long-lived service, so its embedding and annotation bursts
+  # never compete with request latency. It is behind the "batch" profile, so `make up` does not
+  # start it; run it explicitly:
+  #   docker compose --profile batch run --rm worker
+  # This is the one service carved out of the modular monolith, because its lifecycle (scheduled or
+  # one-shot) and resource profile differ from serving. At scale it becomes a k8s CronJob.
+  worker:
+    build: .
+    profiles: ["batch"]
+    working_dir: /app
+    environment:
+      PYTHONPATH: /app
+      LLM_PROVIDER: ${LLM_PROVIDER:-fake}
+      OPENAI_COMPAT_API_KEY: ${OPENAI_COMPAT_API_KEY:-}
+      OPENAI_COMPAT_BASE_URL: ${OPENAI_COMPAT_BASE_URL:-https://api.deepseek.com/v1}
+    command: ["python", "scripts/run_enrichment.py"]
+    volumes:
+      - ./data:/app/data
+
+volumes:
+  qdrant_data:
+  postgres_data:
+  neo4j_data:
+  mlflow_data:

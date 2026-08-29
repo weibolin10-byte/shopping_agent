@@ -1,0 +1,100 @@
+product_id,name,brand,category,gender,size,price,color,colors,weather,stock,supplier_id
+P001,Nike Air Zoom Pegasus 40 跑步鞋,Nike,shoes,men,M,899.0,黑色,黑色|白色|灰色,all-season,86,SUP01
+P002,Nike Air Zoom Pegasus 40 跑步鞋,Nike,shoes,men,L,899.0,黑色,黑色|白色|灰色,all-season,72,SUP01
+P003,Nike Air Zoom Pegasus 40 跑步鞋,Nike,shoes,men,XL,899.0,黑色,黑色|白色|灰色,all-season,54,SUP01
+P004,Nike React Infinity 跑步鞋,Nike,shoes,women,M,999.0,粉色,粉色|白色|黑色,all-season,68,SUP01
+P005,Nike React Infinity 跑步鞋,Nike,shoes,women,L,999.0,粉色,粉色|白色|黑色,all-season,55,SUP01
+P006,Nike React Infinity 跑步鞋,Nike,shoes,women,XL,999.0,粉色,粉色|白色|黑色,all-season,43,SUP01
+P007,Nike Dri-FIT 短袖T恤,Nike,tops,men,M,199.0,黑色,黑色|白色|藏青,hot,120,SUP02
+P008,Nike Dri-FIT 短袖T恤,Nike,tops,men,L,199.0,黑色,黑色|白色|藏青,hot,105,SUP02
+P009,Nike Dri-FIT 短袖T恤,Nike,tops,men,XL,199.0,黑色,黑色|白色|藏青,hot,88,SUP02
+P010,Nike LeBron 篮球鞋,Nike,shoes,men,M,1299.0,黑红,黑红|白色|金色,all-season,42,SUP01
+P011,Nike LeBron 篮球鞋,Nike,shoes,men,L,1299.0,黑红,黑红|白色|金色,all-season,35,SUP01
+P012,Nike LeBron 篮球鞋,Nike,shoes,men,XL,1299.0,黑红,黑红|白色|金色,all-season,28,SUP01
+P013,Nike Air Force 1 板鞋,Nike,shoes,unisex,M,799.0,白色,白色|黑色|小麦色,all-season,95,SUP03
+P014,Nike Air Force 1 板鞋,Nike,shoes,unisex,L,799.0,白色,白色|黑色|小麦色,all-season,82,SUP03
+P015,Nike Air Force 1 板鞋,Nike,shoes,unisex,XL,799.0,白色,白色|黑色|小麦色,all-season,67,SUP03
+P016,Nike Therma-FIT 连帽卫衣,Nike,hoodies,men,M,499.0,黑色,黑色|深灰|藏青,cold,56,SUP02
+P017,Nike Therma-FIT 连帽卫衣,Nike,hoodies,men,L,499.0,黑色,黑色|深灰|藏青,cold,48,SUP02
+P018,Nike Therma-FIT 连帽卫衣,Nike,hoodies,men,XL,499.0,黑色,黑色|深灰|藏青,cold,39,SUP02
+P019,Nike Pro 紧身长裤,Nike,leggings,men,M,299.0,黑色,黑色|深灰,cold,73,SUP02
+P020,Nike Pro 紧身长裤,Nike,leggings,men,L,299.0,黑色,黑色|深灰,cold,61,SUP02
+P021,Nike Pro 紧身长裤,Nike,leggings,men,XL,299.0,黑色,黑色|深灰,cold,45,SUP02
+P022,Nike Air Max 270 运动鞋,Nike,shoes,men,M,1099.0,黑白,黑白|灰蓝|全黑,all-season,64,SUP03
+P023,Nike Air Max 270 运动鞋,Nike,shoes,men,L,1099.0,黑白,黑白|灰蓝|全黑,all-season,52,SUP03
+P024,Nike Air Max 270 运动鞋,Nike,shoes,men,XL,1099.0,黑白,黑白|灰蓝|全黑,all-season,38,SUP03
+P025,Adidas Ultraboost Light 跑步鞋,Adidas,shoes,men,M,1099.0,黑色,黑色|白色|灰色,all-season,78,SUP04
+P026,Adidas Ultraboost Light 跑步鞋,Adidas,shoes,men,L,1099.0,黑色,黑色|白色|灰色,all-season,65,SUP04
+P027,Adidas Ultraboost Light 跑步鞋,Adidas,shoes,men,XL,1099.0,黑色,黑色|白色|灰色,all-season,49,SUP04
+P028,Adidas Adizero Adios 跑步鞋,Adidas,shoes,men,M,899.0,白色,白色|黑色|荧光绿,hot,56,SUP04
+P029,Adidas Adizero Adios 跑步鞋,Adidas,shoes,men,L,899.0,白色,白色|黑色|荧光绿,hot,44,SUP04
+P030,Adidas Adizero Adios 跑步鞋,Adidas,shoes,men,XL,899.0,白色,白色|黑色|荧光绿,hot,32,SUP04
+P031,Adidas Superstar 经典鞋,Adidas,shoes,unisex,M,799.0,白色,白色|黑色|金色,all-season,88,SUP05
+P032,Adidas Superstar 经典鞋,Adidas,shoes,unisex,L,799.0,白色,白色|黑色|金色,all-season,74,SUP05
+P033,Adidas Superstar 经典鞋,Adidas,shoes,unisex,XL,799.0,白色,白色|黑色|金色,all-season,59,SUP05
+P034,Adidas Gazelle 休闲鞋,Adidas,shoes,unisex,M,699.0,深蓝,深蓝|酒红|墨绿,all-season,71,SUP05
+P035,Adidas Gazelle 休闲鞋,Adidas,shoes,unisex,L,699.0,深蓝,深蓝|酒红|墨绿,all-season,58,SUP05
+P036,Adidas Gazelle 休闲鞋,Adidas,shoes,unisex,XL,699.0,深蓝,深蓝|酒红|墨绿,all-season,43,SUP05
+P037,Adidas AeroReady 训练T恤,Adidas,tops,men,M,199.0,黑色,黑色|白色|深灰,hot,110,SUP04
+P038,Adidas AeroReady 训练T恤,Adidas,tops,men,L,199.0,黑色,黑色|白色|深灰,hot,95,SUP04
+P039,Adidas AeroReady 训练T恤,Adidas,tops,men,XL,199.0,黑色,黑色|白色|深灰,hot,78,SUP04
+P040,Adidas Tiro 足球训练裤,Adidas,leggings,men,M,349.0,黑色,黑色|藏青|深灰,all-season,67,SUP05
+P041,Adidas Tiro 足球训练裤,Adidas,leggings,men,L,349.0,黑色,黑色|藏青|深灰,all-season,54,SUP05
+P042,Adidas Tiro 足球训练裤,Adidas,leggings,men,XL,349.0,黑色,黑色|藏青|深灰,all-season,40,SUP05
+P043,Adidas 三叶草连帽卫衣,Adidas,hoodies,unisex,M,599.0,浅灰,浅灰|黑色|藏青,mild,62,SUP05
+P044,Adidas 三叶草连帽卫衣,Adidas,hoodies,unisex,L,599.0,浅灰,浅灰|黑色|藏青,mild,50,SUP05
+P045,Adidas 三叶草连帽卫衣,Adidas,hoodies,unisex,XL,599.0,浅灰,浅灰|黑色|藏青,mild,37,SUP05
+P046,Adidas Z.N.E. 运动外套,Adidas,jackets,men,M,799.0,黑色,黑色|深灰|藏青,cold,48,SUP04
+P047,Adidas Z.N.E. 运动外套,Adidas,jackets,men,L,799.0,黑色,黑色|深灰|藏青,cold,40,SUP04
+P048,Adidas Z.N.E. 运动外套,Adidas,jackets,men,XL,799.0,黑色,黑色|深灰|藏青,cold,29,SUP04
+P049,Lululemon Align 高腰紧身裤,Lululemon,leggings,women,M,850.0,黑色,黑色|深灰|藏青,all-season,72,SUP06
+P050,Lululemon Align 高腰紧身裤,Lululemon,leggings,women,L,850.0,黑色,黑色|深灰|藏青,all-season,58,SUP06
+P051,Lululemon Align 高腰紧身裤,Lululemon,leggings,women,XL,850.0,黑色,黑色|深灰|藏青,all-season,45,SUP06
+P052,Lululemon Define 瑜伽外套,Lululemon,jackets,women,M,980.0,黑色,黑色|深灰|深蓝,mild,55,SUP06
+P053,Lululemon Define 瑜伽外套,Lululemon,jackets,women,L,980.0,黑色,黑色|深灰|深蓝,mild,43,SUP06
+P054,Lululemon Define 瑜伽外套,Lululemon,jackets,women,XL,980.0,黑色,黑色|深灰|深蓝,mild,31,SUP06
+P055,Lululemon Wunder Train 紧身裤,Lululemon,leggings,women,M,750.0,深绿,深绿|黑色|紫红,all-season,64,SUP06
+P056,Lululemon Wunder Train 紧身裤,Lululemon,leggings,women,L,750.0,深绿,深绿|黑色|紫红,all-season,51,SUP06
+P057,Lululemon Wunder Train 紧身裤,Lululemon,leggings,women,XL,750.0,深绿,深绿|黑色|紫红,all-season,38,SUP06
+P058,Lululemon Swiftly 长袖T恤,Lululemon,tops,women,M,450.0,白色,白色|黑色|薄荷绿,all-season,80,SUP06
+P059,Lululemon Swiftly 长袖T恤,Lululemon,tops,women,L,450.0,白色,白色|黑色|薄荷绿,all-season,66,SUP06
+P060,Lululemon Swiftly 长袖T恤,Lululemon,tops,women,XL,450.0,白色,白色|黑色|薄荷绿,all-season,50,SUP06
+P061,Lululemon Scuba 连帽卫衣,Lululemon,hoodies,women,M,880.0,燕麦色,燕麦色|黑色|灰色,mild,47,SUP06
+P062,Lululemon Scuba 连帽卫衣,Lululemon,hoodies,women,L,880.0,燕麦色,燕麦色|黑色|灰色,mild,36,SUP06
+P063,Lululemon Scuba 连帽卫衣,Lululemon,hoodies,women,XL,880.0,燕麦色,燕麦色|黑色|灰色,mild,25,SUP06
+P064,Lululemon Energy 运动内衣,Lululemon,bras,women,M,380.0,黑色,黑色|深蓝|紫红,hot,70,SUP06
+P065,Lululemon Energy 运动内衣,Lululemon,bras,women,L,380.0,黑色,黑色|深蓝|紫红,hot,57,SUP06
+P066,Lululemon Energy 运动内衣,Lululemon,bras,women,XL,380.0,黑色,黑色|深蓝|紫红,hot,42,SUP06
+P067,Lululemon Pace Rival 运动短裙,Lululemon,shorts,women,M,480.0,黑色,黑色|深蓝|白色,hot,53,SUP06
+P068,Lululemon Pace Rival 运动短裙,Lululemon,shorts,women,L,480.0,黑色,黑色|深蓝|白色,hot,41,SUP06
+P069,Lululemon Pace Rival 运动短裙,Lululemon,shorts,women,XL,480.0,黑色,黑色|深蓝|白色,hot,29,SUP06
+P070,Lululemon Metal Vent 男士T恤,Lululemon,tops,men,M,420.0,深灰,深灰|黑色|海军蓝,hot,59,SUP06
+P071,Lululemon Metal Vent 男士T恤,Lululemon,tops,men,L,420.0,深灰,深灰|黑色|海军蓝,hot,47,SUP06
+P072,Lululemon Metal Vent 男士T恤,Lululemon,tops,men,XL,420.0,深灰,深灰|黑色|海军蓝,hot,34,SUP06
+P073,Under Armour Tech 2.0 短袖T恤,Under Armour,tops,men,M,249.0,黑色,黑色|深灰|藏青,hot,115,SUP02
+P074,Under Armour Tech 2.0 短袖T恤,Under Armour,tops,men,L,249.0,黑色,黑色|深灰|藏青,hot,98,SUP02
+P075,Under Armour Tech 2.0 短袖T恤,Under Armour,tops,men,XL,249.0,黑色,黑色|深灰|藏青,hot,82,SUP02
+P076,Under Armour HOVR Phantom 跑步鞋,Under Armour,shoes,men,M,899.0,黑色,黑色|白色|灰色,all-season,62,SUP01
+P077,Under Armour HOVR Phantom 跑步鞋,Under Armour,shoes,men,L,899.0,黑色,黑色|白色|灰色,all-season,50,SUP01
+P078,Under Armour HOVR Phantom 跑步鞋,Under Armour,shoes,men,XL,899.0,黑色,黑色|白色|灰色,all-season,37,SUP01
+P079,Under Armour Curry 篮球鞋,Under Armour,shoes,men,M,999.0,黑白,黑白|蓝黄|全红,all-season,45,SUP01
+P080,Under Armour Curry 篮球鞋,Under Armour,shoes,men,L,999.0,黑白,黑白|蓝黄|全红,all-season,36,SUP01
+P081,Under Armour Curry 篮球鞋,Under Armour,shoes,men,XL,999.0,黑白,黑白|蓝黄|全红,all-season,27,SUP01
+P082,Under Armour ColdGear 紧身衣,Under Armour,tops,men,M,399.0,黑色,黑色|深灰|藏青,cold,76,SUP02
+P083,Under Armour ColdGear 紧身衣,Under Armour,tops,men,L,399.0,黑色,黑色|深灰|藏青,cold,63,SUP02
+P084,Under Armour ColdGear 紧身衣,Under Armour,tops,men,XL,399.0,黑色,黑色|深灰|藏青,cold,48,SUP02
+P085,Under Armour Rival 连帽卫衣,Under Armour,hoodies,men,M,449.0,黑色,黑色|深灰|藏青,mild,69,SUP02
+P086,Under Armour Rival 连帽卫衣,Under Armour,hoodies,men,L,449.0,黑色,黑色|深灰|藏青,mild,56,SUP02
+P087,Under Armour Rival 连帽卫衣,Under Armour,hoodies,men,XL,449.0,黑色,黑色|深灰|藏青,mild,41,SUP02
+P088,Under Armour Playoff 高尔夫Polo衫,Under Armour,tops,men,M,499.0,白色,白色|黑色|深蓝,mild,52,SUP02
+P089,Under Armour Playoff 高尔夫Polo衫,Under Armour,tops,men,L,499.0,白色,白色|黑色|深蓝,mild,40,SUP02
+P090,Under Armour Playoff 高尔夫Polo衫,Under Armour,tops,men,XL,499.0,白色,白色|黑色|深蓝,mild,28,SUP02
+P091,Nike Dri-FIT One 女子紧身裤,Nike,leggings,women,M,299.0,黑色,黑色|深灰|藏青,all-season,64,SUP01
+P092,Nike Dri-FIT One 女子紧身裤,Nike,leggings,women,L,299.0,黑色,黑色|深灰|藏青,all-season,52,SUP01
+P093,Nike Dri-FIT One 女子紧身裤,Nike,leggings,women,XL,299.0,黑色,黑色|深灰|藏青,all-season,38,SUP01
+P094,Nike Swoosh 女子运动内衣,Nike,bras,women,M,229.0,白色,白色|黑色|浅粉,hot,70,SUP01
+P095,Nike Swoosh 女子运动内衣,Nike,bras,women,L,229.0,白色,白色|黑色|浅粉,hot,58,SUP01
+P096,Nike Swoosh 女子运动内衣,Nike,bras,women,XL,229.0,白色,白色|黑色|浅粉,hot,44,SUP01
+P097,Adidas Believe This 女子紧身裤,Adidas,leggings,women,M,329.0,黑色,黑色|深灰|深蓝,all-season,60,SUP03
+P098,Adidas Believe This 女子紧身裤,Adidas,leggings,women,L,329.0,黑色,黑色|深灰|深蓝,all-season,48,SUP03
+P099,Adidas Believe This 女子紧身裤,Adidas,leggings,women,XL,329.0,黑色,黑色|深灰|深蓝,all-season,35,SUP03

@@ -1,0 +1,45 @@
+{"id": "G001", "lang": "zh", "question": "Nike Air Zoom Pegasus 40多少钱？", "type": "answerable", "difficulty": "common", "route": "factual", "expected_answer_contains": ["899"], "expected_entities": ["P001", "P002", "P003"]}
+{"id": "G002", "lang": "zh", "question": "Adidas Ultraboost Light跑鞋价格是多少？", "type": "answerable", "difficulty": "common", "route": "factual", "expected_answer_contains": ["1099"], "expected_entities": ["P025", "P026", "P027"]}
+{"id": "G003", "lang": "zh", "question": "Lululemon Align紧身裤多少钱？", "type": "answerable", "difficulty": "common", "route": "factual", "expected_answer_contains": ["850"], "expected_entities": ["P049", "P050", "P051"]}
+{"id": "G004", "lang": "zh", "question": "Under Armour Curry篮球鞋价格？", "type": "answerable", "difficulty": "common", "route": "factual", "expected_answer_contains": ["999"], "expected_entities": ["P079", "P080", "P081"]}
+{"id": "G005", "lang": "zh", "question": "Nike Dri-FIT T恤是谁供应的？", "type": "answerable", "difficulty": "semi", "route": "relational", "expected_answer_contains": ["丰泰"], "expected_entities": ["SUP02"]}
+{"id": "G006", "lang": "zh", "question": "Adidas Ultraboost是哪个供应商生产的？", "type": "answerable", "difficulty": "semi", "route": "relational", "expected_answer_contains": ["宝成"], "expected_entities": ["SUP04"]}
+{"id": "G007", "lang": "zh", "question": "Lululemon的面料供应商是谁？", "type": "answerable", "difficulty": "semi", "route": "relational", "expected_answer_contains": ["晨风"], "expected_entities": ["SUP06"]}
+{"id": "G008", "lang": "zh", "question": "Pegasus 40跑鞋偏码吗？", "type": "answerable", "difficulty": "common", "route": "qualitative", "expected_answer_contains": ["窄", "大半码"], "expected_entities": ["P001"]}
+{"id": "G009", "lang": "zh", "question": "Align瑜伽裤穿着怎么样？", "type": "answerable", "difficulty": "common", "route": "qualitative", "expected_answer_contains": ["裸感", "舒服"], "expected_entities": ["P049"]}
+{"id": "G010", "lang": "zh", "question": "Ultraboost和Pegasus哪个好？", "type": "answerable", "difficulty": "semi", "route": "qualitative", "expected_answer_contains": ["Boost", "软", "Zoom"], "expected_entities": ["P001", "P025"]}
+{"id": "G011", "lang": "zh", "question": "Lululemon为什么这么贵？", "type": "answerable", "difficulty": "semi", "route": "qualitative", "expected_answer_contains": ["面料", "Nulu", "剪裁"], "expected_entities": ["P049"]}
+{"id": "G012", "lang": "zh", "question": "你们有哪些门店？", "type": "answerable", "difficulty": "common", "route": "relational", "expected_answer_contains": ["上海", "北京"], "expected_entities": ["ST01", "ST02"]}
+{"id": "G013", "lang": "zh", "question": "北京有哪些品牌门店？", "type": "answerable", "difficulty": "semi", "route": "relational", "expected_answer_contains": ["Nike", "Adidas", "Lululemon"], "expected_entities": ["ST02", "ST07", "ST10"]}
+{"id": "G014", "lang": "zh", "question": "退换货政策是什么？", "type": "answerable", "difficulty": "common", "route": "factual", "expected_answer_contains": ["7天"], "expected_entities": []}
+{"id": "G015", "lang": "zh", "question": "满多少包邮？", "type": "answerable", "difficulty": "common", "route": "factual", "expected_answer_contains": ["199"], "expected_entities": []}
+{"id": "G016", "lang": "zh", "question": "加急运费多少？", "type": "answerable", "difficulty": "common", "route": "factual", "expected_answer_contains": ["20"], "expected_entities": []}
+{"id": "G017", "lang": "zh", "question": "支持哪些支付方式？", "type": "answerable", "difficulty": "common", "route": "factual", "expected_answer_contains": ["支付宝", "微信"], "expected_entities": []}
+{"id": "G018", "lang": "zh", "question": "Nike是什么时候成立的？", "type": "answerable", "difficulty": "common", "route": "factual", "expected_answer_contains": ["1972"], "expected_entities": []}
+{"id": "G019", "lang": "zh", "question": "Adidas是哪个国家的品牌？", "type": "answerable", "difficulty": "common", "route": "factual", "expected_answer_contains": ["德国"], "expected_entities": []}
+{"id": "G020", "lang": "zh", "question": "Lululemon是哪里的品牌？", "type": "answerable", "difficulty": "common", "route": "factual", "expected_answer_contains": ["加拿大", "温哥华"], "expected_entities": []}
+{"id": "G021", "lang": "zh", "question": "Under Armour是什么时候创立的？", "type": "answerable", "difficulty": "common", "route": "factual", "expected_answer_contains": ["1996"], "expected_entities": []}
+{"id": "G022", "lang": "zh", "question": "速干T恤怎么洗？", "type": "answerable", "difficulty": "semi", "route": "factual", "expected_answer_contains": ["冷水", "柔顺剂"], "expected_entities": []}
+{"id": "G023", "lang": "zh", "question": "瑜伽裤可以烘干吗？", "type": "answerable", "difficulty": "semi", "route": "factual", "expected_answer_contains": ["不要", "避免"], "expected_entities": []}
+{"id": "G024", "lang": "zh", "question": "冬天跑步穿什么？", "type": "answerable", "difficulty": "semi", "route": "stylist", "expected_answer_contains": ["ColdGear", "保暖"], "expected_entities": ["P082"]}
+{"id": "G025", "lang": "zh", "question": "入门跑者选什么跑鞋？", "type": "answerable", "difficulty": "semi", "route": "stylist", "expected_answer_contains": ["Pegasus"], "expected_entities": ["P001"]}
+{"id": "G026", "lang": "zh", "question": "篮球鞋LeBron和Curry哪个适合后卫？", "type": "answerable", "difficulty": "semi", "route": "stylist", "expected_answer_contains": ["Curry", "轻量"], "expected_entities": ["P010", "P079"]}
+{"id": "G027", "lang": "zh", "question": "Air Force 1偏码吗？", "type": "answerable", "difficulty": "common", "route": "qualitative", "expected_answer_contains": ["硬", "磨"], "expected_entities": ["P013"]}
+{"id": "G028", "lang": "zh", "question": "ColdGear紧身衣保暖吗？", "type": "answerable", "difficulty": "common", "route": "qualitative", "expected_answer_contains": ["保暖", "暖"], "expected_entities": ["P082"]}
+{"id": "G029", "lang": "zh", "question": "三叶草卫衣质量怎么样？", "type": "answerable", "difficulty": "semi", "route": "qualitative", "expected_answer_contains": ["缩水", "版型"], "expected_entities": ["P043"]}
+{"id": "G030", "lang": "zh", "question": "Scuba卫衣偏大还是偏小？", "type": "answerable", "difficulty": "common", "route": "qualitative", "expected_answer_contains": ["偏大", "小一码"], "expected_entities": ["P061"]}
+{"id": "G031", "lang": "zh", "question": "我的订单到哪了？", "type": "answerable", "difficulty": "common", "route": "care", "expected_answer_contains": ["RF"], "expected_entities": []}
+{"id": "G032", "lang": "zh", "question": "最便宜的跑鞋是哪款？", "type": "answerable", "difficulty": "semi", "route": "factual", "expected_answer_contains": ["699", "Gazelle"], "expected_entities": ["P034"]}
+{"id": "G033", "lang": "zh", "question": "最贵的产品是什么？", "type": "answerable", "difficulty": "common", "route": "factual", "expected_answer_contains": ["1299", "LeBron"], "expected_entities": ["P010"]}
+{"id": "G034", "lang": "zh", "question": "有什么500元以内的礼物推荐？", "type": "answerable", "difficulty": "semi", "route": "stylist", "expected_answer_contains": ["Dri-FIT", "199"], "expected_entities": ["P007"]}
+{"id": "G035", "lang": "zh", "question": "运动鞋怎么清洗？", "type": "answerable", "difficulty": "common", "route": "factual", "expected_answer_contains": ["软毛刷", "阴干"], "expected_entities": []}
+{"id": "G036", "lang": "zh", "question": "Nike和Adidas的速干T恤哪个好？", "type": "answerable", "difficulty": "semi", "route": "qualitative", "expected_answer_contains": ["Dri-FIT", "AeroReady"], "expected_entities": ["P007", "P037"]}
+{"id": "G037", "lang": "zh", "question": "质保期多长？", "type": "answerable", "difficulty": "common", "route": "factual", "expected_answer_contains": ["90天", "30天"], "expected_entities": []}
+{"id": "G038", "lang": "zh", "question": "Define瑜伽外套有什么颜色？", "type": "answerable", "difficulty": "common", "route": "factual", "expected_answer_contains": ["黑色", "深灰", "深蓝"], "expected_entities": ["P052"]}
+{"id": "G039", "lang": "zh", "question": "Wunder Train和Align有什么区别？", "type": "answerable", "difficulty": "semi", "route": "qualitative", "expected_answer_contains": ["支撑", "裸感", "高强度"], "expected_entities": ["P049", "P055"]}
+{"id": "G040", "lang": "zh", "question": "法国的首都是哪里？", "type": "out_of_domain", "difficulty": "common"}
+{"id": "G041", "lang": "zh", "question": "Nike Air Zoom Pegasus 40 有没有加长版？", "type": "unanswerable", "difficulty": "edge"}
+{"id": "G042", "lang": "zh", "question": "你们有宠物运动服吗？", "type": "unanswerable", "difficulty": "edge"}
+{"id": "G043", "lang": "zh", "question": "Lululemon Align 有没有儿童尺码？", "type": "unanswerable", "difficulty": "semi"}
+{"id": "G044", "lang": "zh", "question": "你们提供学生折扣吗？", "type": "unanswerable", "difficulty": "edge"}
+{"id": "G045", "lang": "zh", "question": "Adidas Ultraboost 可以换底吗？", "type": "unanswerable", "difficulty": "edge"}

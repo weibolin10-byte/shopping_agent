@@ -1,0 +1,258 @@
+# 领域数据包：多品牌运动电商平台（Nike / Adidas / Lululemon / Under Armour）。
+# 合成演示数据，所有商品信息为模拟数据。引擎仅读取此数据包。
+
+name: china_ecommerce
+brand: 运动品牌集合
+languages: [zh]
+
+# AI 助手人设：购物助手名称、升级专员名称（AI 助手，不冒充人工）、品牌简称、行业描述。
+persona:
+  assistant: 小风
+  specialist: 小晴
+  brand_short: 运动汇
+  industry: 运动品牌零售平台
+
+# 理解步骤在检索前归一化的同义词术语。
+glossary:
+  紧身裤: [瑜伽裤, 健身裤, leggings, 运动长裤, 压缩裤]
+  跑鞋: [跑步鞋, 运动鞋, running shoes, 慢跑鞋]
+  卫衣: [连帽衫, 帽衫, hoodie, 套头衫]
+  运动内衣: [瑜伽内衣, 运动文胸, sports bra]
+  短裤: [运动短裤, 跑步短裤, shorts]
+  夹克: [外套, 夹克衫, jacket, 防风衣]
+  速干: [排汗, 透气, 快干, dry-fit, aeroready]
+  篮球鞋: [球鞋, basketball shoes, 实战鞋]
+
+# 标准节点标签。每个标签也出现在 ontology.cypher 中。
+entity_types:
+  - Product
+  - Store
+  - Supplier
+  - Review
+
+# 数据清单。使摄入过程与领域无关。
+sources:
+  structured:
+    - file: seed/structured/products.csv
+      role: products
+      primary_key: product_id
+      grain: one row per product variant (name plus size)
+      columns:
+        product_id: string
+        name: string
+        brand: string
+        category: string
+        gender: string
+        size: string
+        price: float
+        color: string
+        colors: string
+        weather: string
+        stock: int
+        supplier_id: string
+      pii_columns: []
+    - file: seed/structured/stores.csv
+      role: stores
+      primary_key: store_id
+      grain: one row per store
+      columns:
+        store_id: string
+        name: string
+        brand: string
+        city: string
+        country: string
+      pii_columns: []
+    - file: seed/structured/suppliers.csv
+      role: suppliers
+      primary_key: supplier_id
+      grain: one row per supplier
+      columns:
+        supplier_id: string
+        name: string
+        country: string
+        material: string
+      pii_columns: []
+    - file: seed/structured/sales.csv
+      role: sales
+      primary_key: sale_id
+      grain: one row per sale line
+      columns:
+        sale_id: string
+        product_id: string
+        store_id: string
+        quantity: int
+        returned: bool
+        sold_at: date
+      pii_columns: []
+  unstructured:
+    - file: seed/unstructured/reviews.jsonl
+      doc_type: review
+      id_field: id
+      text_field: text
+      lang_field: lang
+      meta_fields: [product_id, rating, date]
+      entity_ref: [product_id]
+      context_fields: [product_id]
+      mentions:
+        node_label: Review
+        edge_type: MENTIONS
+        target_label: Product
+        target_name_property: name
+    - file: seed/unstructured/reviews_generated.jsonl
+      doc_type: review
+      id_field: id
+      text_field: text
+      lang_field: lang
+      meta_fields: [product_id, rating, date]
+      entity_ref: [product_id]
+      context_fields: [product_id]
+      mentions:
+        node_label: Review
+        edge_type: MENTIONS
+        target_label: Product
+        target_name_property: name
+    - file: seed/unstructured/reviews_voice.jsonl
+      doc_type: review
+      id_field: id
+      text_field: text
+      lang_field: lang
+      meta_fields: [product_id, rating, date]
+      entity_ref: [product_id]
+      context_fields: [product_id]
+      mentions:
+        node_label: Review
+        edge_type: MENTIONS
+        target_label: Product
+        target_name_property: name
+    - file: seed/unstructured/reviews_curated.jsonl
+      doc_type: review
+      id_field: id
+      text_field: text
+      lang_field: lang
+      meta_fields: [product_id, rating, date]
+      entity_ref: [product_id]
+      context_fields: [product_id]
+      mentions:
+        node_label: Review
+        edge_type: MENTIONS
+        target_label: Product
+        target_name_property: name
+    - file: seed/unstructured/company_knowledge.jsonl
+      doc_type: guide
+      id_field: id
+      text_field: text
+      lang_field: lang
+      meta_fields: [category]
+    - file: seed/unstructured/catalog_facts.jsonl
+      doc_type: guide
+      id_field: id
+      text_field: text
+      lang_field: lang
+      meta_fields: [category]
+    - file: seed/unstructured/occasions.jsonl
+      doc_type: guide
+      id_field: id
+      text_field: text
+      lang_field: lang
+      meta_fields: [category]
+    - file: seed/unstructured/expertise.jsonl
+      doc_type: guide
+      id_field: id
+      text_field: text
+      lang_field: lang
+      meta_fields: [category]
+    - file: seed/unstructured/price_facts.jsonl
+      doc_type: guide
+      id_field: id
+      text_field: text
+      lang_field: lang
+      meta_fields: [category]
+    - file: seed/unstructured/color_facts.jsonl
+      doc_type: guide
+      id_field: id
+      text_field: text
+      lang_field: lang
+      meta_fields: [category]
+    - file: seed/unstructured/orders.jsonl
+      doc_type: order
+      id_field: id
+      text_field: text
+      lang_field: lang
+      meta_fields: [email]
+    - file: seed/unstructured/products.jsonl
+      doc_type: product
+      id_field: id
+      text_field: text
+      lang_field: lang
+      meta_fields: [product_id, category]
+      entity_ref: [product_id]
+      context_fields: [product_id]
+      mentions:
+        node_label: ProductDoc
+        edge_type: DESCRIBES
+        target_label: Product
+        target_name_property: name
+    - file: seed/unstructured/suppliers_stores.jsonl
+      doc_type: guide
+      id_field: id
+      text_field: text
+      lang_field: lang
+      meta_fields: [supplier_id, store_id, brand, doc_type]
+      entity_ref: [supplier_id, store_id]
+    - file: seed/unstructured/products_catalog.jsonl
+      doc_type: product
+      id_field: id
+      text_field: text
+      lang_field: lang
+      meta_fields: [product_id, category, gender]
+      entity_ref: [product_id]
+      context_fields: [product_id]
+      mentions:
+        node_label: ProductDoc
+        edge_type: DESCRIBES
+        target_label: Product
+        target_name_property: name
+
+# 知识图谱：节点来自金表，边来自数据中已存在的外键。
+graph:
+  nodes:
+    - label: Product
+      source: products
+      key: product_id
+      properties: [name, brand, category, gender, price, colors, weather]
+    - label: Supplier
+      source: suppliers
+      key: supplier_id
+      properties: [name, country, material]
+    - label: Store
+      source: stores
+      key: store_id
+      properties: [name, brand, city, country]
+  edges:
+    - type: SUPPLIES
+      from: Supplier
+      to: Product
+      source: products
+      from_key: supplier_id
+      to_key: product_id
+    - type: SOLD_AT
+      from: Product
+      to: Store
+      source: sales
+      from_key: product_id
+      to_key: store_id
+
+defaults:
+  top_k_in: 50
+  top_n_out: 8
+  confidence_high: 0.7
+  confidence_low: 0.4
+
+# 聊天界面的初始推荐问题。
+suggestions:
+  - { text: "我的订单到哪了？", lang: zh, kind: order }
+  - { text: "Nike和Adidas的跑鞋哪个好？", lang: zh, kind: recommend }
+  - { text: "Lululemon的瑜伽裤为什么这么贵？", lang: zh, kind: sizing }
+  - { text: "Under Armour的紧身衣保暖吗？", lang: zh, kind: recommend }
+  - { text: "退换货政策是什么？", lang: zh, kind: policy }
+  - { text: "帮我推荐一双入门跑鞋，预算500左右", lang: zh, kind: gift }

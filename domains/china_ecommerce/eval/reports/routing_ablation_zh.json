@@ -1,0 +1,106 @@
+{
+  "generated": "2026-08-15 16:46 UTC",
+  "domain": "china_ecommerce",
+  "n_cases": 33,
+  "model_family": "Qwen (Alibaba Cloud)",
+  "pricing_cny_per_1m": {
+    "qwen-turbo": {
+      "input": 0.3,
+      "output": 0.6
+    },
+    "qwen-plus": {
+      "input": 0.8,
+      "output": 2.0
+    }
+  },
+  "pricing_usd_per_1m": {
+    "qwen-turbo": {
+      "input": 0.0417,
+      "output": 0.0833
+    },
+    "qwen-plus": {
+      "input": 0.1111,
+      "output": 0.2778
+    }
+  },
+  "usd_cny_rate": 7.2,
+  "tiebreak_token_estimate": {
+    "input": 80,
+    "output": 12
+  },
+  "routing": {
+    "deterministic": {
+      "mode": "deterministic",
+      "n": 33,
+      "accuracy": 1.0,
+      "graded": 33,
+      "deterministic_decision_rate": 1.0,
+      "tiebreak_calls": 0,
+      "tiebreak_cost_usd": 0.0,
+      "by_stratum": {
+        "answers": 1.0,
+        "care": 1.0,
+        "complaint": 1.0,
+        "escalation": 1.0,
+        "stylist": 1.0
+      },
+      "escalation": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 4,
+        "fp": 0,
+        "fn": 0
+      },
+      "confusion": {}
+    },
+    "tiebreak_qwen_turbo": {
+      "mode": "tiebreak_qwen_turbo",
+      "n": 33,
+      "accuracy": 1.0,
+      "graded": 33,
+      "deterministic_decision_rate": 0.7879,
+      "tiebreak_calls": 7,
+      "tiebreak_cost_usd": 3e-05,
+      "by_stratum": {
+        "answers": 1.0,
+        "care": 1.0,
+        "complaint": 1.0,
+        "escalation": 1.0,
+        "stylist": 1.0
+      },
+      "escalation": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 4,
+        "fp": 0,
+        "fn": 0
+      },
+      "confusion": {}
+    },
+    "tiebreak_qwen_plus": {
+      "mode": "tiebreak_qwen_plus",
+      "n": 33,
+      "accuracy": 1.0,
+      "graded": 33,
+      "deterministic_decision_rate": 0.7879,
+      "tiebreak_calls": 7,
+      "tiebreak_cost_usd": 8.6e-05,
+      "by_stratum": {
+        "answers": 1.0,
+        "care": 1.0,
+        "complaint": 1.0,
+        "escalation": 1.0,
+        "stylist": 1.0
+      },
+      "escalation": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 4,
+        "fp": 0,
+        "fn": 0
+      },
+      "confusion": {}
+    }
+  },
+  "finding": "The small model (qwen-turbo) matches or exceeds the large model (qwen-plus) on routing accuracy (100.0% vs 100.0%) at 2.9x lower cost. A bigger model is not worth it for classification — the cheap model is the right choice for production tie-break routing."
+}

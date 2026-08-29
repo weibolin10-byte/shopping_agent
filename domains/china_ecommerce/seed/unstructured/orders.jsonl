@@ -1,0 +1,14 @@
+{"id": "ODPROFILE", "lang": "zh", "email": "zhangwei@example.com", "text": "客户账户信息：张伟，邮箱 zhangwei@example.com（此邮箱为账户标识）。会员等级：金卡会员。张伟在过去12个月共下单12笔，以男士跑步和训练装备为主，品牌偏好Nike和Adidas，最近也开始尝试Lululemon男士系列。大部分订单配送至上海，有两笔分别寄往北京和广州作为礼物。身份验证通过姓名和邮箱匹配，系统不留存电话号码和家庭住址。"}
+{"id": "OD100001", "lang": "zh", "email": "zhangwei@example.com", "text": "订单 RF100001，张伟（zhangwei@example.com）：1双 Nike Air Zoom Pegasus 40 跑步鞋（黑色，M码），899元，2025-07-12下单，发往上海，顺丰配送。状态：已送达。"}
+{"id": "OD100002", "lang": "zh", "email": "zhangwei@example.com", "text": "订单 RF100002，张伟（zhangwei@example.com）：2件 Nike Dri-FIT 短袖T恤（黑色和白色，L码），共398元，2025-08-05下单，发往上海，中通配送。状态：已送达。"}
+{"id": "OD100003", "lang": "zh", "email": "zhangwei@example.com", "text": "订单 RF100003，张伟（zhangwei@example.com）：1双 Adidas Ultraboost Light 跑步鞋（灰色，L码），1099元，2025-09-18下单，发往上海，顺丰配送。状态：已送达。"}
+{"id": "OD100004", "lang": "zh", "email": "zhangwei@example.com", "text": "订单 RF100004，张伟（zhangwei@example.com）：1件 Adidas 三叶草连帽卫衣（浅灰，L码），599元，2025-10-22下单，发往北京（礼物），京东物流配送。状态：已送达。"}
+{"id": "OD100005", "lang": "zh", "email": "zhangwei@example.com", "text": "订单 RF100005，张伟（zhangwei@example.com）：1双 Nike Air Force 1 板鞋（白色，L码），799元，2025-11-10下单，发往上海，顺丰配送。状态：已送达。"}
+{"id": "OD100006", "lang": "zh", "email": "zhangwei@example.com", "text": "订单 RF100006，张伟（zhangwei@example.com）：1件 Under Armour ColdGear 紧身衣（黑色，L码），399元，和1件 Under Armour Tech 2.0 短袖T恤（深灰，L码），249元，共648元，2025-12-03下单，发往上海，中通配送。状态：已送达。"}
+{"id": "OD100007", "lang": "zh", "email": "zhangwei@example.com", "text": "订单 RF100007，张伟（zhangwei@example.com）：1件 Nike Therma-FIT 连帽卫衣（深灰，L码），499元，2025-12-20下单，发往广州（礼物），京东物流配送。状态：已送达。"}
+{"id": "OD100008", "lang": "zh", "email": "zhangwei@example.com", "text": "订单 RF100008，张伟（zhangwei@example.com）：1双 Under Armour HOVR Phantom 跑步鞋（黑色，L码），899元，2026-01-15下单，发往上海，顺丰配送。状态：已送达。"}
+{"id": "OD100009", "lang": "zh", "email": "zhangwei@example.com", "text": "订单 RF100009，张伟（zhangwei@example.com）：1件 Lululemon Metal Vent 男士T恤（深灰，L码），420元，2026-02-28下单，发往上海，顺丰配送。状态：已送达。"}
+{"id": "OD100010", "lang": "zh", "email": "zhangwei@example.com", "text": "订单 RF100010，张伟（zhangwei@example.com）：1双 Adidas Adizero Adios 跑步鞋（白色，L码），899元，和1双 Adidas AeroReady 训练T恤（黑色，L码），199元，共1098元，2026-04-10下单，发往上海，中通配送。状态：已送达。"}
+{"id": "OD100011", "lang": "zh", "email": "zhangwei@example.com", "text": "订单 RF100011，张伟（zhangwei@example.com）：1双 Nike LeBron 篮球鞋（黑红，XL码），1299元，2026-06-05下单，发往上海，顺丰配送。状态：运输中，预计6月18日送达，顺丰运单号 SF1234567890。"}
+{"id": "OD100012", "lang": "zh", "email": "zhangwei@example.com", "text": "订单 RF100012，张伟（zhangwei@example.com）：1件 Under Armour Rival 连帽卫衣（黑色，L码），449元，2026-06-10下单，发往上海，中通配送。状态：延迟发货。该商品因库存盘点延迟，原定于6月12日发货，现预计6月20日前发出。已标记为服务跟进订单，客服专员将持续跟进。中通运单号待生成。"}
+{"id": "ODSUM", "lang": "zh", "email": "zhangwei@example.com", "text": "张伟（zhangwei@example.com）订单汇总：过去12个月共12笔订单，涵盖Nike、Adidas、Under Armour、Lululemon四个品牌，以跑鞋、训练T恤、卫衣为主。其中10笔已送达，1笔运输中（RF100011 Nike LeBron篮球鞋，顺丰，预计6月18日送达），1笔延迟发货（RF100012 Under Armour Rival卫衣，因库存盘点延迟，预计6月20日前发出，已标记服务跟进）。累计消费约8083元。"}
