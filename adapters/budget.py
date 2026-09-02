@@ -45,6 +45,8 @@ class TurnBudget:
         self.calls = 0
         self.tokens = 0
         self.usd = 0.0
+        self.operations: dict[str, int] = {}
+        self.cost_by_operation: dict[str, float] = {}
 
     def elapsed(self) -> float:
         return self._clock() - self.started
@@ -65,11 +67,31 @@ class TurnBudget:
         self.tokens += max(tokens, 0)
         self.usd += max(usd, 0.0)
 
+    def check_external(self) -> None:
+        """Check shared spend/deadline ceilings without applying the LLM-call ceiling."""
+        if self.tokens >= self.max_tokens:
+            raise BudgetExceeded("max_tokens")
+        if self.usd >= self.max_usd:
+            raise BudgetExceeded("max_usd")
+        if self.elapsed() >= self.max_seconds:
+            raise BudgetExceeded("deadline")
+
+    def charge_operation(self, kind: str, *, tokens: int = 0, usd: float = 0.0) -> None:
+        """Charge embedding, reranking or tools without counting them as LLM calls."""
+        self.check_external()
+        self.operations[kind] = self.operations.get(kind, 0) + 1
+        self.tokens += max(tokens, 0)
+        amount = max(usd, 0.0)
+        self.usd += amount
+        self.cost_by_operation[kind] = self.cost_by_operation.get(kind, 0.0) + amount
+
     def snapshot(self) -> dict:
         """The turn's spend, for logging into the final event and the trace so it is queryable. The
-        usd figure tracks Groq generation spend, the ceiling this budget enforces; retrieval (Cohere
-        embed and rerank) is not charged here, and the full-turn cost lives in the cost model."""
+        usd figure includes each operation charged by the pipeline. Adapters without price metadata
+        are still counted under operations so the full request shape remains auditable."""
         return {"calls": self.calls, "tokens": self.tokens, "usd": round(self.usd, 6),
+                "operations": dict(self.operations),
+                "cost_by_operation": {k: round(v, 6) for k, v in self.cost_by_operation.items()},
                 "elapsed_ms": round(self.elapsed() * 1000, 1),
                 "limits": {"calls": self.max_calls, "tokens": self.max_tokens,
                            "usd": self.max_usd, "seconds": self.max_seconds}}

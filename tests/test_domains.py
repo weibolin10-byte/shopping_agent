@@ -26,6 +26,8 @@ from retrieval.sparse import SparseEncoder
 DOMAINS = [
     ("china_ecommerce", "Pegasus 40跑鞋偏码吗", "法国首都是什么",
      "尺码正常"),
+    ("home_ecommerce", "云朵阅读台灯适合阅读吗", "法国首都是什么",
+     "低蓝光设计适合阅读"),
 ]
 
 

@@ -47,9 +47,15 @@ def test_context_prefix_skips_missing_and_none_fields():
 
 
 def test_over_budget_sentence_emits_one_chunk():
-    # a single no-punctuation "sentence" far over budget must terminate and emit one chunk
+    # A no-punctuation record is hard-split instead of creating an unbounded model input.
     pieces = split_text("word " * 1000, max_tokens=50)
-    assert len(pieces) == 1
+    assert len(pieces) > 1
+
+
+def test_chinese_sentences_split_without_spaces():
+    pieces = split_text("第一句讲商品。第二句讲政策！第三句讲售后？", max_tokens=7,
+                        overlap_sentences=0)
+    assert pieces == ["第一句讲商品。", "第二句讲政策!", "第三句讲售后?"]
 
 
 def test_multi_chunk_ids_use_suffix():

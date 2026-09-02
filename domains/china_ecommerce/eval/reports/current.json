@@ -1,0 +1,1836 @@
+{
+  "manifest": {
+    "run_id": "china_ecommerce-94edd80b-1788270198",
+    "generated_at": 1788270198.1675699,
+    "git_sha": "94edd80b147228996bb4ff1a0e9d9e6a2359d67b",
+    "git_dirty": true,
+    "working_tree_hash": "74b3384fc0afaacc3d182f1385c470fafbaea5b230123f23b6ea63fcd30cf70b",
+    "domain": "china_ecommerce",
+    "dataset_hashes": {
+      "domains/china_ecommerce/eval/golden.jsonl": "aeabfd9a2df07ca34474f1afc03116b35c7559d7ca79034c2b3561627e6123eb",
+      "domains/china_ecommerce/eval/routing.jsonl": "8c471946889713237f4332e72f92f20e8da9264457cde834a3ef5878247f3daa",
+      "domains/china_ecommerce/eval/generation_regression.jsonl": "a4689d3d70b5fba2de48b9e7eb61ff4685a647be6268b03960f658508df5b910"
+    },
+    "models": {
+      "answer": "deepseek-v4-flash",
+      "router": "qwen-turbo",
+      "judge": "qwen-plus",
+      "embedding": "text-embedding-v3"
+    },
+    "knowledge_version": "policy-2026-01",
+    "parameters": {
+      "retrieval_eval_top_k": 8,
+      "generation_top_k": {
+        "answers": 6,
+        "stylist": 6
+      },
+      "top_k_in": 50,
+      "generation_suite": "regression",
+      "generation_size": 30
+    },
+    "seed": 42,
+    "report_kind": "offline_evaluation"
+  },
+  "results": {
+    "domain": "china_ecommerce",
+    "model": {
+      "big": "deepseek-v4-flash",
+      "small": "qwen-turbo",
+      "judge": "qwen-plus"
+    },
+    "embedding": "text-embedding-v3",
+    "routing": {
+      "deterministic": {
+        "mode": "deterministic",
+        "n": 33,
+        "accuracy": 1.0,
+        "graded": 33,
+        "deterministic_decision_rate": 1.0,
+        "tiebreak_calls": 0,
+        "tiebreak_cost_usd": 0.0,
+        "by_stratum": {
+          "answers": 1.0,
+          "care": 1.0,
+          "complaint": 1.0,
+          "escalation": 1.0,
+          "stylist": 1.0
+        },
+        "escalation": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 4,
+          "fp": 0,
+          "fn": 0
+        },
+        "confusion": {}
+      },
+      "with_tiebreak": {
+        "mode": "with_tiebreak",
+        "n": 33,
+        "accuracy": 1.0,
+        "graded": 33,
+        "deterministic_decision_rate": 0.7879,
+        "tiebreak_calls": 7,
+        "tiebreak_cost_usd": 3.5e-05,
+        "by_stratum": {
+          "answers": 1.0,
+          "care": 1.0,
+          "complaint": 1.0,
+          "escalation": 1.0,
+          "stylist": 1.0
+        },
+        "escalation": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 4,
+          "fp": 0,
+          "fn": 0
+        },
+        "confusion": {}
+      }
+    },
+    "ragas": {
+      "suite": "regression",
+      "dataset_size": 30,
+      "evaluated_size": 30,
+      "items": [
+        {
+          "id": "GEN-CAND-001",
+          "question": "订单不到199元的话，普通运费要收多少？",
+          "answer": "普通运费是12元，订单不满199元时收取 [1]。满199元就包邮啦 [1]。",
+          "contexts": [
+            "所有商品从上海仓库发货,配送至中国大陆地区。 满199元包邮,不满199元收取12元运费。 标准配送3-7个工作日到达,加急配送1-2个工作日到达,加急运费20元。 下单后24小时内发货(节假日顺延)。 目前仅配送中国大陆地区,暂不支持港澳台及海外。",
+            "7天无理由退换货:自签收之日起7天内,商品未穿着、未洗涤、吊牌完好、不影响二次销售,可申请无理由退换货。 退换货运费:因质量问题退换由我们承担,个人原因退换需自行承担运费。 退款在收到退回商品并验收后3-5个工作日内原路返回。",
+            "配送时效:上海及周边地区1-2天,北京、广州、深圳等一线城市2-3天,成都、杭州、武汉等新一线城市2-4天,其他城市3-7天。 偏远地区(新疆、西藏、青海等)5-10天。 加急配送覆盖大部分一二线城市。",
+            "799确实贵,但和Nike同价位比做工更好。 拉链有时候会卡面料,袖口偏紧。",
+            "洗了一次缩水了,L码变M码的感觉,下摆变短了。 599的价格不应该这样,建议冷水洗并且买大一码。",
+            "洗了几次领口有点变形,200多块钱也不能要求太多。 整体还行。"
+          ],
+          "ground_truth": "订单未满199元时，普通配送收取12元运费。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "common",
+          "lane": "answers",
+          "tags": [
+            "policy",
+            "shipping",
+            "structured_fact"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "free_shipping_threshold_cny": 199,
+            "shipping_fee_cny": 12
+          },
+          "citation_targets": [
+            "CK05"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.2857142857142857,
+          "grounding": 1.0,
+          "latency_s": 1.08
+        },
+        {
+          "id": "GEN-CAND-002",
+          "question": "能把商品寄到香港吗？",
+          "answer": "很抱歉，目前我们暂不支持配送至香港地区，仅配送中国大陆地区哦 [1]。如果您有亲友在大陆，可以寄给他们代为转交～ 还有其他可以帮您的吗？😊",
+          "contexts": [
+            "所有商品从上海仓库发货,配送至中国大陆地区。 满199元包邮,不满199元收取12元运费。 标准配送3-7个工作日到达,加急配送1-2个工作日到达,加急运费20元。 下单后24小时内发货(节假日顺延)。 目前仅配送中国大陆地区,暂不支持港澳台及海外。",
+            "配送时效:上海及周边地区1-2天,北京、广州、深圳等一线城市2-3天,成都、杭州、武汉等新一线城市2-4天,其他城市3-7天。 偏远地区(新疆、西藏、青海等)5-10天。 加急配送覆盖大部分一二线城市。",
+            "支付方式:支持支付宝、微信支付、银联卡、信用卡(Visa/Mastercard/JCB)。 所有支付在发货时扣款,我们不存储完整卡号信息。 支持花呗分期付款(3/6/12期),订单满300元可使用。",
+            "我们在全国拥有12家品牌门店:Nike在上海、北京、广州、深圳、成都设有5家门店; Adidas在上海、北京、杭州设有3家门店; Lululemon在上海、北京、深圳设有3家高端商场门店; Under Armour在上海设有1家门店。 支持线上下单门店自提。",
+            "ST01 Nike上海旗舰店:位于上海,是Nike在中国的首家旗舰店,销售全系列Nike产品包括跑鞋、篮球鞋、训练服和休闲装备。 支持门店自提。",
+            "7天无理由退换货:自签收之日起7天内,商品未穿着、未洗涤、吊牌完好、不影响二次销售,可申请无理由退换货。 退换货运费:因质量问题退换由我们承担,个人原因退换需自行承担运费。 退款在收到退回商品并验收后3-5个工作日内原路返回。"
+          ],
+          "ground_truth": "目前只配送中国大陆地区，暂不支持香港、澳门、台湾及海外配送。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "common",
+          "lane": "answers",
+          "tags": [
+            "policy",
+            "shipping",
+            "negative_answer"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "delivery_scope": "中国大陆",
+            "hong_kong_supported": false
+          },
+          "citation_targets": [
+            "CK05"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.2,
+          "grounding": 1.0,
+          "latency_s": 1.54
+        },
+        {
+          "id": "GEN-CAND-003",
+          "question": "加急配送一般几天到，要额外多少钱？",
+          "answer": "加急配送一般1-2个工作日到，额外加收20元运费哦～[1] 覆盖大部分一二线城市，下单后24小时内发货（节假日顺延）[1][2]。",
+          "contexts": [
+            "所有商品从上海仓库发货,配送至中国大陆地区。 满199元包邮,不满199元收取12元运费。 标准配送3-7个工作日到达,加急配送1-2个工作日到达,加急运费20元。 下单后24小时内发货(节假日顺延)。 目前仅配送中国大陆地区,暂不支持港澳台及海外。",
+            "配送时效:上海及周边地区1-2天,北京、广州、深圳等一线城市2-3天,成都、杭州、武汉等新一线城市2-4天,其他城市3-7天。 偏远地区(新疆、西藏、青海等)5-10天。 加急配送覆盖大部分一二线城市。",
+            "7天无理由退换货:自签收之日起7天内,商品未穿着、未洗涤、吊牌完好、不影响二次销售,可申请无理由退换货。 退换货运费:因质量问题退换由我们承担,个人原因退换需自行承担运费。 退款在收到退回商品并验收后3-5个工作日内原路返回。",
+            "客服服务时间:每天9:00-21:00在线客服。 如AI助手无法解决您的问题(如商品质量问题、退款异常、退换货特殊情况等),将转接人工专员小晴,在1个工作日内通过邮件跟进处理。",
+            "订单查询:下单后会收到确认邮件,发货后会收到物流单号。 您也可以在账户页面查看订单状态和物流追踪。 如果物流超过3天未更新,请联系客服,我们会联系快递公司查询或重新发货。",
+            "会员积分计划:免费注册会员,每消费1元积1分,100积分可抵扣5元。 会员享受生日专属优惠、新品提前购买、会员专属折扣等权益。 积分永久有效,订单完成后自动到账。"
+          ],
+          "ground_truth": "加急配送一般1至2个工作日到达，加急运费为20元。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "common",
+          "lane": "answers",
+          "tags": [
+            "policy",
+            "shipping",
+            "multi_fact"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "express_delivery_days": "1-2个工作日",
+            "express_fee_cny": 20
+          },
+          "citation_targets": [
+            "CK05"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.25,
+          "grounding": 1.0,
+          "latency_s": 1.36
+        },
+        {
+          "id": "GEN-CAND-004",
+          "question": "正常下单后多久会发货？",
+          "answer": "正常下单后，我们会在24小时内发货（节假日顺延）[1]。发货后您会收到物流单号，也可以在账户页面查看订单状态和物流追踪[3]。",
+          "contexts": [
+            "所有商品从上海仓库发货,配送至中国大陆地区。 满199元包邮,不满199元收取12元运费。 标准配送3-7个工作日到达,加急配送1-2个工作日到达,加急运费20元。 下单后24小时内发货(节假日顺延)。 目前仅配送中国大陆地区,暂不支持港澳台及海外。",
+            "配送时效:上海及周边地区1-2天,北京、广州、深圳等一线城市2-3天,成都、杭州、武汉等新一线城市2-4天,其他城市3-7天。 偏远地区(新疆、西藏、青海等)5-10天。 加急配送覆盖大部分一二线城市。",
+            "订单查询:下单后会收到确认邮件,发货后会收到物流单号。 您也可以在账户页面查看订单状态和物流追踪。 如果物流超过3天未更新,请联系客服,我们会联系快递公司查询或重新发货。",
+            "7天无理由退换货:自签收之日起7天内,商品未穿着、未洗涤、吊牌完好、不影响二次销售,可申请无理由退换货。 退换货运费:因质量问题退换由我们承担,个人原因退换需自行承担运费。 退款在收到退回商品并验收后3-5个工作日内原路返回。",
+            "客服服务时间:每天9:00-21:00在线客服。 如AI助手无法解决您的问题(如商品质量问题、退款异常、退换货特殊情况等),将转接人工专员小晴,在1个工作日内通过邮件跟进处理。",
+            "所有商品享受品牌官方质保。 鞋类质保90天,服装类质保30天,自购买之日起计算。 质保范围包括开胶、断底、断面、严重褪色等制造缺陷。 正常磨损、人为损坏、不当洗护不在质保范围内。 质保期内出现质量问题,可免费维修或更换。"
+          ],
+          "ground_truth": "正常情况下会在下单后24小时内发货，节假日顺延。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "common",
+          "lane": "answers",
+          "tags": [
+            "policy",
+            "shipping",
+            "sla"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "dispatch_sla_hours": 24,
+            "holiday_rule": "顺延"
+          },
+          "citation_targets": [
+            "CK05"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.5714285714285714,
+          "grounding": 1.0,
+          "latency_s": 1.42
+        },
+        {
+          "id": "GEN-CAND-005",
+          "question": "七天无理由退货需要满足哪些条件？",
+          "answer": "七天无理由退货需要同时满足这几个条件哦～ [1]\n\n- 自签收之日起7天内申请 [1]\n- 商品未穿着、未洗涤 [1]\n- 吊牌完好 [1]\n- 不影响二次销售 [1]\n\n另外提醒一下，鞋类试穿请在室内进行，鞋底有磨损痕迹就无法退换了 [2]。如果是个人原因退货，运费需要自己承担；质量问题则由我们承担 [1]。",
+          "contexts": [
+            "7天无理由退换货:自签收之日起7天内,商品未穿着、未洗涤、吊牌完好、不影响二次销售,可申请无理由退换货。 退换货运费:因质量问题退换由我们承担,个人原因退换需自行承担运费。 退款在收到退回商品并验收后3-5个工作日内原路返回。",
+            "换货流程:在订单页面申请换货,选择需要更换的尺码或颜色。 我们在收到退回商品并验收后发出新商品,换货不收取额外费用。 如需更换的商品缺货,将为您办理退款。 鞋类商品试穿时请在室内进行,鞋底有磨损痕迹将无法退换。",
+            "所有商品享受品牌官方质保。 鞋类质保90天,服装类质保30天,自购买之日起计算。 质保范围包括开胶、断底、断面、严重褪色等制造缺陷。 正常磨损、人为损坏、不当洗护不在质保范围内。 质保期内出现质量问题,可免费维修或更换。",
+            "客服服务时间:每天9:00-21:00在线客服。 如AI助手无法解决您的问题(如商品质量问题、退款异常、退换货特殊情况等),将转接人工专员小晴,在1个工作日内通过邮件跟进处理。",
+            "所有商品从上海仓库发货,配送至中国大陆地区。 满199元包邮,不满199元收取12元运费。 标准配送3-7个工作日到达,加急配送1-2个工作日到达,加急运费20元。 下单后24小时内发货(节假日顺延)。 目前仅配送中国大陆地区,暂不支持港澳台及海外。",
+            "配送时效:上海及周边地区1-2天,北京、广州、深圳等一线城市2-3天,成都、杭州、武汉等新一线城市2-4天,其他城市3-7天。 偏远地区(新疆、西藏、青海等)5-10天。 加急配送覆盖大部分一二线城市。"
+          ],
+          "ground_truth": "自签收起7天内，商品需保持未穿着、未洗涤、吊牌完好且不影响二次销售。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "semi",
+          "lane": "answers",
+          "tags": [
+            "policy",
+            "returns",
+            "multi_fact"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "return_window_days": 7,
+            "conditions": [
+              "未穿着",
+              "未洗涤",
+              "吊牌完好",
+              "不影响二次销售"
+            ]
+          },
+          "citation_targets": [
+            "CK07"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.25,
+          "grounding": 0.875,
+          "latency_s": 2.01
+        },
+        {
+          "id": "GEN-CAND-006",
+          "question": "我只是觉得颜色不合适，退货运费谁承担？",
+          "answer": "颜色不合适属于个人原因退换，运费需要您自行承担哦～[1] 只要商品未穿着、未洗涤、吊牌完好，7天内都可以申请无理由退换货，但个人原因产生的退货运费由您这边负责。[1] 如果您想换其他颜色，直接在订单页面申请换货就行，换货本身不额外收费。[2]",
+          "contexts": [
+            "7天无理由退换货:自签收之日起7天内,商品未穿着、未洗涤、吊牌完好、不影响二次销售,可申请无理由退换货。 退换货运费:因质量问题退换由我们承担,个人原因退换需自行承担运费。 退款在收到退回商品并验收后3-5个工作日内原路返回。",
+            "换货流程:在订单页面申请换货,选择需要更换的尺码或颜色。 我们在收到退回商品并验收后发出新商品,换货不收取额外费用。 如需更换的商品缺货,将为您办理退款。 鞋类商品试穿时请在室内进行,鞋底有磨损痕迹将无法退换。",
+            "所有商品从上海仓库发货,配送至中国大陆地区。 满199元包邮,不满199元收取12元运费。 标准配送3-7个工作日到达,加急配送1-2个工作日到达,加急运费20元。 下单后24小时内发货(节假日顺延)。 目前仅配送中国大陆地区,暂不支持港澳台及海外。",
+            "洗了一次缩水了,L码变M码的感觉,下摆变短了。 599的价格不应该这样,建议冷水洗并且买大一码。",
+            "白色透,必须穿肤色内衣。 而且450一件长袖T恤确实贵,但穿过就不想穿别的了。",
+            "所有商品享受品牌官方质保。 鞋类质保90天,服装类质保30天,自购买之日起计算。 质保范围包括开胶、断底、断面、严重褪色等制造缺陷。 正常磨损、人为损坏、不当洗护不在质保范围内。 质保期内出现质量问题,可免费维修或更换。"
+          ],
+          "ground_truth": "颜色不合适属于个人原因退货，退货运费需要由用户自行承担。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "semi",
+          "lane": "answers",
+          "tags": [
+            "policy",
+            "returns",
+            "reasoning"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "reason": "个人原因",
+            "shipping_payer": "用户"
+          },
+          "citation_targets": [
+            "CK07"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.5,
+          "grounding": 1.0,
+          "latency_s": 1.9
+        },
+        {
+          "id": "GEN-CAND-007",
+          "question": "退回去验收通过后，退款多久能到账？",
+          "answer": "退款在收到退回商品并验收通过后，3-5个工作日内原路返回到您的支付账户[1]。",
+          "contexts": [
+            "7天无理由退换货:自签收之日起7天内,商品未穿着、未洗涤、吊牌完好、不影响二次销售,可申请无理由退换货。 退换货运费:因质量问题退换由我们承担,个人原因退换需自行承担运费。 退款在收到退回商品并验收后3-5个工作日内原路返回。",
+            "换货流程:在订单页面申请换货,选择需要更换的尺码或颜色。 我们在收到退回商品并验收后发出新商品,换货不收取额外费用。 如需更换的商品缺货,将为您办理退款。 鞋类商品试穿时请在室内进行,鞋底有磨损痕迹将无法退换。",
+            "客服服务时间:每天9:00-21:00在线客服。 如AI助手无法解决您的问题(如商品质量问题、退款异常、退换货特殊情况等),将转接人工专员小晴,在1个工作日内通过邮件跟进处理。",
+            "所有商品从上海仓库发货,配送至中国大陆地区。 满199元包邮,不满199元收取12元运费。 标准配送3-7个工作日到达,加急配送1-2个工作日到达,加急运费20元。 下单后24小时内发货(节假日顺延)。 目前仅配送中国大陆地区,暂不支持港澳台及海外。",
+            "配送时效:上海及周边地区1-2天,北京、广州、深圳等一线城市2-3天,成都、杭州、武汉等新一线城市2-4天,其他城市3-7天。 偏远地区(新疆、西藏、青海等)5-10天。 加急配送覆盖大部分一二线城市。",
+            "订单查询:下单后会收到确认邮件,发货后会收到物流单号。 您也可以在账户页面查看订单状态和物流追踪。 如果物流超过3天未更新,请联系客服,我们会联系快递公司查询或重新发货。"
+          ],
+          "ground_truth": "收到退回商品并验收后，退款会在3至5个工作日内原路返回。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "common",
+          "lane": "answers",
+          "tags": [
+            "policy",
+            "refund",
+            "sla"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "refund_sla": "3-5个工作日",
+            "refund_channel": "原路返回"
+          },
+          "citation_targets": [
+            "CK07"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.3333333333333333,
+          "grounding": 1.0,
+          "latency_s": 1.1
+        },
+        {
+          "id": "GEN-CAND-008",
+          "question": "鞋和运动服的质保期一样长吗？",
+          "answer": "不一样哦～鞋类质保90天，服装类质保30天，都是从购买之日起算的[1]。质保范围包括开胶、断底、断面、严重褪色等制造缺陷，正常磨损和人为损坏就不在范围内啦[1]。",
+          "contexts": [
+            "所有商品享受品牌官方质保。 鞋类质保90天,服装类质保30天,自购买之日起计算。 质保范围包括开胶、断底、断面、严重褪色等制造缺陷。 正常磨损、人为损坏、不当洗护不在质保范围内。 质保期内出现质量问题,可免费维修或更换。",
+            "不耐磨! 打了一个月外场水泥地,鞋底纹路快平了。 必须在室内木地板穿,否则寿命太短。",
+            "不耐磨,打了一个月外场鞋底纹路快平了。 建议只在室内木地板穿。",
+            "领口洗了三个月就泄了,变松垮。 Nike的同样穿法就没这问题。 面料速干还行但做工一般。",
+            "尺码参考:各品牌尺码可能存在差异,建议参考商品页面的尺码表选择。 一般来说,Nike鞋码标准,Adidas鞋码偏大半码,Lululemon服装偏修身建议选大一码,Under Armour服装偏紧身。 运动鞋建议下午测量脚长后对照尺码表选择,脚宽者建议选大半码。",
+            "鞋底太软了,配速5分以内就感觉卸力。 这鞋更适合走路和慢跑,想竞速的别买。 而且尺码偏大一号。"
+          ],
+          "ground_truth": "不一样。鞋类质保90天，服装类质保30天，均从购买之日起计算。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "semi",
+          "lane": "answers",
+          "tags": [
+            "policy",
+            "warranty",
+            "comparison"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "shoe_warranty_days": 90,
+            "apparel_warranty_days": 30
+          },
+          "citation_targets": [
+            "CK09"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.6,
+          "grounding": 1.0,
+          "latency_s": 1.38
+        },
+        {
+          "id": "GEN-CAND-009",
+          "question": "新鞋在室外试穿过以后还能换码吗？",
+          "answer": "很抱歉，新鞋如果在室外试穿后，鞋底有磨损痕迹的话，是没法换货的哦。根据我们的换货规则，鞋类商品试穿时请在室内进行，鞋底有磨损痕迹将无法退换[1]。建议您先检查一下鞋底情况，如果只是室内试穿，随时可以申请换码～",
+          "contexts": [
+            "换货流程:在订单页面申请换货,选择需要更换的尺码或颜色。 我们在收到退回商品并验收后发出新商品,换货不收取额外费用。 如需更换的商品缺货,将为您办理退款。 鞋类商品试穿时请在室内进行,鞋底有磨损痕迹将无法退换。",
+            "鞋头太窄了,小脚趾磨了两个水泡。 穿了一个月才磨合好,建议买大半码。 贝壳头也容易踢花。",
+            "尺码参考:各品牌尺码可能存在差异,建议参考商品页面的尺码表选择。 一般来说,Nike鞋码标准,Adidas鞋码偏大半码,Lululemon服装偏修身建议选大一码,Under Armour服装偏紧身。 运动鞋建议下午测量脚长后对照尺码表选择,脚宽者建议选大半码。",
+            "鞋头有点窄,小脚趾磨得疼。 穿了两周才磨合好。 建议大半码。",
+            "Adizero L码偏小,脚宽的要买大一号。 竞速确实快但不适合日常穿。",
+            "不耐磨,打了一个月外场鞋底纹路快平了。 建议只在室内木地板穿。"
+          ],
+          "ground_truth": "鞋类建议只在室内试穿；如果鞋底已有磨损痕迹，将无法退换。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "semi",
+          "lane": "answers",
+          "tags": [
+            "policy",
+            "returns",
+            "edge"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "try_on_location": "室内",
+            "worn_outsole_returnable": false
+          },
+          "citation_targets": [
+            "CK08"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.2,
+          "grounding": 0.3333333333333333,
+          "latency_s": 1.96
+        },
+        {
+          "id": "GEN-CAND-010",
+          "question": "除了支付宝和微信，还能刷信用卡吗？",
+          "answer": "当然可以！我们支持银联卡以及 Visa、Mastercard、JCB 信用卡支付 [1]。所有支付都是在发货时扣款，而且我们不存储完整卡号信息，可以放心使用 [1]。",
+          "contexts": [
+            "支付方式:支持支付宝、微信支付、银联卡、信用卡(Visa/Mastercard/JCB)。 所有支付在发货时扣款,我们不存储完整卡号信息。 支持花呗分期付款(3/6/12期),订单满300元可使用。",
+            "会员积分计划:免费注册会员,每消费1元积1分,100积分可抵扣5元。 会员享受生日专属优惠、新品提前购买、会员专属折扣等权益。 积分永久有效,订单完成后自动到账。",
+            "所有商品从上海仓库发货,配送至中国大陆地区。 满199元包邮,不满199元收取12元运费。 标准配送3-7个工作日到达,加急配送1-2个工作日到达,加急运费20元。 下单后24小时内发货(节假日顺延)。 目前仅配送中国大陆地区,暂不支持港澳台及海外。",
+            "Boost中底踩屎感无敌,长距离跑不脚疼。 ——张哥",
+            "配送时效:上海及周边地区1-2天,北京、广州、深圳等一线城市2-3天,成都、杭州、武汉等新一线城市2-4天,其他城市3-7天。 偏远地区(新疆、西藏、青海等)5-10天。 加急配送覆盖大部分一二线城市。",
+            "HOVR Phantom脚感很特别,回弹有力但不像Boost那么软。 蓝牙连APP记录数据很酷。"
+          ],
+          "ground_truth": "可以，支持Visa、Mastercard和JCB信用卡，也支持银联卡。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "common",
+          "lane": "answers",
+          "tags": [
+            "policy",
+            "payment",
+            "multi_fact"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "credit_cards": [
+              "Visa",
+              "Mastercard",
+              "JCB"
+            ],
+            "unionpay": true
+          },
+          "citation_targets": [
+            "CK15"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.8333333333333334,
+          "grounding": 1.0,
+          "latency_s": 1.36
+        },
+        {
+          "id": "GEN-CAND-011",
+          "question": "花呗分期有什么金额门槛，能分多少期？",
+          "answer": "花呗分期满300元就能用，支持3期、6期、12期三种分期方式[1]。",
+          "contexts": [
+            "支付方式:支持支付宝、微信支付、银联卡、信用卡(Visa/Mastercard/JCB)。 所有支付在发货时扣款,我们不存储完整卡号信息。 支持花呗分期付款(3/6/12期),订单满300元可使用。",
+            "会员积分计划:免费注册会员,每消费1元积1分,100积分可抵扣5元。 会员享受生日专属优惠、新品提前购买、会员专属折扣等权益。 积分永久有效,订单完成后自动到账。",
+            "尺码偏大,我平时穿37. 5这双37就够了。 建议买小半码。",
+            "Ultraboost XL码合适,灰色耐脏。 ——周哥",
+            "鞋头有点窄,小脚趾磨得疼。 穿了两周才磨合好。 建议大半码。",
+            "鞋头太窄了,小脚趾磨了两个水泡。 穿了一个月才磨合好,建议买大半码。 贝壳头也容易踢花。"
+          ],
+          "ground_truth": "订单满300元可使用花呗分期，支持3期、6期和12期。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "semi",
+          "lane": "answers",
+          "tags": [
+            "policy",
+            "payment",
+            "multi_fact"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "installment_threshold_cny": 300,
+            "terms": [
+              3,
+              6,
+              12
+            ]
+          },
+          "citation_targets": [
+            "CK15"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.3333333333333333,
+          "grounding": 1.0,
+          "latency_s": 1.5
+        },
+        {
+          "id": "GEN-CAND-012",
+          "question": "会员积分怎么获得，又怎么抵现金？",
+          "answer": "会员积分很好赚，也特别好用～ 🎉\n\n- **怎么获得**：免费注册会员后，每消费1元就积1分，订单完成后积分自动到账，而且永久有效 [1]。\n- **怎么抵现金**：100积分可以抵扣5元，直接在付款时使用就行 [1]。\n\n另外，会员还有生日专属优惠、新品提前购买和专属折扣这些福利，注册就能享受 [1]。",
+          "contexts": [
+            "会员积分计划:免费注册会员,每消费1元积1分,100积分可抵扣5元。 会员享受生日专属优惠、新品提前购买、会员专属折扣等权益。 积分永久有效,订单完成后自动到账。",
+            "支付方式:支持支付宝、微信支付、银联卡、信用卡(Visa/Mastercard/JCB)。 所有支付在发货时扣款,我们不存储完整卡号信息。 支持花呗分期付款(3/6/12期),订单满300元可使用。",
+            "送瑜伽/普拉提爱好者礼物:Lululemon Align高腰紧身裤(850元)是经典之选,Nulu裸感面料无与伦比; 搭配Energy运动内衣(380元)和Swiftly长袖T恤(450元)组成完整套装。 热身时加一件Define瑜伽外套(980元)。 预算有限先从Align开始。",
+            "起球严重,穿了一个月胸前和袖口全是小球。 版型偏肥大,想修身的要买小一码。",
+            "版型偏肥大,想修身的买小一码。 起球有点严重,穿了一个月就有了。",
+            "性价比高,和Nike Dri-FIT差不多但便宜一点。 ——周哥"
+          ],
+          "ground_truth": "会员每消费1元积1分，100积分可以抵扣5元。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "common",
+          "lane": "answers",
+          "tags": [
+            "policy",
+            "membership",
+            "multi_fact"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "points_per_cny": 1,
+            "points_redemption": {
+              "points": 100,
+              "cny": 5
+            }
+          },
+          "citation_targets": [
+            "CK16"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.4,
+          "grounding": 0.75,
+          "latency_s": 1.84
+        },
+        {
+          "id": "GEN-CAND-013",
+          "question": "React Infinity女款有哪些颜色，售价多少？",
+          "answer": "React Infinity 女款跑鞋有粉色、白色、黑色三个颜色，售价都是 999 元 [5][6]。粉色是女款跑鞋的热门颜色，实物比图片稍深一点但很好看 [4]。需要我帮你看看哪个颜色有货吗？😊",
+          "contexts": [
+            "Nike React Infinity 跑步鞋（SKU P006/P005/P004），品牌Nike，尺码M/L/XL，价格999.0元，总库存166，颜色粉色/白色/黑色。",
+            "粉色/红色系产品:Nike React Infinity跑步鞋(粉色)、Nike LeBron篮球鞋(黑红)、Under Armour Curry篮球鞋(全红)。 粉色是女款跑鞋的热门颜色,黑红和全红配色在篮球鞋中很受欢迎。",
+            "React Infinity XL码合适,女款大码不太好买。 ——阿丽",
+            "React Infinity女款L码合适,粉色实物比图片深一点但好看。 稳定性好。",
+            "Nike React Infinity 跑步鞋。 Nike稳定支撑跑鞋,React泡棉中底柔软脚感和流畅过渡,加宽前掌增强落地稳定性。 适合入门跑者和需要支撑的跑者。 价格999元,有粉色、白色、黑色三色。 女款剪裁。",
+            "Nike React Infinity 跑步鞋。 Nike稳定支撑跑鞋,React泡棉中底提供柔软脚感和流畅过渡,加宽前掌设计增强落地稳定性,帮助减少跑步损伤。 适合入门跑者和需要支撑的跑者,女款剪裁。 价格999元,有粉色、白色、黑色三色。 鞋面可机洗(冷水轻柔档),取出鞋垫后自然晾干。"
+          ],
+          "ground_truth": "Nike React Infinity女款售价999元，可选粉色、白色和黑色。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "common",
+          "lane": "answers",
+          "tags": [
+            "product_fact",
+            "price",
+            "color",
+            "multi_fact"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "product": "Nike React Infinity",
+            "price_cny": 999,
+            "colors": [
+              "粉色",
+              "白色",
+              "黑色"
+            ]
+          },
+          "citation_targets": [
+            "P004"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.5,
+          "grounding": 1.0,
+          "latency_s": 1.45
+        },
+        {
+          "id": "GEN-CAND-014",
+          "question": "想买双复古休闲鞋，Gazelle现在卖多少钱？",
+          "answer": "Gazelle 休闲鞋现在售价 699 元 [1][2]。它有深蓝、酒红、墨绿三色可选，男女同款，尺码 M 到 XL [1][2]。复古麂皮鞋面配生胶大底，很适合日常休闲穿搭 [2]。",
+          "contexts": [
+            "Adidas Gazelle 休闲鞋（SKU P036/P035/P034），品牌Adidas，尺码M/L/XL，价格699.0元，总库存172，颜色深蓝/酒红/墨绿。",
+            "Adidas Gazelle 休闲鞋。 1966年经典训练鞋,翻毛皮麂皮鞋面质感复古,生胶大底抓地力好,修长鞋型显瘦。 男女同款,适合日常休闲和复古穿搭。 价格699元,有深蓝、酒红、墨绿三色。",
+            "Adidas Gazelle 休闲鞋。 Adidas1966年诞生的经典训练鞋,翻毛皮麂皮鞋面质感复古,生胶大底抓地力好,修长鞋型显瘦。 男女同款,适合日常休闲和复古穿搭。 价格699元,有深蓝、酒红、墨绿三色。 麂皮部分用专用刷子顺毛刷理,避免沾水。",
+            "休闲鞋共有3款:Nike Air Force 1(799元)、Nike Air Max 270(1099元)、Adidas Superstar(799元)、Adidas Gazelle(699元)。 均为男女同款,尺码M到XL。 Air Force 1和Superstar是经典百搭款,Air Max 270气垫脚感舒适,Gazelle复古风格。",
+            "1000元以内预算:Adidas Gazelle休闲鞋(699元)复古好搭; Nike Air Force 1(799元)或Adidas Superstar(799元)经典款; Adidas Adizero Adios跑鞋(899元)竞速之选; UA HOVR Phantom跑鞋(899元)智能缓震。",
+            "其他特色颜色:Adidas Gazelle休闲鞋有酒红和墨绿复古配色; Adidas Superstar有金色三条纹特别版; Nike Air Max 270有灰蓝配色; Nike LeBron有金色冠军配色; Lululemon Wunder Train有紫红配色; Under Armour Curry有蓝黄勇士配色。 选择颜色时可以参考日常穿搭风格,经典色(黑、白、灰)最百搭,特色配色更能彰显个性。"
+          ],
+          "ground_truth": "Adidas Gazelle复古休闲鞋售价699元。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "common",
+          "lane": "answers",
+          "tags": [
+            "product_fact",
+            "price"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "product": "Adidas Gazelle",
+            "price_cny": 699
+          },
+          "citation_targets": [
+            "P034"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.36363636363636365,
+          "grounding": 1.0,
+          "latency_s": 1.9
+        },
+        {
+          "id": "GEN-CAND-015",
+          "question": "Energy运动内衣支撑强度和配色是什么？",
+          "answer": "Energy运动内衣是中高强度支撑，跑步、HIIT、球类运动都稳，不晃不跑杯 [3][4]。配色有黑色、深蓝、紫红三色，价格380元，女款，尺码M到XL [3][4]。",
+          "contexts": [
+            "Lululemon Energy 运动内衣（SKU P066/P065/P064），品牌Lululemon，尺码M/L/XL，价格380.0元，总库存169，颜色黑色/深蓝/紫红。",
+            "Energy运动内衣支撑力很好,跑步不晃。 肩带可调节很方便,黑色显瘦。",
+            "Lululemon Energy 运动内衣。 Luxtreme面料速干支撑,宽肩带和可调节背扣,罩杯稳定不跑杯。 适合跑步、HIIT、球类等中高强度运动。 价格380元,有黑色、深蓝、紫红三色。 女款。",
+            "运动内衣共有1款:Lululemon Energy运动内衣(380元,女款),中高强度支撑,有黑色、深蓝、紫红三色,宽肩带和可调节背扣。 适合跑步、HIIT和球类运动。 尺码覆盖M到XL。",
+            "Lululemon Energy 运动内衣。 Lululemon经典中高强度运动内衣,Luxtreme面料速干支撑,宽肩带和可调节背扣,罩杯稳定不跑杯。 适合跑步、HIIT、球类等中高强度运动,女款。 价格380元,有黑色、深蓝、紫红三色。 扣好背扣后冷水轻柔机洗,装入洗衣袋,悬挂晾干。",
+            "运动内衣价格指南:Lululemon Energy运动内衣380元,中高强度支撑,适合跑步和HIIT。 宽肩带设计不压肩,有黑色、深蓝、紫红三色。"
+          ],
+          "ground_truth": "Lululemon Energy运动内衣提供中高强度支撑，有黑色、深蓝和紫红三种配色。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "semi",
+          "lane": "answers",
+          "tags": [
+            "product_fact",
+            "support",
+            "color"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "support": "中高强度",
+            "colors": [
+              "黑色",
+              "深蓝",
+              "紫红"
+            ]
+          },
+          "citation_targets": [
+            "CF10"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.7777777777777778,
+          "grounding": 1.0,
+          "latency_s": 2.13
+        },
+        {
+          "id": "GEN-CAND-016",
+          "question": "Pace Rival运动短裙适合哪些运动，有什么防走光设计？",
+          "answer": "Pace Rival运动短裙适合网球、跑步、高尔夫和日常运动，内置短裤设计能有效防走光，后腰口袋还可放网球或手机 [2][3]。",
+          "contexts": [
+            "Lululemon Pace Rival 运动短裙（SKU P069/P068/P067），品牌Lululemon，尺码M/L/XL，价格480.0元，总库存123，颜色黑色/深蓝/白色。",
+            "Lululemon Pace Rival 运动短裙。 内置短裤防走光,Swift面料四向弹力速干,后腰口袋可放网球或手机。 适合网球、跑步、高尔夫和日常运动。 价格480元,有黑色、深蓝、白色三色。 女款。",
+            "Lululemon Pace Rival 运动短裙。 Lululemon经典网球/跑步短裙,内置短裤防走光,Swift面料四向弹力速干,后腰口袋可放网球或手机。 适合网球、跑步、高尔夫和日常运动,女款。 价格480元,有黑色、深蓝、白色三色。 冷水机洗,悬挂晾干。",
+            "短裤/短裙共有1款:Lululemon Pace Rival运动短裙(480元,女款),内置短裤防走光,有黑色、深蓝、白色三色,适合网球、跑步、高尔夫。 尺码覆盖M到XL。",
+            "短裤/短裙价格指南:Lululemon Pace Rival运动短裙480元,是唯一的短裤/裙类产品。 内置短裤防走光,适合网球、跑步和高尔夫。",
+            "网球/高尔夫装备推荐:Lululemon Pace Rival运动短裙(480元)适合网球和高尔夫,内置短裤防走光。 男士可选Under Armour Playoff高尔夫Polo衫(499元),弹力面料不束缚挥杆。 脚上穿Nike Air Zoom Pegasus或Adidas Ultraboost。"
+          ],
+          "ground_truth": "Pace Rival适合网球、跑步和高尔夫，内置短裤可以防走光。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "semi",
+          "lane": "answers",
+          "tags": [
+            "product_fact",
+            "use_case",
+            "multi_fact"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "sports": [
+              "网球",
+              "跑步",
+              "高尔夫"
+            ],
+            "design": "内置短裤"
+          },
+          "citation_targets": [
+            "CF09"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.6666666666666666,
+          "grounding": 1.0,
+          "latency_s": 1.27
+        },
+        {
+          "id": "GEN-CAND-017",
+          "question": "Adidas Z.N.E.外套是男款还是女款，价格是多少？",
+          "answer": "Adidas Z.N.E. 运动外套是男款，价格799元 [2][3]。有黑色、深灰、藏青三色可选 [2]。需要我帮你看看尺码或搭配建议吗？😊",
+          "contexts": [
+            "Adidas Z.N.E. 运动外套（SKU P048/P047/P046），品牌Adidas，尺码M/L/XL，价格799.0元，总库存117，颜色黑色/深灰/藏青。",
+            "Adidas Z. N. E. 运动外套。 Z. N. E. 系列专注运动前专注状态,双层针织面料保暖有质感,高领设计和拉链口袋,修身剪裁。 适合运动前后保暖和日常通勤。 价格799元,有黑色、深灰、藏青三色。 男款。",
+            "Adidas Z. N. E. 运动外套。 Adidas Z. N. E. 系列专注运动前专注状态,双层针织面料保暖有质感,高领设计和拉链口袋,修身剪裁。 适合运动前后保暖和日常通勤,男款。 价格799元,有黑色、深灰、藏青三色。 冷水轻柔洗涤,平铺晾干。",
+            "外套共有2款:Adidas Z. N. E. 运动外套(799元,男款)和Lululemon Define瑜伽外套(980元,女款)。 Z. N. E. 双层针织保暖有质感,适合运动前后和通勤; Define修身剪裁,适合瑜伽热身和日常穿搭。",
+            "卫衣/连帽衫共有4款:Nike Therma-FIT连帽卫衣(499元,男款)、Adidas三叶草连帽卫衣(599元,男女同款)、Lululemon Scuba连帽卫衣(880元,女款)、Under Armour Rival连帽卫衣(449元,男款)。 价格从449元到880元。 Nike和UA注重运动保暖,Adidas偏休闲潮流,Lululemon偏高端舒适。",
+            "外套价格指南:Adidas Z. N. E. 运动外套799元,Lululemon Define瑜伽外套980元。 两款定位不同:Z. N. E. 注重运动保暖,Define注重修身剪裁。 价格区间为799-980元。"
+          ],
+          "ground_truth": "Adidas Z.N.E.运动外套是男款，售价799元。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "common",
+          "lane": "answers",
+          "tags": [
+            "product_fact",
+            "gender",
+            "price"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "gender": "men",
+            "price_cny": 799
+          },
+          "citation_targets": [
+            "CF08"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.8333333333333334,
+          "grounding": 0.4,
+          "latency_s": 1.3
+        },
+        {
+          "id": "GEN-CAND-018",
+          "question": "Swiftly长袖有哪几种颜色，穿着会磨皮肤吗？",
+          "answer": "Swiftly长袖有白色、黑色和薄荷绿三种颜色可选 [1][4]。它采用无缝设计，穿着完全不磨皮肤，跑步或训练时都很舒服 [2][3][4]。",
+          "contexts": [
+            "Lululemon Swiftly 长袖T恤（SKU P060/P059/P058），品牌Lululemon，尺码M/L/XL，价格450.0元，总库存196，颜色白色/黑色/薄荷绿。",
+            "Swiftly长袖太好穿了,无缝设计完全不磨皮肤。 跑步叠穿单穿都好看。",
+            "Swiftly长袖无缝设计不磨皮肤,跑步好穿。 ——阿静",
+            "女士运动上衣共有2款:Lululemon Swiftly长袖T恤(450元)和Nike React Infinity配套上衣。 Lululemon Swiftly有白色、黑色、薄荷绿三色,无缝设计不磨皮肤,适合跑步和训练。 尺码覆盖M到XL。",
+            "Swiftly长袖L码合身,薄荷绿颜色很清新。 跑步穿很舒服。",
+            "Swiftly长袖贴身穿很舒服,无缝设计完全不磨。 冬天居家单穿也不冷,夏天空调房也合适。"
+          ],
+          "ground_truth": "Swiftly长袖有白色、黑色和薄荷绿，无缝设计不容易磨皮肤。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "semi",
+          "lane": "answers",
+          "tags": [
+            "product_fact",
+            "color",
+            "wear_experience"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "colors": [
+              "白色",
+              "黑色",
+              "薄荷绿"
+            ],
+            "construction": "无缝"
+          },
+          "citation_targets": [
+            "CF05"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.7142857142857143,
+          "grounding": 1.0,
+          "latency_s": 1.23
+        },
+        {
+          "id": "GEN-CAND-019",
+          "question": "Nike Dri-FIT和Adidas AeroReady短袖是不是同价？",
+          "answer": "是的，两款都是199元，价格相同[2]。不过面料手感略有差别：Nike Dri-FIT稍厚实，Adidas AeroReady更轻薄[3][4]。选喜欢的品牌logo就行[2]。",
+          "contexts": [
+            "Nike Dri-FIT 短袖T恤（SKU P009/P008/P007），品牌Nike，尺码M/L/XL，价格199.0元，总库存313，颜色黑色/白色/藏青。",
+            "200元以内预算:Nike Dri-FIT短袖T恤(199元)和Adidas AeroReady训练T恤(199元)是最佳性价比选择,速干功能实用,品牌知名度高。 两款面料和功能接近,选喜欢的品牌logo即可。",
+            "Nike Dri-FIT和Adidas AeroReady速干差不多,Nike面料稍厚一点,Adidas更轻薄。 UA Tech 2. 0性价比最高。",
+            "速干面料对比:Nike Dri-FIT和Adidas AeroReady功能类似,都是聚酯纤维速干排汗,Dri-FIT面料稍厚实一些,AeroReady更轻薄。 UA Tech面料有天然棉感但速干稍慢。 Lululemon Swiftly使用无缝针织和银离子防臭技术,舒适度最高但价格也最贵。 选择时根据预算和运动强度决定。",
+            "面料知识:Dri-FIT和AeroReady是速干排汗面料,适合高温运动; Nulu是Lululemon专利裸感面料,轻盈柔软适合瑜伽; ColdGear是Under Armour双层保暖面料,适合冬季户外运动; Therma-FIT是Nike保暖抓绒面料; Boost是Adidas标志性缓震中底科技; Air Zoom是Nike气垫缓震技术。",
+            "上衣价格指南:最便宜的是Nike Dri-FIT短袖T恤和Adidas AeroReady训练T恤(均为199元),最贵的是Under Armour Playoff高尔夫Polo衫(499元)。 短袖T恤价格区间为199-420元,紧身衣/长袖为399-450元。 性价比之选是Nike Dri-FIT(199元)。"
+          ],
+          "ground_truth": "是的，两款短袖目前都是199元。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "common",
+          "lane": "answers",
+          "tags": [
+            "product_fact",
+            "price",
+            "comparison"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "nike_dri_fit_price_cny": 199,
+            "adidas_aeroready_price_cny": 199
+          },
+          "citation_targets": [
+            "CF04",
+            "EX08"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.8571428571428571,
+          "grounding": 1.0,
+          "latency_s": 1.16
+        },
+        {
+          "id": "GEN-CAND-020",
+          "question": "平台当前价格最高的是哪件商品？",
+          "answer": "平台当前价格最高的商品是 **Nike LeBron 篮球鞋**，售价 **1299元** [1]。",
+          "contexts": [
+            "Nike LeBron 篮球鞋（SKU P010/P011/P012），品牌Nike，尺码M/L/XL，价格1299.0元，总库存105，颜色黑红/白色/金色。",
+            "Nike产品共8款,价格从199元到1299元,覆盖跑鞋、篮球鞋、休闲鞋、T恤、卫衣、紧身裤等品类,是品类最全的品牌。 Adidas产品共7款,价格从199元到1099元,跑步和休闲鞋款突出,三叶草系列偏潮流。 Lululemon产品共8款,价格从380元到980元,以女性瑜伽服饰为核心。 Under Armour产品共6款,价格从249元到999元,训练和篮球装备见长。",
+            "平台跑鞋共有5款:Nike Air Zoom Pegasus 40(899元)、Nike React Infinity(999元)、Adidas Ultraboost Light(1099元)、Adidas Adizero Adios(899元)、Under Armour HOVR Phantom(899元)。 尺码覆盖M到XL。 Pegasus和Ultraboost适合日常慢跑,Adizero适合竞速,React Infinity适合需要稳定性的跑者。",
+            "UA Tech 2. 0性价比高,249块钱很值。 ——阿强",
+            "Lululemon Align 高腰紧身裤。 Lululemon最受欢迎的Nulu裸感面料,轻盈柔软如第二层肌肤,高腰设计收腹不提臀,无侧缝剪裁减少摩擦。 适合瑜伽、普拉提、日常休闲和轻运动,女款。 价格850元,有黑色、深灰、藏青三色。 冷水轻柔机洗,反面洗涤,避免烘干和柔顺剂。",
+            "Lululemon男装质量好但价格偏高,打折值得入。 ——张哥"
+          ],
+          "ground_truth": "当前价格最高的是Nike LeBron篮球鞋，售价1299元。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "common",
+          "lane": "answers",
+          "tags": [
+            "product_fact",
+            "superlative",
+            "price"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "product": "Nike LeBron篮球鞋",
+            "price_cny": 1299
+          },
+          "citation_targets": [
+            "P010"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.2857142857142857,
+          "grounding": 1.0,
+          "latency_s": 1.28
+        },
+        {
+          "id": "GEN-CAND-021",
+          "question": "我跑步时脚踝容易内翻，想要稳定一点的跑鞋，选哪双？",
+          "answer": "脚踝容易内翻的话，稳定支撑型跑鞋会更适合你，Nike React Infinity 就是为这类需求设计的，加宽前掌能增强落地稳定性，帮助减少跑步损伤 [2][3]。价格999元，有粉色、白色、黑色三色可选 [2][3]。\n\n- **Nike React Infinity 跑步鞋**：稳定支撑款，React泡棉中底柔软且过渡流畅，加宽前掌增强落地稳定性，适合入门跑者和需要支撑的跑者 [2][3]。女款剪裁，鞋面可机洗（冷水轻柔档） [3]。\n\n如果你想要更日常一点的脚感，也可以考虑 Pegasus 40，它缓震回弹均衡，跑步感比 Ultraboost 更纯粹 [1]，但稳定支撑方面不如 React Infinity 突出。",
+          "contexts": [
+            "Pegasus 40是最均衡的跑鞋,缓震回弹都恰到好处。 比Ultraboost更有跑步感,比Adizero更日常。",
+            "Nike React Infinity 跑步鞋。 Nike稳定支撑跑鞋,React泡棉中底柔软脚感和流畅过渡,加宽前掌增强落地稳定性。 适合入门跑者和需要支撑的跑者。 价格999元,有粉色、白色、黑色三色。 女款剪裁。",
+            "Nike React Infinity 跑步鞋。 Nike稳定支撑跑鞋,React泡棉中底提供柔软脚感和流畅过渡,加宽前掌设计增强落地稳定性,帮助减少跑步损伤。 适合入门跑者和需要支撑的跑者,女款剪裁。 价格999元,有粉色、白色、黑色三色。 鞋面可机洗(冷水轻柔档),取出鞋垫后自然晾干。",
+            "LeBron篮球鞋的缓震是最好的,体重180斤以上选它没错。 Curry更轻更灵活但缓震少一些。",
+            "鞋子偏重,不适合竞速跑。 日常慢跑和走路很舒服,缓震够。",
+            "Adidas Ultraboost Light 跑步鞋。 Adidas旗舰缓震跑鞋,Light Boost中底比传统Boost轻30%且回弹更佳,Primeknit+鞋面袜套般贴合,Continental橡胶大底湿地抓地力强。 适合长距离跑步和日常通勤穿着,男款。 价格1099元,有黑色、白色、灰色三色。 取出鞋垫后冷水轻柔洗涤,阴干。"
+          ],
+          "ground_truth": "更建议Nike React Infinity，它面向需要更多稳定支撑的跑者，售价999元。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "semi",
+          "lane": "stylist",
+          "tags": [
+            "stylist",
+            "running",
+            "constraint"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "recommendation": "Nike React Infinity",
+            "reason": "稳定支撑",
+            "price_cny": 999
+          },
+          "citation_targets": [
+            "CF01",
+            "OC03"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.25,
+          "grounding": 1.0,
+          "latency_s": 2.81
+        },
+        {
+          "id": "GEN-CAND-022",
+          "question": "后卫打法，喜欢轻量和贴地感，篮球鞋怎么选？",
+          "answer": "后卫打法选鞋，轻量和贴地感是关键，库里系列就是为这个场景设计的[2][4]。它采用Flow无橡胶大底，贴地感强，变向不打滑，而且比LeBron轻很多[2][4]。\n\n- **Under Armour Curry篮球鞋（999元）**：轻量、场地感好，Flow大底贴地变向不打滑，后卫突破神器[4][6]。\n- **Nike LeBron篮球鞋（1299元）**：缓震顶级，但偏重，适合大体重锋线，后卫变向会感觉拖沓[3][5]。\n\n所以后卫首选Curry，如果追求极致轻量和贴地，它是最对口的[2][4]。上身可以配一件Nike Dri-FIT或UA Tech 2.0速干T恤，冬天加Nike Therma-FIT卫衣[6]。",
+          "contexts": [
+            "后卫鞋标杆,轻量贴地。 比LeBron轻很多。 ——大刘",
+            "Curry篮球鞋场地感太好了,Flow无橡胶底设计贴地感强,变向不打滑。 后卫神鞋。",
+            "鞋子太重了,打后卫变向的时候感觉脚底下拖了块砖。 这鞋适合大体重锋线,后卫还是选Curry那种轻的。",
+            "Curry篮球鞋场地感太强了,Flow大底贴地变向不打滑,比LeBron轻太多。 后卫突破神器。",
+            "LeBron篮球鞋的缓震是最好的,体重180斤以上选它没错。 Curry更轻更灵活但缓震少一些。",
+            "篮球装备推荐:大体重锋线球员选Nike LeBron篮球鞋(1299元),Max Air缓震顶级; 后卫球员选Under Armour Curry篮球鞋(999元),轻量场地感好。 上身配Nike Dri-FIT或UA Tech 2. 0速干T恤,冬天加一件Nike Therma-FIT卫衣。"
+          ],
+          "ground_truth": "推荐Under Armour Curry篮球鞋，它更适合后卫，特点是轻量、贴地和场地感好，售价999元。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "semi",
+          "lane": "stylist",
+          "tags": [
+            "stylist",
+            "basketball",
+            "persona_fit"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "recommendation": "Under Armour Curry",
+            "reason": [
+              "后卫",
+              "轻量",
+              "贴地"
+            ],
+            "price_cny": 999
+          },
+          "citation_targets": [
+            "CF02",
+            "OC06"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.6,
+          "grounding": 0.8571428571428571,
+          "latency_s": 2.6
+        },
+        {
+          "id": "GEN-CAND-023",
+          "question": "体重大、打锋线，最看重缓震和包裹，推荐什么篮球鞋？",
+          "answer": "体重大、打锋线、最看重缓震和包裹的话，LeBron篮球鞋就是为你准备的 😊\n\n- **Nike LeBron篮球鞋（1299元）**：Max Air缓震顶级，落地膝盖不震，高帮包裹脚踝很安心，大体重锋线首选 [5][4]\n- 搭配建议：上身配一件Nike Dri-FIT速干T恤，冬天换Nike Therma-FIT卫衣，整套打球更舒服 [5]\n\n如果你偶尔也想打打后卫变向，那可以再备一双Curry（999元），更轻更灵活，但缓震会少一些 [1][2]。",
+          "contexts": [
+            "LeBron篮球鞋的缓震是最好的,体重180斤以上选它没错。 Curry更轻更灵活但缓震少一些。",
+            "鞋子太重了,打后卫变向的时候感觉脚底下拖了块砖。 这鞋适合大体重锋线,后卫还是选Curry那种轻的。",
+            "鞋子有点重,不适合打后卫变向多的。 大体重锋线穿着很合适,抓地力不错。",
+            "体重185斤,穿LeBron打球落地缓震太到位了,膝盖完全不震。 高帮包裹脚踝很安心,抢篮板有信心。",
+            "篮球装备推荐:大体重锋线球员选Nike LeBron篮球鞋(1299元),Max Air缓震顶级; 后卫球员选Under Armour Curry篮球鞋(999元),轻量场地感好。 上身配Nike Dri-FIT或UA Tech 2. 0速干T恤,冬天加一件Nike Therma-FIT卫衣。",
+            "大体重球员的福音,包裹和缓震都到位。 ——刘哥"
+          ],
+          "ground_truth": "推荐Nike LeBron篮球鞋，它适合大体重锋线球员，缓震和包裹更突出，售价1299元。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "semi",
+          "lane": "stylist",
+          "tags": [
+            "stylist",
+            "basketball",
+            "persona_fit"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "recommendation": "Nike LeBron",
+            "reason": [
+              "大体重锋线",
+              "缓震",
+              "包裹"
+            ],
+            "price_cny": 1299
+          },
+          "citation_targets": [
+            "CF02",
+            "OC06"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.6363636363636364,
+          "grounding": 0.75,
+          "latency_s": 2.48
+        },
+        {
+          "id": "GEN-CAND-024",
+          "question": "女生做HIIT，想要紧身裤有支撑又速干，还要配运动内衣。",
+          "answer": "女生做HIIT，选Lululemon Wunder Train紧身裤最合适，Everlux面料速干又有支撑，深蹲也不透光，750元[1]。搭配Energy运动内衣（380元）就是一套很稳的组合[1]。\n\n- Lululemon Wunder Train紧身裤：Everlux面料速干、有支撑，HIIT深蹲动作放心穿[1]\n- Energy运动内衣：专为高强度训练设计，和紧身裤搭配正好[1]\n\n如果想更平价，也可以看Nike Dri-FIT One女子紧身裤（299元，速干高腰，适合训练）[3]，但支撑性上Wunder Train更针对HIIT。需要我帮你按预算再挑吗？😊",
+          "contexts": [
+            "HIIT和CrossFit装备指南:女士选Lululemon Wunder Train紧身裤(750元),Everlux面料速干有支撑,深蹲不透光; 搭配Energy运动内衣(380元)。 男士选UA Tech 2. 0 T恤(249元)宽松活动自如,Nike Pro紧身裤(299元)压缩支撑。 鞋选UA Curry篮球鞋(999元)稳定贴地。",
+            "健身房和力量训练推荐:男士穿Nike Dri-FIT或UA Tech 2. 0速干T恤,搭配Nike Pro紧身裤或Adidas Tiro训练裤。 女士穿Lululemon Wunder Train紧身裤和Energy运动内衣。 篮球训练选Under Armour Curry篮球鞋,轻量贴地。",
+            "Nike Dri-FIT One 女子紧身裤。 Nike经典女子训练紧身裤,Dri-FIT速干面料导出汗液保持干爽,高腰宽边腰带舒适包覆,隐藏式口袋可放钥匙或手机。 适合瑜伽、跑步、健身房训练和日常穿着。 价格299元,有黑色、深灰、藏青三色。 女款标准剪裁。",
+            "Nike Dri-FIT One 女子紧身裤。 Nike经典女子训练紧身裤,Dri-FIT速干面料导出汗液保持干爽,高腰宽边腰带舒适包覆不滑落,隐藏式口袋可放钥匙或手机。 适合瑜伽、跑步、健身房训练和日常穿着,女款标准剪裁。 价格299元,有黑色、深灰、藏青三色。 冷水机洗,不要使用柔顺剂和漂白剂,悬挂晾干避免暴晒。",
+            "Adidas Believe This 女子紧身裤。 Adidas女子训练紧身裤,Aeroready速干科技面料吸湿排汗,高腰宽腰头设计贴合不滑落,四向弹力面料活动自如无束缚。 适合瑜伽、普拉提、跑步和健身房训练,女款修身剪裁。 价格329元,有黑色、深灰、深蓝三色。 冷水机洗,避免柔顺剂,阴干不要烘干。",
+            "Adidas Believe This 女子紧身裤。 Adidas女子训练紧身裤,Aeroready速干科技面料吸湿排汗,高腰宽腰头设计贴合不滑落,四向弹力面料活动自如。 适合瑜伽、普拉提、跑步和健身房训练。 价格329元,有黑色、深灰、深蓝三色。 女款修身剪裁。"
+          ],
+          "ground_truth": "推荐Wunder Train紧身裤搭配Energy运动内衣；Everlux面料速干且有支撑，Energy提供中高强度支撑。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "semi",
+          "lane": "stylist",
+          "tags": [
+            "stylist",
+            "hiit",
+            "bundle",
+            "multi_evidence"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "bottom": "Lululemon Wunder Train",
+            "bra": "Lululemon Energy",
+            "reason": [
+              "速干",
+              "支撑"
+            ]
+          },
+          "citation_targets": [
+            "EX13",
+            "CF10"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.7272727272727273,
+          "grounding": 1.0,
+          "latency_s": 2.72
+        },
+        {
+          "id": "GEN-CAND-025",
+          "question": "主要练瑜伽，Align和Wunder Train哪条更合适？",
+          "answer": "练瑜伽的话，Align 会更适合你～ 😊\n\n- **Lululemon Align 高腰紧身裤（850元）**：采用 Nulu 裸感面料，最轻最软，专为瑜伽等低强度活动设计，舒适度拉满 [3][4]\n- **Wunder Train（750元）**：虽然支撑感更强、适合高强度训练，但居家休闲和瑜伽场景下，Align 的舒适感更胜一筹 [5][6]\n\n如果你偶尔也会去健身房做力量训练，那两条可以都备着，瑜伽穿 Align，健身穿 Wunder Train [5]。需要我帮你看看 Align 的具体尺码和颜色吗？",
+          "contexts": [
+            "Lululemon Wunder Train 紧身裤（SKU P057/P056/P055），品牌Lululemon，尺码M/L/XL，价格750.0元，总库存153，颜色深绿/黑色/紫红。",
+            "Wunder Train L码合适,黑色百搭。 比Align有支撑感,健身房推荐。",
+            "瑜伽装备推荐:Lululemon Align高腰紧身裤(850元)是首选,Nulu裸感面料舒适; 追求支撑选Wunder Train(750元)。 上衣选Swiftly长袖T恤(450元)无缝不磨皮,搭配Energy运动内衣(380元)。 热身时穿Define瑜伽外套(980元)。",
+            "Lululemon面料指南:Nulu是Align使用的裸感面料,最轻最软适合瑜伽; Everlux是Wunder Train使用的面料,速干有支撑适合高强度训练; Luon是Define使用的面料,弹力贴身有棉感; Swift是Pace Rival短裙使用的面料,四向弹力耐用。 不同面料适合不同场景。",
+            "Wunder Train比Align更有支撑感,健身穿更安心。 但居家休闲还是Align更舒服,两种都需要。",
+            "Wunder Train比Align更有支撑感,深蹲跑步都不透。 深绿颜色很高级。"
+          ],
+          "ground_truth": "主要练瑜伽更推荐Align，它的Nulu面料更轻软、裸感；Wunder Train支撑更强，更适合高强度训练。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "semi",
+          "lane": "stylist",
+          "tags": [
+            "stylist",
+            "yoga",
+            "comparison"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "recommendation": "Align",
+            "align_use": "瑜伽",
+            "wunder_train_use": "高强度训练"
+          },
+          "citation_targets": [
+            "EX17",
+            "OC04"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.8333333333333334,
+          "grounding": 0.75,
+          "latency_s": 2.68
+        },
+        {
+          "id": "GEN-CAND-026",
+          "question": "零度左右户外跑步，上身怎么分层搭配？",
+          "answer": "零度左右户外跑步，上身按“内层+中层+外层”三层来搭最稳，保暖又排汗 [1][2]：\n\n- **内层：Under Armour ColdGear紧身衣（399元）** — 双层保暖排汗，0度穿不冷，压缩感贴合肌肉不晃 [3][4][6]\n- **中层：Nike Therma-FIT卫衣（499元）** — 抓绒柔软贴身不扎，5度时一件长袖加它就够，零度正好做中间层 [2][5]\n- **外层：Adidas Z. N. E. 外套（799元）** — 防风，挡冷风，跑热了也方便脱 [2]\n\n这样搭下来，零度跑基本不冷，出汗也能快速排走 [3][4]。要不要我再帮你看看下装或鞋子的搭配？😊",
+          "contexts": [
+            "冬天和寒冷天气推荐分层穿搭:内层穿Under Armour ColdGear紧身衣保暖排汗,中层穿Nike Therma-FIT卫衣或Adidas三叶草卫衣,外层可配Adidas Z. N. E. 外套。 脚上穿Nike Pegasus或Adidas Ultraboost跑步。",
+            "冬季户外运动分层指南:底层穿Under Armour ColdGear紧身衣(399元),双层保暖排汗; 中层穿Nike Therma-FIT卫衣(499元)或Adidas三叶草卫衣(599元)抓绒保暖; 外层穿Adidas Z. N. E. 外套(799元)防风。 下装穿Nike Pro紧身裤(299元)。 脚上穿Nike Pegasus或Adidas Ultraboost。",
+            "Under Armour ColdGear紧身衣是我冬天户外跑步的必备打底,比Nike Pro更保暖。 0度穿不冷,排汗也快。",
+            "ColdGear紧身衣冬天跑步神器,双层保暖排汗,0度穿不冷不热。 压缩感贴合肌肉,跑起来不晃。",
+            "Therma-FIT卫衣冬天跑步穿太合适了,5度的天气里面一件长袖加这件卫衣就够了。 抓绒柔软贴身不扎。",
+            "ColdGear紧身衣冬天跑步太好用了,双层保暖排汗,0度穿不冷。 压缩感贴合肌肉。"
+          ],
+          "ground_truth": "可以用ColdGear紧身衣做保暖排汗底层，Therma-FIT或三叶草卫衣做中层，再搭配Z.N.E.外套防风。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "semi",
+          "lane": "stylist",
+          "tags": [
+            "stylist",
+            "winter_running",
+            "layering"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "base": "ColdGear",
+            "middle": "Therma-FIT或三叶草卫衣",
+            "outer": "Z.N.E.外套"
+          },
+          "citation_targets": [
+            "EX14",
+            "OC02"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.36363636363636365,
+          "grounding": 0.5,
+          "latency_s": 2.86
+        },
+        {
+          "id": "GEN-CAND-027",
+          "question": "夏天跑步怕闷热，200元左右有什么上衣？",
+          "answer": "夏天跑步怕闷热，200元左右的速干T恤正好合适，透气排汗是关键～ [1]\n\n- **Nike Dri-FIT短袖T恤（199元）**：速干功能实用，品牌经典，性价比高 [1]\n- **Adidas AeroReady训练T恤（199元）**：同样速干透气，面料和功能与Nike接近，选喜欢的logo就行 [1]\n\n两款都是200元内的最佳选择，日常跑步和训练都够用 [1]。如果预算能稍微放宽，Under Armour Tech 2.0短袖T恤（249元）也不错，天然质感速干透气，还有防臭技术，适合健身房和跑步 [4]。",
+          "contexts": [
+            "200元以内预算:Nike Dri-FIT短袖T恤(199元)和Adidas AeroReady训练T恤(199元)是最佳性价比选择,速干功能实用,品牌知名度高。 两款面料和功能接近,选喜欢的品牌logo即可。",
+            "上衣价格指南:最便宜的是Nike Dri-FIT短袖T恤和Adidas AeroReady训练T恤(均为199元),最贵的是Under Armour Playoff高尔夫Polo衫(499元)。 短袖T恤价格区间为199-420元,紧身衣/长袖为399-450元。 性价比之选是Nike Dri-FIT(199元)。",
+            "女士运动上衣共有2款:Lululemon Swiftly长袖T恤(450元)和Nike React Infinity配套上衣。 Lululemon Swiftly有白色、黑色、薄荷绿三色,无缝设计不磨皮肤,适合跑步和训练。 尺码覆盖M到XL。",
+            "Under Armour Tech 2. 0 短袖T恤。 UA Tech面料天然质感速干透气,防臭技术抑制细菌滋生,宽松剪裁活动自如。 适合健身房、跑步和日常训练。 价格249元,有黑色、深灰、藏青三色。 男款。",
+            "男士运动上衣共有7款:Nike Dri-FIT短袖T恤(199元)、Adidas AeroReady训练T恤(199元)、Lululemon Metal Vent男士T恤(420元)、Under Armour Tech 2. 0短袖T恤(249元)、Under Armour ColdGear紧身衣(399元)、Under Armour Playoff高尔夫Polo衫(499元)、Nike美利奴长袖已售罄。 价格从199元到499元。",
+            "跑步装备推荐:入门跑者选Nike Air Zoom Pegasus 40(899元),均衡缓震适合大多数人; 追求稳定选Nike React Infinity(999元); 长距离慢跑选Adidas Ultraboost Light(1099元),脚感柔软; 竞速PB选Adidas Adizero Adios(899元),碳板推进。 上衣选Nike Dri-FIT或Adidas AeroReady速干T恤。"
+          ],
+          "ground_truth": "可以选择199元的Nike Dri-FIT短袖或Adidas AeroReady训练T恤，两款都主打速干排汗。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "common",
+          "lane": "stylist",
+          "tags": [
+            "stylist",
+            "summer_running",
+            "budget"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "options": [
+              "Nike Dri-FIT",
+              "Adidas AeroReady"
+            ],
+            "price_cny": 199,
+            "function": "速干排汗"
+          },
+          "citation_targets": [
+            "EX08",
+            "OC01"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 1.0,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.3,
+          "grounding": 0.8333333333333334,
+          "latency_s": 2.34
+        },
+        {
+          "id": "GEN-CAND-028",
+          "question": "脚比较宽，日常慢跑选Nike还是Adidas更稳妥？",
+          "answer": "脚宽的话，Adidas会更稳妥一些，因为它的鞋楦普遍偏宽，对宽脚更友好[1]。Nike的鞋楦偏窄，日常慢跑可能会觉得挤[1]。\n\n- **Adidas Ultraboost Light**：日常慢跑和走路都很舒服，Boost中底比Nike的React更软，缓震够用，穿一天脚也不累[4]。\n- **Adidas Adizero**：适合竞速，但日常穿不太合适，而且L码偏小，脚宽的话要买大一号[6]。\n\n如果你更看重日常舒适和宽松脚感，选Adidas的Ultraboost Light就很稳[4]。要不要我帮你看看这款的具体配色或尺码？😊",
+          "contexts": [
+            "Nike和Adidas跑鞋对比:Nike选择更多,Pegasus均衡、React稳定、Air Max潮流; Adidas的Boost中底脚感更软,Ultraboost适合长距离,Adizero适合竞速。 鞋楦方面Nike偏窄,Adidas偏宽。 建议脚宽的选Adidas,正常脚型两家都可以,最好试穿后决定。",
+            "Nike Dri-FIT和Adidas AeroReady速干差不多,Nike面料稍厚一点,Adidas更轻薄。 UA Tech 2. 0性价比最高。",
+            "鞋子偏重,不适合竞速跑。 日常慢跑和走路很舒服,缓震够。",
+            "Ultraboost Light走路和慢跑都很舒服,Boost中底比Nike的React软。 日常穿一天脚不累。",
+            "Adidas AeroReady比Nike Dri-FIT轻薄透气,但Nike的更耐洗不变形。 价格差不多看个人喜好。",
+            "Adizero L码偏小,脚宽的要买大一号。 竞速确实快但不适合日常穿。"
+          ],
+          "ground_truth": "脚宽时更建议优先试Adidas，因为Adidas鞋楦相对更宽；Nike鞋楦偏窄，选择时最好试穿。",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "semi",
+          "lane": "stylist",
+          "tags": [
+            "stylist",
+            "running",
+            "sizing",
+            "constraint"
+          ],
+          "expected_action": "answer",
+          "actual_action": "answer",
+          "required_facts": {
+            "recommendation": "Adidas",
+            "reason": "鞋楦更宽",
+            "nike_fit": "偏窄"
+          },
+          "citation_targets": [
+            "EX18"
+          ],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": 0.8,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": false,
+          "confidence": 0.5,
+          "grounding": 1.0,
+          "latency_s": 2.58
+        },
+        {
+          "id": "GEN-CAND-029",
+          "question": "在校大学生买鞋有学生专享折扣吗？",
+          "answer": "抱歉，这个我暂时没有找到完全匹配的信息😊。可以再告诉我一些细节吗？比如品类、使用场景、颜色或预算，我帮你找找最接近的选项。你最看重什么呢？",
+          "contexts": [
+            "比Nike和Adidas便宜,质量差不多。 ——阿伟",
+            "Adidas Ultraboost Light 跑步鞋。 Adidas旗舰缓震跑鞋,Light Boost中底比传统Boost轻30%,Primeknit+鞋面袜套般贴合,Continental橡胶大底湿地抓地。 适合长距离跑步和日常通勤。 价格1099元,有黑色、白色、灰色三色。 男款。",
+            "Adidas Ultraboost Light 跑步鞋。 Adidas旗舰缓震跑鞋,Light Boost中底比传统Boost轻30%且回弹更佳,Primeknit+鞋面袜套般贴合,Continental橡胶大底湿地抓地力强。 适合长距离跑步和日常通勤穿着,男款。 价格1099元,有黑色、白色、灰色三色。 取出鞋垫后冷水轻柔洗涤,阴干。",
+            "Nike Air Max 270 运动鞋。 Nike Air Max系列首款以生活方式为定位的鞋款,后跟270度超大Air气垫提供出色的视觉冲击和柔软脚感,网面和合成材质组合鞋面透气耐穿。 男女同款,适合日常穿搭和轻运动。 价格1099元,有黑白、灰蓝、全黑三色。 湿布擦拭表面,避免浸泡。",
+            "Nike Air Max 270 运动鞋。 后跟270度超大Air气垫,网面和合成材质组合鞋面透气耐穿。 适合日常穿搭和轻运动。 价格1099元,有黑白、灰蓝、全黑三色。 男款。",
+            "鞋类价格指南:最便宜的鞋是Adidas Gazelle(699元),最贵的是Nike LeBron篮球鞋(1299元)。 跑鞋价格区间为899-1099元,篮球鞋为999-1299元,休闲鞋为699-1099元。 如果追求性价比,Adidas Gazelle(699元)是最便宜的选择。"
+          ],
+          "ground_truth": "",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "edge",
+          "lane": "answers",
+          "tags": [
+            "abstain",
+            "policy",
+            "knowledge_gap"
+          ],
+          "expected_action": "abstain",
+          "actual_action": "abstain",
+          "required_facts": {},
+          "citation_targets": [],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": null,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": true,
+          "confidence": 0.0,
+          "grounding": 0.0,
+          "latency_s": 0.3
+        },
+        {
+          "id": "GEN-CAND-030",
+          "question": "你们卖适合小狗冬天穿的运动外套吗？",
+          "answer": "抱歉，这个我暂时没有找到完全匹配的信息😊。可以再告诉我一些细节吗？比如品类、使用场景、颜色或预算，我帮你找找最接近的选项。你最看重什么呢？",
+          "contexts": [
+            "Adidas Z. N. E. 运动外套。 Adidas Z. N. E. 系列专注运动前专注状态,双层针织面料保暖有质感,高领设计和拉链口袋,修身剪裁。 适合运动前后保暖和日常通勤,男款。 价格799元,有黑色、深灰、藏青三色。 冷水轻柔洗涤,平铺晾干。",
+            "外套共有2款:Adidas Z. N. E. 运动外套(799元,男款)和Lululemon Define瑜伽外套(980元,女款)。 Z. N. E. 双层针织保暖有质感,适合运动前后和通勤; Define修身剪裁,适合瑜伽热身和日常穿搭。",
+            "Adidas Z. N. E. 运动外套。 Z. N. E. 系列专注运动前专注状态,双层针织面料保暖有质感,高领设计和拉链口袋,修身剪裁。 适合运动前后保暖和日常通勤。 价格799元,有黑色、深灰、藏青三色。 男款。",
+            "Therma-FIT卫衣冬天跑步穿太合适了,5度的天气里面一件长袖加这件卫衣就够了。 抓绒柔软贴身不扎。",
+            "Adidas Z. N. E. 外套是我秋冬通勤最爱,双层针织比普通卫衣保暖有质感,比羽绒服轻便。",
+            "冬季户外运动分层指南:底层穿Under Armour ColdGear紧身衣(399元),双层保暖排汗; 中层穿Nike Therma-FIT卫衣(499元)或Adidas三叶草卫衣(599元)抓绒保暖; 外层穿Adidas Z. N. E. 外套(799元)防风。 下装穿Nike Pro紧身裤(299元)。 脚上穿Nike Pegasus或Adidas Ultraboost。"
+          ],
+          "ground_truth": "",
+          "retrieval_mode": "dense",
+          "lang": "zh",
+          "difficulty": "edge",
+          "lane": "stylist",
+          "tags": [
+            "abstain",
+            "catalog_gap",
+            "knowledge_gap"
+          ],
+          "expected_action": "abstain",
+          "actual_action": "abstain",
+          "required_facts": {},
+          "citation_targets": [],
+          "contract_scores": {
+            "action_correct": true,
+            "required_fact_recall": null,
+            "forbidden_claims": [],
+            "forbidden_claim_free": true
+          },
+          "abstained": true,
+          "confidence": 0.5,
+          "grounding": 0.0,
+          "latency_s": 0.27
+        }
+      ],
+      "scores": {
+        "count": 30,
+        "overall": {
+          "faithfulness": 0.971,
+          "answer_relevance": 0.826,
+          "context_precision": 0.824,
+          "context_recall": 0.966
+        },
+        "valid_counts": {
+          "faithfulness": 28,
+          "answer_relevance": 28,
+          "context_precision": 25,
+          "context_recall": 28
+        },
+        "item_scores": [
+          {
+            "id": "GEN-CAND-001",
+            "question": "订单不到199元的话，普通运费要收多少？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.849,
+              "context_precision": 1.0,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-002",
+            "question": "能把商品寄到香港吗？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.837,
+              "context_precision": 1.0,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-003",
+            "question": "加急配送一般几天到，要额外多少钱？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.911,
+              "context_precision": null,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-004",
+            "question": "正常下单后多久会发货？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.811,
+              "context_precision": null,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-005",
+            "question": "七天无理由退货需要满足哪些条件？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.906,
+              "context_precision": 1.0,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-006",
+            "question": "我只是觉得颜色不合适，退货运费谁承担？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.794,
+              "context_precision": 1.0,
+              "context_recall": 0.5
+            }
+          },
+          {
+            "id": "GEN-CAND-007",
+            "question": "退回去验收通过后，退款多久能到账？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.845,
+              "context_precision": 1.0,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-008",
+            "question": "鞋和运动服的质保期一样长吗？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.728,
+              "context_precision": 1.0,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-009",
+            "question": "新鞋在室外试穿过以后还能换码吗？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.828,
+              "context_precision": 1.0,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-010",
+            "question": "除了支付宝和微信，还能刷信用卡吗？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.655,
+              "context_precision": 1.0,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-011",
+            "question": "花呗分期有什么金额门槛，能分多少期？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.869,
+              "context_precision": 1.0,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-012",
+            "question": "会员积分怎么获得，又怎么抵现金？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.877,
+              "context_precision": 1.0,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-013",
+            "question": "React Infinity女款有哪些颜色，售价多少？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.874,
+              "context_precision": 0.692,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-014",
+            "question": "想买双复古休闲鞋，Gazelle现在卖多少钱？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.85,
+              "context_precision": 1.0,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-015",
+            "question": "Energy运动内衣支撑强度和配色是什么？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.918,
+              "context_precision": null,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-016",
+            "question": "Pace Rival运动短裙适合哪些运动，有什么防走光设计？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.906,
+              "context_precision": 0.71,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-017",
+            "question": "Adidas Z.N.E.外套是男款还是女款，价格是多少？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.888,
+              "context_precision": null,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-018",
+            "question": "Swiftly长袖有哪几种颜色，穿着会磨皮肤吗？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.854,
+              "context_precision": null,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-019",
+            "question": "Nike Dri-FIT和Adidas AeroReady短袖是不是同价？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.851,
+              "context_precision": 0.646,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-020",
+            "question": "平台当前价格最高的是哪件商品？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.795,
+              "context_precision": 1.0,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-021",
+            "question": "我跑步时脚踝容易内翻，想要稳定一点的跑鞋，选哪双？",
+            "scores": {
+              "faithfulness": 0.875,
+              "answer_relevance": 0.695,
+              "context_precision": 0.583,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-022",
+            "question": "后卫打法，喜欢轻量和贴地感，篮球鞋怎么选？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.803,
+              "context_precision": 0.71,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-023",
+            "question": "体重大、打锋线，最看重缓震和包裹，推荐什么篮球鞋？",
+            "scores": {
+              "faithfulness": 0.75,
+              "answer_relevance": 0.814,
+              "context_precision": 1.0,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-024",
+            "question": "女生做HIIT，想要紧身裤有支撑又速干，还要配运动内衣。",
+            "scores": {
+              "faithfulness": 0.818,
+              "answer_relevance": 0.788,
+              "context_precision": 0.833,
+              "context_recall": 0.75
+            }
+          },
+          {
+            "id": "GEN-CAND-025",
+            "question": "主要练瑜伽，Align和Wunder Train哪条更合适？",
+            "scores": {
+              "faithfulness": 0.9,
+              "answer_relevance": 0.733,
+              "context_precision": 1.0,
+              "context_recall": 0.8
+            }
+          },
+          {
+            "id": "GEN-CAND-026",
+            "question": "零度左右户外跑步，上身怎么分层搭配？",
+            "scores": {
+              "faithfulness": 0.857,
+              "answer_relevance": 0.912,
+              "context_precision": 1.0,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-027",
+            "question": "夏天跑步怕闷热，200元左右有什么上衣？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.769,
+              "context_precision": 0.75,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-028",
+            "question": "脚比较宽，日常慢跑选Nike还是Adidas更稳妥？",
+            "scores": {
+              "faithfulness": 1.0,
+              "answer_relevance": 0.779,
+              "context_precision": 0.667,
+              "context_recall": 1.0
+            }
+          },
+          {
+            "id": "GEN-CAND-029",
+            "question": "在校大学生买鞋有学生专享折扣吗？",
+            "scores": {
+              "faithfulness": null,
+              "answer_relevance": null,
+              "context_precision": 0.0,
+              "context_recall": null
+            }
+          },
+          {
+            "id": "GEN-CAND-030",
+            "question": "你们卖适合小狗冬天穿的运动外套吗？",
+            "scores": {
+              "faithfulness": null,
+              "answer_relevance": null,
+              "context_precision": 0.0,
+              "context_recall": null
+            }
+          }
+        ],
+        "by_language": {
+          "zh": {
+            "faithfulness": 0.971,
+            "answer_relevance": 0.826,
+            "context_precision": 0.824,
+            "context_recall": 0.966
+          }
+        },
+        "by_difficulty": {
+          "common": {
+            "faithfulness": 1.0,
+            "answer_relevance": 0.832,
+            "context_precision": 0.909,
+            "context_recall": 1.0
+          },
+          "edge": {
+            "context_precision": 0.0
+          },
+          "semi": {
+            "faithfulness": 0.947,
+            "answer_relevance": 0.822,
+            "context_precision": 0.885,
+            "context_recall": 0.937
+          }
+        }
+      },
+      "deterministic_contract": {
+        "count": 30,
+        "action_accuracy": 1.0,
+        "required_fact_recall": 0.993,
+        "forbidden_claim_free_rate": 1.0
+      }
+    },
+    "ablation": {
+      "hybrid": {
+        "hit@8": 0.885,
+        "entity_recall@8": 0.756,
+        "mrr": 0.632,
+        "n": 26
+      },
+      "dense": {
+        "hit@8": 0.885,
+        "entity_recall@8": 0.756,
+        "mrr": 0.667,
+        "n": 26
+      },
+      "by_route": {
+        "factual": {
+          "hybrid": {
+            "hit@8": 0.714,
+            "entity_recall@8": 0.381,
+            "mrr": 0.643,
+            "n": 7
+          },
+          "dense": {
+            "hit@8": 0.714,
+            "entity_recall@8": 0.381,
+            "mrr": 0.714,
+            "n": 7
+          }
+        },
+        "qualitative": {
+          "hybrid": {
+            "hit@8": 1.0,
+            "entity_recall@8": 0.9,
+            "mrr": 0.698,
+            "n": 10
+          },
+          "dense": {
+            "hit@8": 1.0,
+            "entity_recall@8": 0.9,
+            "mrr": 0.758,
+            "n": 10
+          }
+        },
+        "relational": {
+          "hybrid": {
+            "hit@8": 1.0,
+            "entity_recall@8": 1.0,
+            "mrr": 0.8,
+            "n": 5
+          },
+          "dense": {
+            "hit@8": 1.0,
+            "entity_recall@8": 1.0,
+            "mrr": 0.65,
+            "n": 5
+          }
+        },
+        "stylist": {
+          "hybrid": {
+            "hit@8": 0.75,
+            "entity_recall@8": 0.75,
+            "mrr": 0.24,
+            "n": 4
+          },
+          "dense": {
+            "hit@8": 0.75,
+            "entity_recall@8": 0.75,
+            "mrr": 0.375,
+            "n": 4
+          }
+        }
+      }
+    },
+    "duration_s": 317.7
+  }
+}

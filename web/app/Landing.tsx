@@ -46,7 +46,7 @@ const FEATURES = [
 
 export default function Landing({ onEnter }: { onEnter: () => void }) {
   const ref = useReveal();
-  const [brand, setBrand] = useState("运动品牌集合");
+  const [brand, setBrand] = useState(process.env.NEXT_PUBLIC_STORE_NAME || "智能商城");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const { token: captchaToken, widget: captchaWidget, reset: resetCaptcha } = useTurnstile();

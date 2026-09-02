@@ -13,36 +13,31 @@ and displayed text stays clean. Each chunk gets a content checksum.
 from __future__ import annotations
 
 import hashlib
-import re
 
 from adapters.base import Chunk
-
-_SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+")
-
-
-def _estimate_tokens(text: str) -> int:
-    # Rough word-to-token factor; good enough for budgeting without a tokenizer dependency.
-    return max(1, round(len(text.split()) * 1.3))
+from pipeline.text import estimate_tokens, hard_split, normalize_text, sentence_split
 
 
 def split_text(text: str, max_tokens: int = 180, overlap_sentences: int = 1) -> list[str]:
     """Split into sentence-packed chunks under a token budget, overlapping by whole sentences.
     Short text stays a single chunk."""
-    text = " ".join(text.split())
+    text = normalize_text(text)
     if not text:
         return []
-    sentences = [s.strip() for s in _SENTENCE_SPLIT.split(text) if s.strip()]
+    sentences = []
+    for sentence in sentence_split(text):
+        sentences.extend(hard_split(sentence, max_tokens))
     if not sentences:
         return []
     chunks: list[str] = []
     current: list[str] = []
     current_tokens = 0
     for sentence in sentences:
-        tokens = _estimate_tokens(sentence)
+        tokens = estimate_tokens(sentence)
         if current and current_tokens + tokens > max_tokens:
             chunks.append(" ".join(current))
             current = current[-overlap_sentences:] if overlap_sentences else []
-            current_tokens = sum(_estimate_tokens(s) for s in current)
+            current_tokens = sum(estimate_tokens(s) for s in current)
         current.append(sentence)
         current_tokens += tokens
     if current:
@@ -67,9 +62,11 @@ def chunk_records(
     context_fields: list[str] | None = None,
     max_tokens: int = 180,
     overlap_sentences: int = 1,
+    source_metadata: dict | None = None,
 ) -> list[Chunk]:
     meta_fields = meta_fields or []
     context_fields = context_fields or []
+    source_metadata = source_metadata or {}
     chunks: list[Chunk] = []
     for rec in records:
         record_id = str(rec[id_field])
@@ -85,6 +82,7 @@ def chunk_records(
                 "doc_type": doc_type,
                 "record_id": record_id,
                 "checksum": hashlib.sha256(piece.encode()).hexdigest(),
+                **source_metadata,
             }
             if prefix:
                 metadata["context"] = prefix  # embedded with the text; not part of stored text

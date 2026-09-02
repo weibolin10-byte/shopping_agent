@@ -43,12 +43,12 @@ const CATEGORY_LABELS: Record<string, string> = {
   leggings: "紧身裤",
   outerwear: "外套",
   jackets: "外套",
-  bras: "运动内衣",
+  bras: "内衣",
   bottoms: "下装",
   shorts: "短裤",
   bags: "包袋",
   accessories: "配饰",
-  "sports bras": "运动内衣",
+  "sports bras": "内衣",
 };
 
 export function categoryLabel(category: string): string {

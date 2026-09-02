@@ -8,7 +8,8 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_env_example_declares_core_keys():
     env = (ROOT / ".env.example").read_text()
     for key in ["DOMAIN", "LLM_PROVIDER", "OPENAI_COMPAT_API_KEY", "EMBED_PROVIDER",
-                "QWEN_API_KEY"]:
+                "QWEN_API_KEY", "SESSION_BACKEND", "ORDER_BACKEND", "REDIS_URL",
+                "POSTGRES_DSN", "KNOWLEDGE_VERSION"]:
         assert key in env, "missing {} in .env.example".format(key)
 
 
@@ -17,6 +18,6 @@ def test_project_docs_exist():
         assert (ROOT / "docs" / name).is_file()
 
 
-def test_only_chinese_domain_pack_is_present():
+def test_primary_and_generalization_domain_packs_are_present():
     packs = sorted(path.name for path in (ROOT / "domains").iterdir() if path.is_dir())
-    assert packs == ["china_ecommerce"]
+    assert packs == ["china_ecommerce", "home_ecommerce"]

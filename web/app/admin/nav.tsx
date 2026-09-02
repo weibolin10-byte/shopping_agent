@@ -15,10 +15,11 @@ const TABS = [
 
 export function AdminNav() {
   const path = usePathname();
+  const brand = process.env.NEXT_PUBLIC_STORE_NAME || "智能商城";
   return (
     <div className="ax-topbar">
       <Link href="/admin" className="ax-brand">
-        运动品牌集合 <span>管理后台</span>
+        {brand} <span>管理后台</span>
       </Link>
       <nav className="ax-tabs">
         {TABS.map((t) => (

@@ -12,7 +12,7 @@ export default function StoreHeader({ brand, active }: { brand: string; active?:
   const { openWith } = useChat();
   const router = useRouter();
   const [term, setTerm] = useState("");
-  const short = brand || "运动品牌集合";
+  const short = brand || process.env.NEXT_PUBLIC_STORE_NAME || "智能商城";
   const genders = [
     { key: "women", label: "女士" },
     { key: "men", label: "男士" },

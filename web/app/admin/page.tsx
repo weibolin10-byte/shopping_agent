@@ -54,7 +54,7 @@ function AdminLogin({ onToken }: { onToken: (t: string) => void }) {
     <main className="admin">
       <form onSubmit={login} className="login">
         <div className="ax-brand">
-          运动品牌集合 <span>管理后台</span>
+          {process.env.NEXT_PUBLIC_STORE_NAME || "智能商城"} <span>管理后台</span>
         </div>
         <p className="meta">登录以管理审核队列、质量和健康状态。</p>
         <input

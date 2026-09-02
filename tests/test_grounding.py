@@ -66,6 +66,12 @@ def test_grounding_score_counts_only_valid_citations():
     assert grounding_score("anything", []) == 0.0
 
 
+def test_grounding_ignores_greeting_and_closing_question():
+    ctx = [{"n": 1, "text": "Pegasus价格899元"}]
+    answer = "张伟，你好！Pegasus价格899元 [1]。需要我帮你看尺码吗？"
+    assert grounding_score(answer, ctx) == 1.0
+
+
 def test_grounding_score_rejects_a_mis_cited_sentence():
     # cites [1] but asserts something absent from chunk 1: the cite-anything loophole, now closed
     ctx = [{"n": 1, "text": "the belt bag costs 38 dollars"}]

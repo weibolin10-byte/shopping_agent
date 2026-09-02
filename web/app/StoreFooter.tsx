@@ -5,7 +5,7 @@ import Link from "next/link";
 // Shared footer for every store page. Brand text comes from the API (never hardcoded), so the
 // engine stays domain agnostic.
 export default function StoreFooter({ brand }: { brand?: string }) {
-  const name = brand || "运动品牌集合";
+  const name = brand || process.env.NEXT_PUBLIC_STORE_NAME || "智能商城";
   const short = name;
   return (
     <footer className="sfoot">
@@ -16,7 +16,7 @@ export default function StoreFooter({ brand }: { brand?: string }) {
             <span>.</span>
           </div>
           <p>
-            运动品牌集合，提供运动服饰与装备。基于 Agentic RAG 技术构建的智能电商演示平台，数据为合成数据，无真实商品或人物。
+            {name}，提供商品浏览与智能导购。平台基于 Agentic RAG 构建，演示数据均为合成数据。
           </p>
         </div>
         <div className="sfoot-col">

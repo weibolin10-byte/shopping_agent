@@ -43,6 +43,7 @@ from pipeline.answer import (
     should_abstain,
     stream_answer,
 )
+from rag.policies import allowed_doc_types, retrieval_plan
 from rag.roles import role_fragment
 from rag.router import route
 from rag.understand import rewrite_followup
@@ -100,7 +101,10 @@ def make_graph(ctx: _Ctx):
         # A grading retrieval, gated exactly like the pipeline: auth_text carries the shopper's own
         # words so an order document surfaces only on a valid name+email, never on a probe.
         hits = retrieve(state["question"], ctx.embedder, ctx.store, top_k=8, reranker=ctx.reranker,
-                        top_k_in=50, auth_text=state.get("auth_text", ""), lang=ctx.lang)
+                        top_k_in=50, auth_text=state.get("auth_text", ""), lang=ctx.lang,
+                        retrieval_mode=ctx.deps["retrieval_plan"].mode,
+                        allowed_doc_types=allowed_doc_types(ctx.deps["retrieval_plan"]),
+                        budget=ctx.budget)
         return {"documents": build_contexts(hits)}
 
     def grade_documents(state: _State) -> dict:
@@ -176,14 +180,17 @@ def stream_graph(query, *, embedder, store, llm, reranker=None, metric_resolver=
                  graph_retriever=None, lang=None, persona=None, history=None, concise=False,
                  auth_identity=None, notes=None, message_id=None, small_llm=None, trace_path=None,
                  review_queue=None, domain=None, budget=None, answer_cache=None,
-                 block_order_pii=False):
+                 block_order_pii=False, order_store=None, user_scope=None,
+                 tenant_scope="default", conversation_state=None, catalog_store=None):
     """Run the corrective-RAG lane and yield the same event dicts as stream_omni/stream_answer
     (token chunks then one final). Signature mirrors rag.omni.stream_omni so the API dispatch is a
     drop-in third branch. The turn is bounded by one shared TurnBudget."""
-    budget = budget or TurnBudget()
+    budget = budget or TurnBudget(max_calls=4)
     b_llm = BudgetedLLM(llm, budget)
     signed_in = bool(auth_identity and auth_identity[0])
     lane = route(query, history=history, signed_in=signed_in).lane
+    active_plan = retrieval_plan(lane, domain or "china_ecommerce", signed_in=signed_in,
+                                 user_id=user_scope, tenant_id=tenant_scope, query=query)
     mid = message_id or uuid.uuid4().hex
     # Identity for the order-PII gate is the shopper's own words, as stream_answer builds it,
     # or empty when order/account disclosure is blocked (e.g. an anonymous channel).
@@ -193,7 +200,9 @@ def stream_graph(query, *, embedder, store, llm, reranker=None, metric_resolver=
     deps = dict(embedder=embedder, store=store, llm=b_llm, reranker=reranker,
                 metric_resolver=metric_resolver, graph_retriever=graph_retriever, lang=lang,
                 persona=persona, history=history, concise=concise, auth_identity=auth_identity,
-                notes=notes, block_order_pii=block_order_pii)
+                notes=notes, block_order_pii=block_order_pii, retrieval_plan=active_plan,
+                order_store=order_store, user_scope=user_scope, tenant_scope=tenant_scope)
+    deps["catalog_store"] = catalog_store
     if trace_path is not None:
         deps["trace_path"] = trace_path
     ctx = _Ctx(embedder=embedder, store=store, reranker=reranker, lang=lang, history=history,

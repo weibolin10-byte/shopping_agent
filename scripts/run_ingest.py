@@ -73,6 +73,7 @@ def main() -> int:
             meta_fields=src.get("meta_fields", []),
             doc_type=src.get("doc_type", "doc"),
             context_fields=src.get("context_fields", []),
+            source_metadata=src.get("metadata", {}),
         ))
     if not chunks:
         print("no unstructured records to ingest")

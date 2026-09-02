@@ -4,7 +4,7 @@ the model. Retrieved content is data, never instructions.
 Layers: NFKC-normalize and strip zero-width characters (defeats homoglyph and invisible-char
 bypasses), collapse whitespace (so a chunk cannot forge prompt structure), then redact
 instruction-like spans up to the sentence end (so legitimate text after an injection
-survives). English and French, since the corpus is bilingual.
+survives). English, French and Chinese are covered by the same deterministic boundary.
 
 This is defense in depth alongside the system prompt and the untrusted-data reminder, not a
 replacement. Known limits (covered by the system prompt, revisited at M6/M8): a payload split
@@ -19,7 +19,9 @@ import unicodedata
 
 # zero-width joiners/spaces and BOM, used to break up trigger words invisibly
 _ZERO_WIDTH = dict.fromkeys([0x200B, 0x200C, 0x200D, 0x2060, 0xFEFF], None)
-_TAIL = r"[^.!?]*[.!?]?"  # match to the end of the offending sentence
+# Leave the sentence terminator in place.  If the replacement consumes it, a later overlapping
+# pattern can run through ``[removed]`` into the following legitimate sentence and over-redact it.
+_TAIL = r"[^.!?。！？]*"  # match to, but not including, the offending sentence boundary
 
 _INJECTION_PATTERNS = [
     # English
@@ -37,6 +39,17 @@ _INJECTION_PATTERNS = [
     re.compile(r"oublie[rz]?\s+(tout|toutes|le\s+reste)" + _TAIL, re.IGNORECASE),
     re.compile(r"(tu\s+es|vous\s+[êe]tes)\s+maintenant" + _TAIL, re.IGNORECASE),
     re.compile(r"(nouvelles?\s+instructions?\s*:|d[ée]sormais\b)" + _TAIL, re.IGNORECASE),
+    # Chinese
+    re.compile(r"(忽略|无视|不要管|跳过)[^.!?。！？]{0,8}"
+               r"(之前|上面|以上|先前|原来)[^.!?。！？]{0,6}"
+               r"(指令|要求|规则|提示词|系统消息)?" + _TAIL),
+    re.compile(r"(忘掉|忘记|清除)[^.!?。！？]{0,8}"
+               r"(之前|上面|以上|所有)[^.!?。！？]{0,6}"
+               r"(指令|要求|规则|内容|提示词)?" + _TAIL),
+    re.compile(r"(从现在开始|现在起|你现在是|假装你是|扮演)"
+               r"[^.!?。！？]{0,20}" + _TAIL),
+    re.compile(r"(系统|开发者|管理员)(提示词|消息|指令)\s*[:：]" + _TAIL),
+    re.compile(r"(新的?指令|新规则|最高优先级)\s*[:：]" + _TAIL),
 ]
 _REDACTED = "[removed]"
 

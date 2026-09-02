@@ -33,6 +33,19 @@ os.environ.pop("DEMO_READONLY", None)
 # re-insert a popped key from a developer's .env; an empty value is present, so dotenv leaves it.
 os.environ["LANGFUSE_PUBLIC_KEY"] = ""
 os.environ["LANGFUSE_SECRET_KEY"] = ""
+# A developer may use Redis/Postgres/Qdrant in their local .env. The default test suite is an
+# offline contract and must not inherit those choices or require Docker services to be running.
+_OFFLINE_BACKENDS = {
+    "LLM_PROVIDER": "fake",
+    "EMBED_PROVIDER": "fake",
+    "VECTOR_PROVIDER": "memory",
+    "GRAPH_PROVIDER": "memory",
+    "RATE_LIMIT_BACKEND": "memory",
+    "SESSION_BACKEND": "memory",
+    "ORDER_BACKEND": "json",
+    "ANSWER_CACHE_BACKEND": "memory",
+}
+os.environ.update(_OFFLINE_BACKENDS)
 config.get_settings.cache_clear()
 
 
@@ -40,6 +53,8 @@ config.get_settings.cache_clear()
 def hermetic_settings(monkeypatch):
     monkeypatch.delenv("DEMO_READONLY", raising=False)
     monkeypatch.delenv("SKEIN_ENV", raising=False)
+    for name, value in _OFFLINE_BACKENDS.items():
+        monkeypatch.setenv(name, value)
     config.get_settings.cache_clear()
     yield
     config.get_settings.cache_clear()

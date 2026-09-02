@@ -85,6 +85,8 @@ def test_scorecard_by_language():
     card = evaluate_ragas(items, RagasFakeLLM(), make_embedder("fake"))
     assert card["count"] == 2
     assert card["overall"]["faithfulness"] == 1.0
+    assert card["valid_counts"]["faithfulness"] == 1
+    assert card["item_scores"][0]["id"] is None
     # fr had nothing to score, so it gets no bucket
     assert "en" in card["by_language"] and "fr" not in card["by_language"]
 

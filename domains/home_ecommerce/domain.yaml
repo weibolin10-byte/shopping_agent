@@ -1,0 +1,104 @@
+name: home_ecommerce
+brand: 居家优选
+languages: [zh]
+
+persona:
+  assistant: 小居
+  specialist: 小安
+  brand_short: 居家优选
+  industry: 家居生活零售平台
+
+glossary:
+  台灯: [阅读灯, 桌灯]
+
+entity_types: [Product]
+
+sources:
+  structured:
+    - file: seed/structured/products.csv
+      role: products
+      primary_key: product_id
+      grain: one row per product
+      columns:
+        product_id: string
+        name: string
+        category: string
+        price: float
+        stock: int
+      pii_columns: []
+    - file: seed/structured/customers.csv
+      role: customers
+      primary_key: customer_id
+      grain: one row per customer
+      columns:
+        customer_id: string
+        email: string
+      pii_columns: [email]
+  unstructured:
+    - file: seed/unstructured/catalog.jsonl
+      doc_type: product
+      id_field: id
+      text_field: text
+      lang_field: lang
+      meta_fields: [product_id, category]
+      entity_ref: [product_id]
+      context_fields: [product_id]
+      metadata:
+        authority_level: 3
+        knowledge_version: home-catalog-v1
+
+graph:
+  nodes:
+    - label: Product
+      source: products
+      key: product_id
+      properties: [name, category, price, stock]
+  edges: []
+
+defaults:
+  top_k_in: 20
+  top_n_out: 5
+  confidence_high: 0.7
+  confidence_low: 0.4
+
+lanes:
+  stylist:
+    allowed_sources: [catalog, guide, review, graph]
+    preferred_sources: [catalog]
+    retrieval_mode: hybrid
+    top_k: 5
+    top_k_in: 20
+    min_confidence: 0.22
+  care:
+    auth_required: true
+    required_slots: [identity]
+    allowed_sources: [order, policy]
+    preferred_sources: [order]
+    retrieval_mode: order_service
+    top_k: 5
+    top_k_in: 5
+    min_confidence: 0.05
+  complaint:
+    allowed_sources: [order, policy, guide]
+    preferred_sources: [policy]
+    retrieval_mode: hybrid
+    top_k: 5
+    top_k_in: 20
+    min_confidence: 0.18
+  answers:
+    allowed_sources: [catalog, policy, guide, graph, review]
+    preferred_sources: [catalog]
+    retrieval_mode: hybrid
+    top_k: 5
+    top_k_in: 20
+    min_confidence: 0.22
+  escalation:
+    allowed_sources: []
+    preferred_sources: []
+    retrieval_mode: none
+    top_k: 1
+    top_k_in: 1
+    min_confidence: 1.0
+
+suggestions:
+  - {text: "云朵台灯适合阅读吗？", lang: zh, kind: fact}

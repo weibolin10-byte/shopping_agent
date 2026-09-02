@@ -28,7 +28,7 @@ from api.auth import (
     verify_turnstile,
 )
 from api.deps import get_components
-from api.ratelimit import RateLimiter
+from api.ratelimit import RateLimiter, make_rate_limiter
 from api.resilience import is_transient
 from data.catalog import brand as _brand
 from data.catalog import catalog as _catalog
@@ -48,8 +48,15 @@ from pipeline.answer import (
     stream_answer,
     write_trace,
 )
+from rag.conversation import (
+    ConversationState,
+    InMemoryConversationStore,
+    StateConflict,
+    new_session_id,
+)
 from rag.flywheel import grow_verified_eval, reindex_verified, suggest_threshold
 from rag.omni import stream_omni
+from rag.workflow import workflow_for
 
 _FEEDBACK_PATH = os.getenv("FEEDBACK_PATH", "traces/feedback.jsonl")
 _MAX_AUDIO_BYTES = 10 * 1024 * 1024  # 10 MB decoded: a short voice clip, not a file upload
@@ -146,7 +153,8 @@ def create_app(rate_limit: str | None = None, auth_db_path: str | None = None,
     brain = chat_brain or settings.chat_brain
     if brain == "agent":
         brain = "omni"
-    limiter = RateLimiter(rate_limit or settings.rate_limit)
+    limiter = make_rate_limiter(rate_limit or settings.rate_limit, namespace="shopping:chat")
+    fallback_conversation_store = InMemoryConversationStore()
     # Default allows the web app at either localhost or 127.0.0.1 (browsers pick either), so local
     # dev works without CORS surprises. Production sets ALLOWED_ORIGINS to the real origin.
     origins = [o.strip() for o in os.getenv(
@@ -339,29 +347,95 @@ def create_app(rate_limit: str | None = None, auth_db_path: str | None = None,
         if settings.demo_customer_email and user.get("username") != settings.admin_username:
             auth_identity = (settings.demo_customer_name, settings.demo_customer_email)
 
+        session_id = req.session_id or new_session_id()
+        state_store = comp.get("conversation_store") or fallback_conversation_store
+        state = state_store.get(session_id)
+        owner_id = str(user.get("username") or "")
+        tenant_id = os.getenv("TENANT_ID", "default")
+        if state is not None and state.owner_id and state.owner_id != owner_id:
+            raise HTTPException(status_code=403, detail="session does not belong to this user")
+        if state is None:
+            state = ConversationState(session_id=session_id, owner_id=owner_id,
+                                      tenant_id=tenant_id)
+        state_version = state.version
+        # Once a session exists, server-owned history wins. Client history is accepted only to
+        # migrate an old client into a new server session and is never an identity credential.
+        conversation_history = state.recent_turns or (req.history or [])
+
         message_id = uuid.uuid4().hex
         started = time.perf_counter()
 
         def event_stream():
+            def deliver(events):
+                nonlocal state_version
+                for event in events:
+                    if event.get("type") == "final":
+                        event = {**event, "session_id": session_id,
+                                 "trace_id": event.get("message_id") or message_id,
+                                 "lane": event.get("lane") or state.lane or "answers",
+                                 "action": event.get("action") or
+                                 ("abstain" if event.get("tier") == "abstain" else "answer"),
+                                 "clarification": event.get("clarification"),
+                                 "degraded": event.get("tier") == "degraded"}
+                        state.lane = event["lane"]
+                        state.recent_turns = (conversation_history + [
+                            {"role": "user", "content": req.query[:2000]},
+                            {"role": "assistant", "content": str(event.get("answer") or "")[:4000]},
+                        ])[-12:]
+                        state.evidence_ids = [str(c.get("id")) for c in event.get("citations", [])
+                                              if isinstance(c, dict) and c.get("id")][-20:]
+                        if event.get("action") == "clarify":
+                            state.clarification_count += 1
+                        if event.get("escalation_id"):
+                            state.escalation_id = event["escalation_id"]
+                            state.task_status = "escalated"
+                        try:
+                            state_store.save(state, expected_version=state_version)
+                            state_version = state.version
+                        except StateConflict:
+                            # Never corrupt newer session state; the answer remains valid and the
+                            # client can retry with the same session id on its next turn.
+                            event["state_conflict"] = True
+                    yield _sse(event)
             try:
                 if brain == "omni":
                     # The master orchestrator: route the turn, then answer through the SAME gated
                     # streaming pipeline with the chosen lane's focus, so the order-PII gate, safety
                     # intercepts, and grounding are identical to the linear path. The 8B classifier
                     # (the resilient client's small fallback) tie-breaks only ambiguous turns.
-                    for event in stream_omni(req.query, message_id=message_id,
+                    selected, workflow_reason = workflow_for(req.query, conversation_history)
+                    stream_fn = stream_omni
+                    if selected == "graph":
+                        try:
+                            from rag.graph_brain import stream_graph
+                            stream_fn = stream_graph
+                        except ImportError:
+                            selected, workflow_reason = "omni", "graph dependency unavailable"
+                    events = stream_fn(req.query, message_id=message_id,
                                              embedder=comp["embedder"], store=comp["store"],
                                              llm=comp["llm"], reranker=comp["reranker"],
                                              metric_resolver=comp.get("metric_resolver"),
                                              graph_retriever=comp.get("graph_retriever"),
                                              lang=req.lang, persona=req.persona,
-                                             history=req.history, concise=req.concise,
+                                             history=conversation_history, concise=req.concise,
                                              auth_identity=auth_identity, notes=req.notes,
                                              small_llm=getattr(comp["llm"], "fallback", None),
                                              review_queue=comp.get("review_queue"),
                                              domain=comp.get("domain"),
-                                             answer_cache=comp.get("answer_cache")):
-                        yield _sse(event)
+                                             answer_cache=comp.get("answer_cache"),
+                                             order_store=comp.get("order_store"),
+                                             catalog_store=comp.get("catalog_store"),
+                                             user_scope=(auth_identity[1] if auth_identity else
+                                                         owner_id),
+                                             tenant_scope=tenant_id,
+                                             conversation_state=state)
+                    def tagged():
+                        for event in events:
+                            if event.get("type") == "final":
+                                event = {**event, "workflow": selected,
+                                         "workflow_reason": workflow_reason}
+                            yield event
+                    yield from deliver(tagged())
                     return
                 if brain == "graph":
                     # Opt-in corrective/self-RAG lane (LangGraph), off the deterministic fast path:
@@ -369,32 +443,42 @@ def create_app(rate_limit: str | None = None, auth_db_path: str | None = None,
                     # through the SAME gated pipeline, so the order-PII gate, safety intercepts, and
                     # grounding are identical. Lazy import so a base install never loads LangGraph.
                     from rag.graph_brain import stream_graph
-                    for event in stream_graph(req.query, message_id=message_id,
+                    events = stream_graph(req.query, message_id=message_id,
                                               embedder=comp["embedder"], store=comp["store"],
                                               llm=comp["llm"], reranker=comp["reranker"],
                                               metric_resolver=comp.get("metric_resolver"),
                                               graph_retriever=comp.get("graph_retriever"),
                                               lang=req.lang, persona=req.persona,
-                                              history=req.history, concise=req.concise,
+                                              history=conversation_history, concise=req.concise,
                                               auth_identity=auth_identity, notes=req.notes,
                                               small_llm=getattr(comp["llm"], "fallback", None),
                                               review_queue=comp.get("review_queue"),
                                               domain=comp.get("domain"),
-                                              answer_cache=comp.get("answer_cache")):
-                        yield _sse(event)
+                                              answer_cache=comp.get("answer_cache"),
+                                              order_store=comp.get("order_store"),
+                                              catalog_store=comp.get("catalog_store"),
+                                              user_scope=(auth_identity[1] if auth_identity else
+                                                          owner_id),
+                                              tenant_scope=tenant_id,
+                                              conversation_state=state)
+                    yield from deliver(events)
                     return
                 # Linear path: tokens stream across threadpool resumes, so we do not open a span
                 # around the generator (its OTel context would not survive the hops). The individual
                 # generate() calls are still traced by the adapter.
-                for event in stream_answer(req.query, message_id=message_id,
+                events = stream_answer(req.query, message_id=message_id,
                                            embedder=comp["embedder"], store=comp["store"],
                                            llm=comp["llm"], reranker=comp["reranker"],
                                            metric_resolver=comp.get("metric_resolver"),
                                            graph_retriever=comp.get("graph_retriever"),
                                            lang=req.lang, persona=req.persona,
-                                           history=req.history, concise=req.concise,
-                                           auth_identity=auth_identity, notes=req.notes):
-                    yield _sse(event)
+                                           history=conversation_history, concise=req.concise,
+                                           auth_identity=auth_identity, notes=req.notes,
+                                           order_store=comp.get("order_store"),
+                                           catalog_store=comp.get("catalog_store"),
+                                           user_scope=(auth_identity[1] if auth_identity else
+                                                       owner_id), tenant_scope=tenant_id)
+                yield from deliver(events)
             # Catch broadly: the response is already a 200 SSE stream, so any failure (a hosted
             # SDK error not wrapped as RuntimeError, a mid-stream drop) must surface as an event,
             # never a silent dead stream. is_transient decides degraded vs honest error.
@@ -412,7 +496,9 @@ def create_app(rate_limit: str | None = None, auth_db_path: str | None = None,
                     yield _sse({"type": "token", "text": msg})
                     yield _sse({"type": "final", "message_id": message_id, "tier": "degraded",
                                 "answer": msg, "confidence": 0.0, "grounding": 0.0,
-                                "citations": []})
+                                "citations": [], "session_id": session_id,
+                                "trace_id": message_id, "lane": state.lane or "answers",
+                                "action": "abstain", "degraded": True})
                 else:
                     yield _sse({"type": "error", "message_id": message_id,
                                 "message": "internal error"})

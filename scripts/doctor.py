@@ -87,10 +87,18 @@ def _load_env() -> dict:
 def check_keys() -> bool:
     env = _load_env()
     needs = []
+    if env.get("LLM_PROVIDER", "fake") == "openai_compat":
+        needs.append(("OPENAI_COMPAT_API_KEY", ""))
+        if env.get("OPENAI_COMPAT_MODEL_SMALL"):
+            needs.append(("OPENAI_COMPAT_SMALL_API_KEY", ""))
     if "groq" in (env.get("LLM_PROVIDER", "fake"), env.get("TRANSCRIBE_PROVIDER", "fake")):
         needs.append(("GROQ_API_KEY", "gsk_"))
+    if env.get("EMBED_PROVIDER", "fake") == "qwen":
+        needs.append(("QWEN_API_KEY", ""))
     if "cohere" in (env.get("EMBED_PROVIDER", "fake"), env.get("RERANK_PROVIDER", "none")):
         needs.append(("COHERE_API_KEY", ""))
+    if env.get("JUDGE_MODEL"):
+        needs.append(("JUDGE_API_KEY", ""))
     if not needs:
         _line("ok", "providers are offline fakes; no keys needed")
         return True

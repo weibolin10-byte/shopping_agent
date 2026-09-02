@@ -33,8 +33,10 @@ def _components(llm=None):
         for d, dv, sv in zip(docs, dense, [encoder.encode(d["text"]) for d in docs])
     ])
     from adapters.fakes import FakeTranscriber
+    from rag.conversation import InMemoryConversationStore
     return {"embedder": embedder, "store": store, "llm": llm or EchoLLM(), "reranker": None,
-            "transcriber": FakeTranscriber()}
+            "transcriber": FakeTranscriber(),
+            "conversation_store": InMemoryConversationStore()}
 
 
 def _client(components, rate_limit="100/minute", auth_db_path=None, chat_brain=None):
@@ -68,6 +70,23 @@ def test_chat_streams_tokens_then_final():
     final = [e for e in events if e["type"] == "final"][-1]
     assert final["tier"] in ("auto", "abstain")
     assert "message_id" in final
+    assert final["session_id"] and final["trace_id"] == final["message_id"]
+    assert final["lane"] and final["action"] in ("answer", "abstain", "clarify", "escalate")
+
+
+def test_session_is_bound_to_authenticated_owner():
+    components = _components()
+    client = _client(components)
+    first = client.post("/api/chat", json={"query": "hello", "session_id": "owned-session"},
+                        headers=_AUTH)
+    assert first.status_code == 200
+    other = {"Authorization": "Bearer " + create_access_token(
+        "someone-else", "customer", get_settings().jwt_secret)}
+    denied = client.post("/api/chat", json={"query": "hello", "session_id": "owned-session"},
+                         headers=other)
+    assert denied.status_code == 403
+    state = components["conversation_store"].get("owned-session")
+    assert [turn["role"] for turn in state.recent_turns] == ["user", "assistant"]
 
 
 def test_chat_abstains_out_of_scope():

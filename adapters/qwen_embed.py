@@ -24,7 +24,9 @@ from ._http import _USER_AGENT
 _DEFAULT_BASE = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 _DEFAULT_MODEL = "text-embedding-v3"
 _DEFAULT_DIM = 1024
-_EMBED_BATCH = 25  # Qwen has a lower batch limit than Cohere
+# DashScope text-embedding-v3 rejects batches larger than 10. Keep this limit at the
+# adapter boundary so callers can safely submit an arbitrary number of documents.
+_EMBED_BATCH = 10
 
 # Known model -> dimension mapping (for v3 the dim is fixed at 1024)
 _MODEL_DIMS = {

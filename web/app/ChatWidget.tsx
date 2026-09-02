@@ -19,6 +19,12 @@ type FinalEvent = {
   confidence?: number;
   grounding?: number;
   citations?: Citation[];
+  session_id?: string;
+  trace_id?: string;
+  lane?: string;
+  action?: "answer" | "clarify" | "abstain" | "escalate" | "workflow";
+  clarification?: { reason?: string; missing_slots?: string[] } | null;
+  degraded?: boolean;
 };
 
 type StreamEvent =
@@ -37,7 +43,7 @@ type Message = {
 };
 
 const AGENT_INTRO =
-  "你好，我是运动品牌集合的 AI 客服专家。👋 接下来由我为您服务。请告诉我您遇到的问题，" +
+  "你好，我是智能商城的 AI 客服专家。👋 接下来由我为您服务。请告诉我您遇到的问题，" +
   "如果是关于订单的，我会立即帮您查询。";
 
 const HELP_TOPIC_LABELS: Record<string, string> = {
@@ -401,7 +407,7 @@ export default function ChatWidget({
     };
   }, [token, products.length]);
 
-  const short = brand || "运动品牌集合";
+  const short = brand || "智能商城";
 
   function forceConnect() {
     fetch(`${API_BASE}/api/demo-login`, { method: "POST" })
@@ -542,6 +548,14 @@ function Conversation({
   const [speakLevel, setSpeakLevel] = useState(0);
   const agentModeRef = useRef(false);
   const bargedRef = useRef(false);
+  const sessionRef = useRef<string>("");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("shopping_agent_session");
+    const session = saved || crypto.randomUUID().replaceAll("-", "");
+    sessionRef.current = session;
+    localStorage.setItem("shopping_agent_session", session);
+  }, []);
 
   const authHeaders = {
     "Content-Type": "application/json",
@@ -589,6 +603,9 @@ function Conversation({
       localStorage.setItem("aster_agent", "0");
       localStorage.removeItem("aster_profile");
       localStorage.removeItem("aster_visited");
+      const session = crypto.randomUUID().replaceAll("-", "");
+      sessionRef.current = session;
+      localStorage.setItem("shopping_agent_session", session);
     } catch {
       /* ignore */
     }
@@ -709,6 +726,7 @@ function Conversation({
         signal: ctrl.signal,
         body: JSON.stringify({
           query: qSend,
+          ...(sessionRef.current ? { session_id: sessionRef.current } : {}),
           ...(inAgent ? { persona: "agent" } : {}),
           ...(voiceLiveRef.current ? { concise: true } : {}),
           ...(history.length ? { history } : {}),
@@ -759,6 +777,10 @@ function Conversation({
               patchBot((b) => ({ ...b, text: b.text + event.text }));
             } else if (event.type === "final") {
               const fe = event;
+              if (fe.session_id) {
+                sessionRef.current = fe.session_id;
+                localStorage.setItem("shopping_agent_session", fe.session_id);
+              }
               const answer = fe.answer ?? acc;
               result = answer;
               const recs = recsFromAnswer(answer, products);
@@ -1258,7 +1280,7 @@ function Conversation({
       {agentMode && (
         <div className="agent-banner">
           <span>
-            <b>客服专员</b> · 运动品牌集合
+            <b>客服专员</b> · {brand}
           </span>
           <button onClick={endAgent}>返回购物助手</button>
         </div>

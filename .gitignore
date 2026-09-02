@@ -159,6 +159,9 @@ ENV/
 env.bak/
 venv.bak/
 
+# Local evaluation experiments; only reports/current.json is the published MVP baseline.
+domains/*/eval/reports/repeatability*.json
+
 # Spyder project settings
 .spyderproject
 .spyproject

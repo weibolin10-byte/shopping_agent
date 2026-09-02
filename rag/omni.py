@@ -23,6 +23,7 @@ import uuid
 
 from adapters.budget import BudgetedLLM, BudgetExceeded, TurnBudget
 from pipeline.answer import DEFAULT_TRACE_PATH, stream_answer, write_trace
+from rag.policies import retrieval_plan as make_retrieval_plan
 from rag.roles import role_fragment
 from rag.router import route
 
@@ -139,7 +140,8 @@ def _answers_with_cache(query, *, lane, deps, budget, answer_cache, message_id):
                          grounding=final_ev.get("grounding"), confidence=final_ev.get("confidence"))
 
 
-def _stream_multitask(routed, *, message_id, auth_identity, deps, budget):
+def _stream_multitask(routed, *, message_id, auth_identity, deps, budget, domain,
+                      user_scope=None, tenant_scope="default"):
     # answer each distinct LANE once (so a single complaint split across two comma clauses does not
     # double-apologize), with a complaint lane leading, then the rest in typed order, capped after.
     by_lane: dict = {}
@@ -152,11 +154,17 @@ def _stream_multitask(routed, *, message_id, auth_identity, deps, budget):
     answers = []
     finals = []  # the real per-clause finals, so the stitched reply reports measured telemetry
     for clause, lane in ordered:
+        lane_deps = {**deps, "retrieval_plan": make_retrieval_plan(
+            lane, domain, signed_in=bool(auth_identity and auth_identity[0]),
+            user_id=user_scope, tenant_id=tenant_scope, query=clause)}
         try:
-            text, final = _answer_once(clause, lane, deps)
+            text, final = _answer_once(clause, lane, lane_deps)
             if final.get("tier") == "abstain" and lane != "answers" and reroute_budget > 0:
                 reroute_budget -= 1  # one clause may retry as the answers catch-all
-                text, final = _answer_once(clause, "answers", deps)
+                answer_deps = {**deps, "retrieval_plan": make_retrieval_plan(
+                    "answers", domain, signed_in=bool(auth_identity and auth_identity[0]),
+                    user_id=user_scope, tenant_id=tenant_scope, query=clause)}
+                text, final = _answer_once(clause, "answers", answer_deps)
         except BudgetExceeded:
             break  # out of budget: finish with the clauses already answered, never loop on
         if text:
@@ -201,7 +209,7 @@ def _find_order_ref(query: str, history) -> str:
     return m.group(0) if m else ""
 
 
-_HANDOFF_MARK = "noting for our care specialist"  # the opening line of _escalate_handoff's brief
+_HANDOFF_MARKS = ("noting for our care specialist", "为客服专员整理的信息")
 
 
 def _already_escalated(history) -> bool:
@@ -209,13 +217,14 @@ def _already_escalated(history) -> bool:
     (often the shopper just confirming the prior 'anything else?') should reassure, not open a
     second duplicate case."""
     for t in (history or []):
-        if t.get("role") in ("assistant", "bot") and _HANDOFF_MARK in (t.get("content") or ""):
+        if (t.get("role") in ("assistant", "bot")
+                and any(mark in (t.get("content") or "") for mark in _HANDOFF_MARKS)):
             return True
     return False
 
 
 def _escalate_handoff(query, *, message_id, auth_identity, history, lang, review_queue, domain,
-                      trace_path):
+                      trace_path, origin_lane="escalation"):
     """The handoff to a person. The escalation specialist confirms what a human will need as a
     numbered list (only the shopper's OWN proven identity, so this echoes nothing they did not
     supply), files a case brief to the durable review queue, and asks if there is anything else.
@@ -238,58 +247,78 @@ def _escalate_handoff(query, *, message_id, auth_identity, history, lang, review
                                            route="escalation", lang=lang)
         except Exception:
             case_id = ""
-    rows = [("Your concern", concern), ("Name on the account", name),
-            ("Email on the order", email), ("Order reference", order_ref)]
-    lines = ["I've got you, and I'll make this quick. Here is what I'm noting for our care "
-             "specialist:"]
-    for i, (label, val) in enumerate(rows, start=1):
-        lines.append("{}. {}: {}".format(i, label, val or "please confirm"))
+    is_zh = bool(lang == "zh" or any("\u4e00" <= ch <= "\u9fff" for ch in query or ""))
+    if is_zh:
+        rows = [("您反馈的问题", concern), ("账户姓名", name),
+                ("订单邮箱", email), ("订单号", order_ref)]
+        lines = ["我明白，这件事我会尽快帮您升级给人工客服处理。以下是为客服专员整理的信息："]
+        for i, (label, val) in enumerate(rows, start=1):
+            lines.append("{}. {}：{}".format(i, label, val or "待确认"))
+    else:
+        rows = [("Your concern", concern), ("Name on the account", name),
+                ("Email on the order", email), ("Order reference", order_ref)]
+        lines = ["I've got you, and I'll make this quick. Here is what I'm noting for our care "
+                 "specialist:"]
+        for i, (label, val) in enumerate(rows, start=1):
+            lines.append("{}. {}: {}".format(i, label, val or "please confirm"))
     # only claim it was logged and will be followed up when a case was actually filed; otherwise
     # take the details without a false promise
     if case_id:
-        lines.append("I've logged this (ref {}) and a specialist will follow up by email. Is "
-                     "there anything else you'd like me to add before I pass it over?".format(
-                         case_id[:8]))
+        lines.append(("已创建处理记录（编号 {}），人工客服会继续跟进。还有其他信息需要补充吗？"
+                      if is_zh else
+                      "I've logged this (ref {}) and a specialist will follow up by email. Is "
+                      "there anything else you'd like me to add before I pass it over?").format(
+                          case_id[:8]))
     else:
-        lines.append("Let me take these details down for a specialist to pick up. Is there "
+        lines.append("我会把这些信息交给人工客服。还有其他信息需要补充吗？" if is_zh else
+                     "Let me take these details down for a specialist to pick up. Is there "
                      "anything else you'd like me to add before I pass it over?")
     text = "\n".join(lines)
     mid = message_id or uuid.uuid4().hex
     write_trace({"ts": time.time(), "message_id": mid, "query": query, "lang": lang,
-                 "tier": "escalate", "lane": "escalation", "escalation_id": case_id,
+                 "tier": "escalate", "lane": origin_lane, "escalation_id": case_id,
                  "streamed": True}, trace_path or DEFAULT_TRACE_PATH)
     yield {"type": "token", "text": text}
     yield {"type": "final", "message_id": mid, "answer": text, "tier": "escalate",
-           "confidence": 1.0, "grounding": 1.0, "citations": [], "escalation_id": case_id}
+           "confidence": 1.0, "grounding": 1.0, "citations": [], "lane": origin_lane,
+           "action": "escalate", "escalation_id": case_id}
 
 
 def stream_omni(query, *, embedder, store, llm, reranker=None, metric_resolver=None,
                 graph_retriever=None, lang=None, persona=None, history=None, concise=False,
                 auth_identity=None, notes=None, message_id=None, small_llm=None, trace_path=None,
                 review_queue=None, domain=None, budget=None, answer_cache=None,
-                block_order_pii=False):
+                block_order_pii=False, order_store=None, user_scope=None,
+                tenant_scope="default", conversation_state=None, catalog_store=None):
     """Yield the same event dicts as stream_answer (token chunks then one final), after routing.
 
     Every model call on this turn goes through one shared TurnBudget: routing tie-break, generation,
     and each multi-task clause. The budget is checked before each call and the turn stops with the
     answers already in hand on breach, so it can never loop or run away on tokens or time."""
-    budget = budget or TurnBudget()
+    budget = budget or TurnBudget(max_calls=4)
     b_llm = BudgetedLLM(llm, budget)
     b_small = BudgetedLLM(small_llm, budget) if small_llm is not None else None
     signed_in = bool(auth_identity and auth_identity[0])
+    user_scope = user_scope or (auth_identity[1] if auth_identity else None)
     decision = route(query, history=history, signed_in=signed_in, small_llm=b_small)
+    if not decision.tasks and decision.lane not in ("complaint", "escalation"):
+        budget.max_calls = min(budget.max_calls, 2)
 
     # Lane continuity: a short follow-up ("when will it get here", "the cheaper one") often carries
     # no intent of its own and falls to the answers catch-all, breaking the thread it continues.
     # Re-route it with the prior shopper turns prepended so it inherits that lane (an order-status
     # follow-up stays in care, a styling one in stylist), instead of dropping to generic answers.
+    from pipeline.text import is_contextual_followup
     if (decision.layer != 0 and decision.lane == "answers"
-            and len((query or "").split()) <= 6 and history):
+            and is_contextual_followup(query) and history):
         prior = [t.get("content", "") for t in history
                  if t.get("role") == "user" and (t.get("content") or "").strip()]
         if prior:
+            # The first route may already have spent the optional classifier call. Continuity is
+            # only a deterministic inheritance check: calling the classifier again would consume
+            # the second and final fast-path LLM slot before answer generation can run.
             cont = route((" ".join(prior[-2:]) + " " + query).strip(), history=history,
-                         signed_in=signed_in, small_llm=b_small)
+                         signed_in=signed_in, small_llm=None)
             if cont.lane != "answers" and cont.clarify is None and not cont.tasks:
                 decision = cont
 
@@ -303,13 +332,40 @@ def stream_omni(query, *, embedder, store, llm, reranker=None, metric_resolver=N
                     trace_path or DEFAULT_TRACE_PATH)
         yield {"type": "token", "text": text}
         yield {"type": "final", "message_id": mid, "answer": text, "tier": "auto",
-               "confidence": round(decision.confidence, 3), "grounding": 1.0, "citations": []}
+               "confidence": round(decision.confidence, 3), "grounding": 1.0, "citations": [],
+               "lane": decision.lane, "action": "clarify",
+               "clarification": {"reason": decision.clarify.get("axis"),
+                                  "options": [decision.clarify.get("a"),
+                                              decision.clarify.get("b")]}}
         return
 
+    active_domain = domain or "china_ecommerce"
+    plan = make_retrieval_plan(decision.lane, active_domain, signed_in=signed_in,
+                               user_id=user_scope, tenant_id=tenant_scope, query=query)
+    if conversation_state is not None:
+        conversation_state.lane = decision.lane
+        conversation_state.missing_slots = (["identity"]
+                                            if decision.lane == "care" and not signed_in else [])
+    if decision.lane == "care" and not signed_in and order_store is not None:
+        mid = message_id or uuid.uuid4().hex
+        is_zh = any("\u4e00" <= ch <= "\u9fff" for ch in query or "")
+        text = ("请先登录并完成身份验证，我才能在订单服务中查询仅属于您的订单。"
+                if is_zh else
+                "Please sign in and verify your identity so I can access only your own orders.")
+        yield {"type": "token", "text": text}
+        yield {"type": "final", "message_id": mid, "answer": text, "tier": "abstain",
+               "confidence": 1.0, "grounding": 1.0, "citations": [], "lane": "care",
+               "action": "clarify",
+               "clarification": {"reason": "identity_required",
+                                  "missing_slots": ["identity"]},
+               "budget": budget.snapshot()}
+        return
     deps = dict(embedder=embedder, store=store, llm=b_llm, reranker=reranker,
                 metric_resolver=metric_resolver, graph_retriever=graph_retriever, lang=lang,
                 persona=persona, history=history, concise=concise, auth_identity=auth_identity,
-                notes=notes, block_order_pii=block_order_pii)
+                notes=notes, block_order_pii=block_order_pii, retrieval_plan=plan,
+                order_store=order_store, user_scope=user_scope, tenant_scope=tenant_scope)
+    deps["catalog_store"] = catalog_store
     if trace_path is not None:
         deps["trace_path"] = trace_path
 
@@ -334,7 +390,8 @@ def stream_omni(query, *, embedder, store, llm, reranker=None, metric_resolver=N
             mid = message_id or uuid.uuid4().hex
             yield {"type": "token", "text": text}
             yield {"type": "final", "message_id": mid, "answer": text, "tier": "escalate",
-                   "confidence": 1.0, "grounding": 1.0, "citations": []}
+                   "confidence": 1.0, "grounding": 1.0, "citations": [],
+                   "lane": "escalation", "action": "escalate"}
             return
         yield from _escalate_handoff(query, message_id=message_id, auth_identity=auth_identity,
                                      history=history, lang=lang, review_queue=review_queue,
@@ -362,8 +419,20 @@ def stream_omni(query, *, embedder, store, llm, reranker=None, metric_resolver=N
                 # fan out over ALL clauses, so an "answers" sub-question in the turn is still
                 # answered and stitched in, not silently dropped by an actionable-only filter
                 yield from _stream_multitask(routed, message_id=message_id,
-                                             auth_identity=auth_identity, deps=deps, budget=budget)
+                                             auth_identity=auth_identity, deps=deps, budget=budget,
+                                             domain=active_domain, user_scope=user_scope,
+                                             tenant_scope=tenant_scope)
                 return
+
+    # A single complaint is not merely an informational answer: create a real handoff so damaged
+    # goods, abnormal refunds and serious delivery failures reach a person. Multi-intent requests
+    # have already been handled above, preserving their complaint-first fan-out behavior.
+    if decision.lane == "complaint":
+        yield from _escalate_handoff(query, message_id=message_id,
+                                     auth_identity=auth_identity, history=history,
+                                     lang=lang, review_queue=review_queue, domain=domain,
+                                     trace_path=trace_path, origin_lane="complaint")
+        return
 
     # Single-task fast path. An anonymous answers-lane turn (generic FAQ, no order or profile data)
     # may be served from the semantic cache; every other lane bypasses it for safety.

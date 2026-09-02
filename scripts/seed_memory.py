@@ -63,6 +63,7 @@ def main() -> int:
             meta_fields=src.get("meta_fields", []),
             doc_type=src.get("doc_type", "doc"),
             context_fields=src.get("context_fields", []),
+            source_metadata=src.get("metadata", {}),
         )
         print(f"  {src['file']}: {len(rows)} rows -> {len(chunks)} chunks")
         all_chunks.extend(chunks)

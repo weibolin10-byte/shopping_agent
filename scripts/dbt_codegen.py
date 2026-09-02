@@ -87,7 +87,9 @@ def generate(domain: str, domains_dir: str = "domains") -> list[str]:
         validate_source(src)  # same guards as the Python builder (safe role/path, PII declared)
         role = src["role"]
         # escape the single quotes so a path with a quote cannot break out of the SQL string literal
-        csv_path = os.path.abspath(os.path.join(pack, src["file"])).replace("'", "''")
+        # The documented dbt command runs from the repository root. Keep generated SQL portable
+        # across clones instead of embedding the developer machine's absolute path.
+        csv_path = os.path.normpath(os.path.join(pack, src["file"])).replace("'", "''")
         columns = src.get("columns", {}) or {}
         pii = set(src.get("pii_columns", []) or [])
         pk = src.get("primary_key")

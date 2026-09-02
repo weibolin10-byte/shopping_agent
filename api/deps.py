@@ -25,9 +25,12 @@ from api.resilience import (
     ResilientReranker,
     ResilientStore,
 )
+from data.catalog_store import StructuredCatalogStore
 from data.metrics import MetricResolver
+from data.orders import make_order_store
 from ingest.naming import collection_name
-from rag.answer_cache import SemanticAnswerCache
+from rag.answer_cache import RedisAnswerCache, SemanticAnswerCache
+from rag.conversation import make_conversation_store
 from rag.hitl import ReviewQueue
 from retrieval.graph import make_graph_retriever
 
@@ -74,8 +77,30 @@ def get_components() -> dict:
     # answers-lane FAQ cache: serves a repeat anonymous, grounded answer without retrieval or
     # generation. On by default (safe and cheap; anonymous + grounded only, TTL, invalidated on
     # re-index); set ANSWER_CACHE=off to disable. Reuses the app embedder for consistent similarity.
-    answer_cache = (SemanticAnswerCache(embedder)
-                    if os.getenv("ANSWER_CACHE", "on").strip().lower() != "off" else None)
+    cache_backend = os.getenv("ANSWER_CACHE_BACKEND", "memory").strip().lower()
+    if os.getenv("ANSWER_CACHE", "on").strip().lower() == "off":
+        answer_cache = None
+    elif cache_backend == "redis":
+        try:
+            import redis
+        except ImportError as exc:
+            raise RuntimeError("ANSWER_CACHE_BACKEND=redis requires the production extra") from exc
+        client = redis.Redis.from_url(os.getenv("REDIS_URL", "redis://localhost:6379/0"))
+        answer_cache = RedisAnswerCache(
+            client, knowledge_version=os.getenv("KNOWLEDGE_VERSION", settings.domain))
+    else:
+        answer_cache = SemanticAnswerCache(embedder)
+    session_backend = os.getenv("SESSION_BACKEND", "memory").strip().lower()
+    conversation_store = make_conversation_store(
+        session_backend, sqlite_path=os.getenv("SESSION_DB_PATH", ".sessions.db"),
+        redis_url=os.getenv("REDIS_URL", "redis://localhost:6379/0"),
+        postgres_dsn=os.getenv("POSTGRES_DSN", ""))
+    order_path = os.getenv(
+        "ORDER_STORE_PATH", os.path.join("domains", settings.domain,
+                                         "seed", "unstructured", "orders.jsonl"))
+    catalog_path = os.getenv(
+        "CATALOG_STORE_PATH", os.path.join("domains", settings.domain,
+                                           "seed", "structured", "products.csv"))
     return {
         "embedder": embedder,
         "answer_cache": answer_cache,
@@ -90,4 +115,10 @@ def get_components() -> dict:
             settings.review_queue_db,
             verified_path=os.getenv("VERIFIED_PATH", "traces/verified_answers.jsonl")),
         "domain": settings.domain,
+        "conversation_store": conversation_store,
+        "order_store": make_order_store(os.getenv("ORDER_BACKEND", "json"),
+                                        json_path=order_path,
+                                        postgres_dsn=os.getenv("POSTGRES_DSN", "")),
+        "catalog_store": StructuredCatalogStore.from_csv(
+            catalog_path, knowledge_version=os.getenv("KNOWLEDGE_VERSION", "catalog-v1")),
     }

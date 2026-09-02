@@ -138,11 +138,15 @@ sources:
         target_label: Product
         target_name_property: name
     - file: seed/unstructured/company_knowledge.jsonl
-      doc_type: guide
+      doc_type: policy
       id_field: id
       text_field: text
       lang_field: lang
       meta_fields: [category]
+      metadata:
+        authority_level: 3
+        effective_at: "2026-01-01T00:00:00+08:00"
+        knowledge_version: "policy-2026-01"
     - file: seed/unstructured/catalog_facts.jsonl
       doc_type: guide
       id_field: id
@@ -173,12 +177,6 @@ sources:
       text_field: text
       lang_field: lang
       meta_fields: [category]
-    - file: seed/unstructured/orders.jsonl
-      doc_type: order
-      id_field: id
-      text_field: text
-      lang_field: lang
-      meta_fields: [email]
     - file: seed/unstructured/products.jsonl
       doc_type: product
       id_field: id
@@ -247,6 +245,56 @@ defaults:
   top_n_out: 8
   confidence_high: 0.7
   confidence_low: 0.4
+
+# Lane policies are executable retrieval and failure contracts, not prompt-only personas.
+lanes:
+  stylist:
+    allowed_sources: [catalog, guide, review, graph]
+    preferred_sources: [catalog, guide]
+    # Dense won the 2026-09-01 offline ablation for stylist MRR (0.375 vs 0.240).
+    # Relationship questions are the only measured stratum where Hybrid ranked better.
+    retrieval_mode: dense
+    retrieval_modes: { factual: dense, qualitative: dense, relational: hybrid }
+    top_k: 6
+    top_k_in: 50
+    min_confidence: 0.22
+    personalization: true
+    failure_action: clarify
+  care:
+    auth_required: true
+    required_slots: [identity]
+    allowed_sources: [order, policy]
+    preferred_sources: [order]
+    retrieval_mode: order_service
+    top_k: 8
+    top_k_in: 8
+    min_confidence: 0.05
+    failure_action: clarify
+  complaint:
+    allowed_sources: [order, policy, guide]
+    preferred_sources: [order, policy]
+    retrieval_mode: hybrid
+    top_k: 8
+    top_k_in: 50
+    min_confidence: 0.18
+    failure_action: escalate
+  answers:
+    allowed_sources: [catalog, policy, guide, graph, review]
+    preferred_sources: [policy, catalog]
+    retrieval_mode: dense
+    retrieval_modes: { factual: dense, qualitative: dense, relational: hybrid }
+    top_k: 6
+    top_k_in: 50
+    min_confidence: 0.22
+    failure_action: abstain
+  escalation:
+    allowed_sources: []
+    preferred_sources: []
+    retrieval_mode: none
+    top_k: 1
+    top_k_in: 1
+    min_confidence: 1.0
+    failure_action: escalate
 
 # 聊天界面的初始推荐问题。
 suggestions:

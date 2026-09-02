@@ -238,3 +238,31 @@ def test_bare_followup_inherits_the_prior_care_lane(monkeypatch):
     list(omni.stream_omni("when will it get here", embedder=None, store=None, llm=None,
                           history=history))
     assert rec.calls[-1]["lane"] == "care"
+
+
+def test_short_answers_followup_does_not_spend_a_second_classifier_call(monkeypatch):
+    rec = _Recorder()
+    monkeypatch.setattr(omni, "stream_answer", rec)
+
+    class AnswersClassifier:
+        def __init__(self):
+            self.calls = 0
+
+        def generate(self, *args, **kwargs):
+            self.calls += 1
+
+            class Result:
+                text = '{"lane": "answers", "confidence": 0.9}'
+
+            return Result()
+
+    classifier = AnswersClassifier()
+    history = [
+        {"role": "user", "content": "Nike Air Zoom Pegasus 40多少钱？"},
+        {"role": "assistant", "content": "899元。"},
+    ]
+    list(omni.stream_omni("退换货政策呢？", embedder=None, store=None, llm=None,
+                          small_llm=classifier, history=history))
+
+    assert classifier.calls == 1
+    assert rec.calls[-1]["lane"] == "answers"

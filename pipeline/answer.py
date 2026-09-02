@@ -22,6 +22,7 @@ from functools import lru_cache
 from adapters.base import Embedder, HybridStore, LLMClient, Reranker
 from data.metrics import MetricResolver
 from pipeline.sanitize import sanitize_context
+from pipeline.text import estimate_tokens
 from retrieval.graph import GraphRetriever
 from retrieval.metric_router import metric_context, route_metric
 from retrieval.sparse import SparseEncoder, tokenize
@@ -79,6 +80,8 @@ _SYSTEM_TMPL = (
     "You are {assistant}, {brand}'s warm, friendly, and supportive shopping assistant for "
     "{industry}, in the style of a great customer-service rep. "
     "Answer only using the numbered context below, and cite the sources you use like [1] or [2]. "
+    "Every factual sentence, including an opening or summary sentence, must end with its own "
+    "citation; only greetings and questions may be uncited. "
     "Keep it short and scannable, and NEVER write a wall of text: for any answer with more than "
     "one point, option, product, or step, lay it out as a short bulleted or numbered list, one "
     "item per line. When you recommend more than one product, ALWAYS use a short bulleted list, "
@@ -186,6 +189,8 @@ _AGENT_SYSTEM_TMPL = (
     "person, an AI, a bot, or automated, be honest and friendly that you are {brand}'s virtual "
     "specialist, then keep helping; do not claim to be human. "
     "Answer only using the numbered context below, and cite the sources you use like [1] or [2]. "
+    "Every factual sentence, including an opening or summary sentence, must end with its own "
+    "citation; only greetings and questions may be uncited. "
     "Be warm and concise: a sentence or two in the first person. "
     "When you list more than one product, use a short bulleted list with a one-line reason each, "
     "so it is easy to scan; do not paste links, the shopper sees product cards under your message. "
@@ -249,6 +254,18 @@ def _smalltalk(query: str, persona: str | None = None, domain: str | None = None
     """Greetings and 'who are you' should feel human, not abstain. Handle them conversationally
     before retrieval so the assistant always answers a hello. When persona is 'agent', the human
     specialist answers in their own voice instead of the assistant's."""
+    raw = query or ""
+    if (re.search(r"(忽略|无视|跳过|忘掉|忘记).{0,12}(之前|上面|所有|原来).{0,8}"
+                  r"(指令|规则|提示词|系统消息)", raw)
+            or re.search(r"(输出|打印|显示|告诉我|泄露|复述).{0,12}"
+                         r"(系统提示词|系统指令|开发者消息|内部规则)", raw)
+            or re.search(r"(你现在是|从现在开始扮演|假装你是).{0,10}"
+                         r"(管理员|系统|开发者)", raw)):
+        return "我不能展示或更改内部设置，但可以继续帮您处理商品、订单或售后问题。"
+    if (re.search(r"(列出|展示|显示|告诉我|给我|导出).{0,12}"
+                  r"(客户|用户|买家|会员).{0,8}(名单|姓名|邮箱|订单|购买记录)", raw)
+            or re.search(r"谁.{0,8}(买了|下单|购买).{0,12}(商品|这款|这个)", raw)):
+        return "我会保护所有用户的隐私，不能提供客户名单、联系方式或他人的购买记录。"
     q = re.sub(r"\s+", " ", re.sub(r"[^a-z' ]", " ", query.lower())).strip()
     if not q:
         return None
@@ -538,7 +555,7 @@ def _cited_numbers(text: str) -> set[int]:
             if part.isdigit():
                 nums.add(int(part))
     return nums
-_SENTENCE = re.compile(r"[^.!?]+[.!?]?")
+_SENTENCE = re.compile(r"[^.!?。！？]+[.!?。！？]?")
 
 DEFAULT_MIN_CONFIDENCE = 0.22  # abstain only on very thin overlap; the reranked context and the
 # model's own grounding do the rest. Kept low so a reworded question ("indoor rock climbing" vs
@@ -707,6 +724,18 @@ def should_abstain(query: str, contexts: list[dict],
     # probe term and require it to appear in context, otherwise abstain.
     if _zh_absence_probe(query, contexts):
         return True, confidence
+    if _zh_supported_probe(query, contexts):
+        return False, confidence
+
+    # Official policy/catalog evidence can answer short paraphrases whose lexical overlap lands
+    # just below the generic threshold. The absence probe above still fails closed for genuinely
+    # unsupported variants.
+    authoritative = any(
+        int((context.get("metadata") or {}).get("authority_level") or 0) >= 3
+        for context in contexts
+    )
+    if authoritative and confidence >= 0.15:
+        return False, confidence
 
     return confidence < min_confidence, confidence
 
@@ -724,6 +753,7 @@ _ZH_ABSENCE_PATTERNS = [
     re.compile(r"提供(.{2,8}?)(?:吗|么)[？?]?$"),
     re.compile(r"支持(.{2,8}?)(?:吗|么)[？?]?$"),
     re.compile(r"你们(?:有|提供|支持)(?!哪些|什么)(.{2,8}?)(?:吗|么)[？?]?$"),
+    re.compile(r"你们(?:卖|出售|有卖)(.{2,20}?)(?:吗|么)[？?]?$"),
 ]
 
 
@@ -732,6 +762,19 @@ _ZH_PROBE_GENERIC = {
     "加长版", "儿童尺码", "宠物", "学生折扣", "换底", "修鞋", "定制",
     "分期", "包邮", "退换", "退货", "换货", "折扣", "优惠",
 }
+
+_ZH_PROBE_EQUIVALENTS = (
+    (("香港", "澳门", "台湾"), ("港澳台",)),
+    (("刷信用卡",), ("信用卡", "Visa", "Mastercard", "JCB")),
+    (("换码",), ("更换尺码", "更换的尺码", "选择需要更换的尺码")),
+)
+
+
+def _zh_supported_probe(query: str, contexts: list[dict]) -> bool:
+    blob = "\n".join(context["text"] for context in contexts)
+    return any(any(cue in query for cue in cues)
+               and any(evidence in blob for evidence in evidence_terms)
+               for cues, evidence_terms in _ZH_PROBE_EQUIVALENTS)
 
 
 def _zh_absence_probe(query: str, contexts: list[dict]) -> bool:
@@ -755,6 +798,10 @@ def _zh_absence_probe(query: str, contexts: list[dict]) -> bool:
             continue
         # Build the full context blob for substring search.
         blob = "\n".join(c["text"] for c in contexts)
+        if any(any(cue in term for cue in cues)
+               and any(evidence in blob for evidence in evidence_terms)
+               for cues, evidence_terms in _ZH_PROBE_EQUIVALENTS):
+            return False
         # The full probe term must appear as a contiguous substring; if it
         # does not, the requested variant / option / service is unavailable.
         if term not in blob:
@@ -771,11 +818,8 @@ def _is_brand_or_product_token(term: str) -> bool:
 
 
 def _sentences(text: str) -> list[str]:
-    # Split on newlines first (bulleted answers), then on sentence punctuation.
-    out = []
-    for line in text.splitlines():
-        out.extend(s.strip() for s in _SENTENCE.findall(line) if s.strip())
-    return out
+    from pipeline.text import sentence_split
+    return sentence_split(text)
 
 
 def grounding_score(answer: str, contexts: list[dict]) -> float:
@@ -789,9 +833,11 @@ def grounding_score(answer: str, contexts: list[dict]) -> float:
     if not contexts:
         return 0.0
     by_n = {c["n"]: set(_content_tokens(c["text"])) for c in contexts}
-    sentences = _sentences(answer)
+    from pipeline.text import is_evidence_claim
+    sentences = [sentence for sentence in _sentences(answer)
+                 if is_evidence_claim(sentence)]
     if not sentences:
-        return 0.0
+        return 1.0
     grounded = 0
     for s in sentences:
         cited = _cited_numbers(s) & set(by_n)
@@ -825,7 +871,8 @@ def _followup_query(query: str, history: list[dict] | None) -> str:
     """For a short follow-up ('which is cheaper', a name given after an email) prepend the last few
     shopper turns, so retrieval still finds the subject and multi-turn account intent ('where is my
     order' ... 'info@x.com' ... 'Jordan Avery') carries through instead of abstaining."""
-    if history and len(query.split()) <= 6:
+    from pipeline.text import is_contextual_followup
+    if history and is_contextual_followup(query):
         prior = [t["content"].strip() for t in history
                  if t.get("role") == "user" and (t.get("content") or "").strip()]
         # also carry the last assistant turn (truncated), so a product it just recommended stays in
@@ -1470,7 +1517,11 @@ def _query_lang(query: str) -> str | None:
 def retrieve(query: str, embedder: Embedder, store: HybridStore, top_k: int = 8,
              reranker: Reranker | None = None, top_k_in: int = 50,
              dense_only: bool = False, auth_text: str | None = None, gender=_GENDER_UNSET,
-             rerank_skip_out: dict | None = None, lang: str | None = None) -> list[dict]:
+             rerank_skip_out: dict | None = None, lang: str | None = None,
+             retrieval_mode: str = "hybrid",
+             allowed_doc_types: tuple[str, ...] | None = None,
+             entity_product_ids: set[str] | None = None, budget=None,
+             allow_sparse_fallback: bool = True) -> list[dict]:
     """Hybrid retrieval used by both the answer pipeline and the eval harness.
 
     With a reranker, fetch a wider pool (top_k_in) then rerank down to top_k; the hit score
@@ -1492,13 +1543,41 @@ def retrieve(query: str, embedder: Embedder, store: HybridStore, top_k: int = 8,
     sparse_only = False
     try:
         dense_q = embedder.embed([query], input_type="query")[0]
+        if budget is not None:
+            budget.charge_operation("embedding", tokens=estimate_tokens(query))
     except Exception as exc:
+        if not allow_sparse_fallback:
+            raise RuntimeError("formal retrieval requires dense embedding") from exc
         _log.warning("dense embedder unavailable, falling back to sparse-only retrieval: %s", exc)
         sparse_only = True
-    fetch = top_k_in if reranker is not None else top_k
+    if retrieval_mode == "dense":
+        dense_only = True
+    sparse_only = sparse_only or retrieval_mode == "sparse"
+    # Source filtering is an OR over doc types. Backends expose exact-match filters, so request a
+    # wider candidate pool and enforce the allowlist before reranking and prompt construction.
+    fetch = top_k_in if (reranker is not None or allowed_doc_types) else top_k
     hits = store.hybrid_search(
         dense_q, {"indices": sparse_q.indices, "values": sparse_q.values}, top_k=fetch,
         dense_only=dense_only, sparse_only=sparse_only)
+    if allowed_doc_types:
+        allowed = set(allowed_doc_types)
+        hits = [h for h in hits if (h.get("payload") or {}).get("doc_type") in allowed]
+    if entity_product_ids:
+        hits = [h for h in hits
+                if not (h.get("payload") or {}).get("product_id")
+                or str((h.get("payload") or {}).get("product_id")) in entity_product_ids]
+        # Once an explicit product entity is known, lexical evidence terms become safe tie-breaks:
+        # "偏窄 / 大半码" should outrank generic praise about the same shoe. This is not a global
+        # sparse fusion; unrelated products were already removed by the hard entity constraint.
+        from pipeline.text import lexical_units
+        query_units = set(lexical_units(query))
+        ranked = []
+        for original_rank, hit in enumerate(hits):
+            text_units = set(lexical_units((hit.get("payload") or {}).get("text") or ""))
+            lexical_score = len(query_units & text_units) / max(len(query_units), 1)
+            ranked.append((lexical_score, float(hit.get("score") or 0.0), -original_rank, hit))
+        ranked.sort(key=lambda row: row[:3], reverse=True)
+        hits = [row[3] for row in ranked]
     auth = auth_text if auth_text is not None else query
     if not _account_intent(query):
         hits = [h for h in hits if (h.get("payload") or {}).get("doc_type") != "order"]
@@ -1530,6 +1609,8 @@ def retrieve(query: str, embedder: Embedder, store: HybridStore, top_k: int = 8,
     # reranker sharpens precision; without it retrieval is coarser but still relevant.
     try:
         ranked = reranker.rerank(query, texts, top_n=min(top_k, len(hits)))
+        if budget is not None:
+            budget.charge_operation("rerank", tokens=sum(estimate_tokens(t) for t in texts))
     except Exception as exc:
         _log.warning("reranker unavailable, returning hybrid order: %s", exc)
         return hits[:top_k]
@@ -1605,6 +1686,9 @@ def build_contexts(hits: list[dict]) -> list[dict]:
             "score": h.get("score", 0.0),
             "doc_type": payload.get("doc_type"),
             "source": payload.get("source"),
+            "rerank_score": h.get("rerank_score"),
+            "metadata": {k: v for k, v in payload.items()
+                         if k not in ("text", "chunk_id")},
         })
     return contexts
 
@@ -1620,11 +1704,52 @@ def answer_question(query: str, *, embedder: Embedder, store: HybridStore, llm: 
                     graph_retriever: GraphRetriever | None = None,
                     top_k: int = 8, top_k_in: int = 50,
                     min_confidence: float = DEFAULT_MIN_CONFIDENCE, lang: str | None = None,
-                    trace_path: str = DEFAULT_TRACE_PATH) -> AnswerResult:
+                    trace_path: str = DEFAULT_TRACE_PATH, retrieval_plan=None,
+                    catalog_store=None, allow_retrieval_fallback: bool = True) -> AnswerResult:
     started = time.perf_counter()
     from adapters.config import get_settings
     domain = get_settings().domain
-    hits = retrieve(query, embedder, store, top_k, reranker=reranker, top_k_in=top_k_in, lang=lang)
+    if retrieval_plan is not None:
+        from rag.policies import allowed_doc_types
+        top_k = retrieval_plan.top_k
+        top_k_in = retrieval_plan.top_k_in
+        min_confidence = retrieval_plan.min_confidence
+        retrieval_mode = retrieval_plan.mode
+        allowed = allowed_doc_types(retrieval_plan)
+    else:
+        retrieval_mode, allowed = "hybrid", None
+    from pipeline.text import expand_retrieval_query
+    entity_ids = (catalog_store.resolve_product_ids(query) if catalog_store is not None else set())
+    structured_query = bool(catalog_store is not None
+                            and catalog_store.requires_structured_lookup(query))
+    retrieval_query = (expand_retrieval_query(
+        query, query_type=(retrieval_plan.query_type if retrieval_plan else "factual"))
+        if entity_ids else query)
+    hits = retrieve(retrieval_query, embedder, store, top_k, reranker=reranker, top_k_in=top_k_in,
+                    lang=lang, retrieval_mode=retrieval_mode, allowed_doc_types=allowed,
+                    entity_product_ids=entity_ids,
+                    allow_sparse_fallback=allow_retrieval_fallback)
+    # A structured product card is authoritative for price, stock and specifications, but its
+    # rendered text does not state supplier/store relationships. Injecting it into relational
+    # questions consumes a high-ranked context slot without supporting the answer, lowering
+    # precision and sometimes pushing the actual relationship evidence down the prompt.
+    use_structured_catalog = (
+        retrieval_plan is None or retrieval_plan.query_type != "relational"
+    )
+    if (catalog_store is not None and (entity_ids or structured_query) and use_structured_catalog
+            and (retrieval_plan is None or "catalog" in retrieval_plan.allowed_sources)):
+        structured = catalog_store.as_hits(retrieval_query, limit=top_k,
+                                           product_ids=entity_ids or None)
+        seen: set[str] = set()
+        combined = structured + hits
+        hits = []
+        for hit in combined:
+            hit_id = str(hit.get("id"))
+            if hit_id not in seen:
+                seen.add(hit_id)
+                hits.append(hit)
+            if len(hits) >= top_k:
+                break
     # Gate on the vector evidence alone, before injecting authoritative blocks, so a graph or
     # metric block can never inflate the confidence it is about to override.
     abstained, confidence = should_abstain(query, build_contexts(hits), min_confidence)
@@ -1644,6 +1769,11 @@ def answer_question(query: str, *, embedder: Embedder, store: HybridStore, llm: 
         "graph": has_graph,
         "retrieved": [{"id": c["id"], "score": c["score"]} for c in contexts],
         "confidence": round(confidence, 3),
+        "retrieval_plan": ({"mode": retrieval_plan.mode,
+                            "query_type": retrieval_plan.query_type,
+                            "allowed_sources": list(retrieval_plan.allowed_sources),
+                            "reason": retrieval_plan.reason}
+                           if retrieval_plan else None),
     }
 
     if abstained:
@@ -1693,7 +1823,9 @@ def stream_answer(query: str, *, embedder: Embedder, store: HybridStore, llm: LL
                   history: list[dict] | None = None, concise: bool = False,
                   auth_identity: tuple[str, str] | None = None, notes: str | None = None,
                   role_fragment: str = "", lane: str | None = None,
-                  block_order_pii: bool = False):
+                  block_order_pii: bool = False, retrieval_plan=None, order_store=None,
+                  user_scope: str | None = None, tenant_scope: str = "default",
+                  catalog_store=None):
     """Stream an answer as events for the API. Yields {"type": "token", "text": ...} chunks,
     then one {"type": "final", ...} with the answer, tier, confidence, grounding, citations,
     and message_id. The caller may pass message_id so a degraded fallback can reuse it.
@@ -1759,15 +1891,96 @@ def stream_answer(query: str, *, embedder: Embedder, store: HybridStore, llm: LL
         # append up to five prior product names to anchor retrieval; a truncated pin is fine
         retrieval_q = (rquery + " " + " ".join(pinned[:5])).strip()[:400]
     rerank_skip: dict = {}
-    hits = retrieve(retrieval_q, embedder, store, top_k, reranker=reranker, top_k_in=top_k_in,
-                    auth_text=auth_text, gender=sticky_gender, rerank_skip_out=rerank_skip,
-                    lang=lang)
+    budget = getattr(llm, "budget", None)
+    if retrieval_plan is not None:
+        from rag.policies import allowed_doc_types
+        top_k = retrieval_plan.top_k
+        top_k_in = retrieval_plan.top_k_in
+        min_confidence = retrieval_plan.min_confidence
+        mode = retrieval_plan.mode
+        allowed = allowed_doc_types(retrieval_plan)
+    else:
+        mode, allowed = "hybrid", None
+    if mode == "order_service" and order_store is not None:
+        from data.orders import order_id_from_query
+        records = (order_store.find(user_id=user_scope, tenant_id=tenant_scope,
+                                    order_id=order_id_from_query(retrieval_q), limit=top_k)
+                   if order_store is not None and user_scope else [])
+        if budget is not None:
+            budget.charge_operation("order_service")
+        hits = [{"id": r.order_id, "score": 1.0,
+                 "payload": {"chunk_id": r.order_id, "doc_type": "order",
+                             "source": "order_service", "text": r.fields.get("text") or
+                             "Order {} status: {}".format(r.order_id, r.status),
+                             "structured_fields": {**r.fields, "order_id": r.order_id,
+                                                   "status": r.status},
+                             "user_scope": r.user_id, "tenant_scope": r.tenant_id,
+                             "authority_level": 3}}
+                for r in records]
+    else:
+        if mode == "order_service":
+            mode = "hybrid"  # compatibility fallback for offline callers without the adapter
+        vector_allowed = allowed
+        if retrieval_plan is not None and order_store is not None and vector_allowed:
+            # Even if a legacy collection still contains order chunks,
+            # they are never accepted from the public vector boundary.
+            vector_allowed = tuple(doc for doc in vector_allowed if doc != "order")
+        from pipeline.text import expand_retrieval_query
+        entity_ids = (catalog_store.resolve_product_ids(retrieval_q)
+                      if catalog_store is not None else set())
+        structured_query = bool(catalog_store is not None
+                                and catalog_store.requires_structured_lookup(retrieval_q))
+        planned_query = (expand_retrieval_query(
+            retrieval_q, query_type=(retrieval_plan.query_type if retrieval_plan else "factual"))
+            if entity_ids else retrieval_q)
+        hits = retrieve(planned_query, embedder, store, top_k, reranker=reranker,
+                        top_k_in=top_k_in,
+                        auth_text=auth_text, gender=sticky_gender, rerank_skip_out=rerank_skip,
+                        lang=lang, retrieval_mode=mode, allowed_doc_types=vector_allowed,
+                        entity_product_ids=entity_ids, budget=budget)
+        if (order_store is not None and user_scope and retrieval_plan is not None
+                and "order" in retrieval_plan.allowed_sources):
+            from data.orders import order_id_from_query
+            private_records = order_store.find(user_id=user_scope, tenant_id=tenant_scope,
+                                               order_id=order_id_from_query(retrieval_q),
+                                               limit=top_k)
+            private_hits = [{"id": r.order_id, "score": 1.0,
+                             "payload": {"chunk_id": r.order_id, "doc_type": "order",
+                                         "source": "order_service",
+                                         "text": r.fields.get("text") or
+                                         "Order {} status: {}".format(r.order_id, r.status),
+                                         "structured_fields": {
+                                             **r.fields, "order_id": r.order_id,
+                                             "status": r.status},
+                                         "user_scope": r.user_id,
+                                         "tenant_scope": r.tenant_id,
+                                         "authority_level": 3}}
+                            for r in private_records]
+            hits = (private_hits + hits)[:top_k]
+        use_structured_catalog = (
+            retrieval_plan is None or retrieval_plan.query_type != "relational"
+        )
+        if (catalog_store is not None and (entity_ids or structured_query)
+                and use_structured_catalog
+                and (retrieval_plan is None or "catalog" in retrieval_plan.allowed_sources)):
+            structured = catalog_store.as_hits(planned_query, limit=top_k,
+                                               product_ids=entity_ids or None)
+            # Authoritative catalog facts lead; duplicate variant ids are removed downstream by
+            # the evidence assembler while document reviews remain available for qualitative use.
+            hits = (structured + hits)[:top_k]
     abstained, confidence = should_abstain(rquery, build_contexts(hits), min_confidence)
     # use the expanded query for graph/metric evidence too, so "what about size M?" can still
     # slot-fill a governed stock metric with the product from the prior turn
     contexts, has_graph, graph_auth = with_graph_evidence(
         rquery, build_contexts(hits), graph_retriever)
     contexts, has_metric = with_metric_evidence(rquery, contexts, llm, metric_resolver)
+    from rag.evidence import assemble_evidence, detect_conflicts
+    evidence = assemble_evidence(
+        contexts, allowed_sources=(retrieval_plan.allowed_sources if retrieval_plan else ()),
+        user_scope=user_scope, tenant_scope=tenant_scope)
+    evidence_conflicts = detect_conflicts(evidence)
+    if evidence_conflicts:
+        abstained = True
     if has_metric or graph_auth:
         abstained = False  # a governed metric or a query-named graph fact is authoritative
     # A complaint ("my jacket ripped") often also trips _shopping_intent, so only un-abstain into a
@@ -1801,6 +2014,13 @@ def stream_answer(query: str, *, embedder: Embedder, store: HybridStore, llm: LL
         "lane": lane,  # the omni lane that produced this turn (None on the linear path)
         "retrieved": [{"id": c["id"], "score": c["score"]} for c in contexts],
         "confidence": round(confidence, 3),
+        "retrieval_plan": ({"mode": retrieval_plan.mode,
+                            "allowed_sources": list(retrieval_plan.allowed_sources),
+                            "top_k": retrieval_plan.top_k,
+                            "reason": retrieval_plan.reason}
+                           if retrieval_plan else None),
+        "evidence_count": len(evidence),
+        "evidence_conflicts": list(evidence_conflicts),
     }
 
     if abstained:
@@ -1810,7 +2030,12 @@ def stream_answer(query: str, *, embedder: Embedder, store: HybridStore, llm: LL
         # "下单都快一个星期了，之前说三天内发" is venting about a delay, not asking a
         # policy question).
         is_problem = _problem_intent(rquery) or lane == "complaint"
-        if is_problem:  # a complaint/billing/order problem, not a product miss
+        if evidence_conflicts:
+            abstain_msg = ("检索到的权威数据存在冲突，我暂时不直接给出结论。请确认您要查询的"
+                           "商品或订单，我会重新核对最新数据。" if is_zh else
+                           "The authoritative sources conflict, so I won't guess. Please confirm "
+                           "the product or order and I'll verify the latest record.")
+        elif is_problem:  # a complaint/billing/order problem, not a product miss
             if auth_identity and auth_identity[0]:  # signed in: never ask them to re-verify
                 abstain_msg = _problem_abstain_verified(
                     auth_identity[0].split(" ")[0], persona == "agent", zh=is_zh)
@@ -1827,9 +2052,14 @@ def stream_answer(query: str, *, embedder: Embedder, store: HybridStore, llm: LL
                      latency_ms=round((time.perf_counter() - started) * 1000, 1))
         write_trace(trace, trace_path)
         yield {"type": "token", "text": abstain_msg}
+        action = ("clarify" if evidence_conflicts or lane == "care" else
+                  "escalate" if is_problem else "abstain")
         yield {"type": "final", "message_id": message_id, "answer": abstain_msg,
                "tier": "abstain", "confidence": round(confidence, 3), "grounding": 0.0,
-               "citations": []}
+               "citations": [], "lane": lane or "answers", "action": action,
+               "clarification": ({"reason": "evidence_conflict" if evidence_conflicts
+                                                  else "missing_evidence"}
+                                  if action == "clarify" else None)}
         return
 
     contexts = _redact_contexts_by_gender(contexts, sticky_gender, domain)
@@ -1859,6 +2089,8 @@ def stream_answer(query: str, *, embedder: Embedder, store: HybridStore, llm: LL
         yield {"type": "token", "text": piece}
     answer = "".join(parts)
     grounding = grounding_score(answer, contexts)
+    from rag.evidence import validate_answer
+    validation = validate_answer(answer, evidence)
     citations = [{"n": c["n"], "id": c["id"], "source": c["source"], "doc_type": c["doc_type"]}
                  for c in _used_citations(answer, contexts)]
     # measured token usage + cost from the streamed call (Groq stream_options.include_usage), so the
@@ -1881,6 +2113,9 @@ def stream_answer(query: str, *, embedder: Embedder, store: HybridStore, llm: LL
         cost_by_tier=({answer_tier: answer_cost}
                       if answer_cost is not None and answer_tier else {}),
         rerank_skipped=rerank_skip.get("reason"),  # None when rerank ran; the reason when skipped
+        citation_coverage=round(validation.citation_coverage, 3),
+        unsupported_claims=len(validation.unsupported_claims),
+        evidence_conflicts=list(validation.conflicts),
         latency_ms=round((time.perf_counter() - started) * 1000, 1),
     )
     # Persist the per-turn budget snapshot when the caller wrapped the LLM in a BudgetedLLM (the
@@ -1894,4 +2129,7 @@ def stream_answer(query: str, *, embedder: Embedder, store: HybridStore, llm: LL
     _maybe_enqueue_faithfulness(message_id, rquery, answer, contexts, round(grounding, 3))
     yield {"type": "final", "message_id": message_id, "answer": answer, "tier": "auto",
            "confidence": round(confidence, 3), "grounding": round(grounding, 3),
-           "citations": citations}
+           "citations": citations, "lane": lane or "answers", "action": "answer",
+           "validation": {"valid": validation.valid,
+                          "citation_coverage": round(validation.citation_coverage, 3),
+                          "conflicts": list(validation.conflicts)}}

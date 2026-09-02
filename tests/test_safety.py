@@ -20,9 +20,30 @@ from pipeline.answer import (
     _smalltalk,
     answer_question,
     retrieve,
+    should_abstain,
 )
 from pipeline.sanitize import sanitize_context
 from retrieval.sparse import SparseEncoder
+
+
+def test_chinese_capability_probe_understands_policy_paraphrases_and_catalog_gaps():
+    def policy(text):
+        return [{"text": text, "metadata": {"authority_level": 3}}]
+    assert not should_abstain(
+        "能把商品寄到香港吗？",
+        policy("目前仅配送中国大陆地区，暂不支持港澳台及海外。"),
+    )[0]
+    assert not should_abstain(
+        "新鞋在室外试穿过以后还能换码吗？",
+        policy("鞋类请在室内试穿，可选择需要更换的尺码。"),
+    )[0]
+    assert not should_abstain(
+        "除了支付宝和微信，还能刷信用卡吗？",
+        policy("支持支付宝、微信支付和信用卡Visa/Mastercard/JCB。"),
+    )[0]
+    product_context = [{"text": "成人冬季运动外套，保暖防风。",
+                        "metadata": {"authority_level": 3}}]
+    assert should_abstain("你们卖适合小狗冬天穿的运动外套吗？", product_context)[0]
 
 # --- 1. Prompt injection: retrieved content is data, never instructions --------------------------
 
@@ -129,6 +150,15 @@ def test_multi_turn_verification_carries_account_intent():
     ]
     expanded = _followup_query("Zhang Wei", history)
     assert _account_intent(expanded) is True
+
+
+def test_complete_policy_question_is_not_polluted_by_previous_product_turn():
+    history = [
+        {"role": "user", "content": "Nike Air Zoom Pegasus 40多少钱？"},
+        {"role": "assistant", "content": "899元。"},
+    ]
+    query = "退换货政策是什么？"
+    assert _followup_query(query, history) == query
 
 
 # --- 4. Order-PII DISCLOSURE gate: intent surfacing an order doc is not enough; the shopper must

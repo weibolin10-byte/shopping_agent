@@ -39,16 +39,22 @@ _QUALITATIVE_CUES = {"say", "says", "said", "think", "review", "reviews", "opini
                      "true", "fit", "fits", "runs",
                      "offer", "offers", "include", "includes", "feature", "features", "comprend"}
 
+_ZH_METRIC_CUES = ("平均", "均值", "中位数", "占比", "比例", "总销量", "销售总额", "退货率")
+_ZH_RELATIONAL_CUES = ("供应商", "谁供应", "谁生产", "谁制造", "哪个供应商", "门店", "在哪卖",
+                       "哪里有店", "属于哪", "关联")
+_ZH_QUALITATIVE_CUES = ("怎么样", "哪个好", "哪款好", "偏码", "为什么", "推荐", "怎么选", "区别",
+                        "差别", "适合", "舒服", "质量", "值得", "穿着", "体验")
+
 
 def heuristic_route(query: str) -> str:
     token_set = set(tokenize(query))
     # "rate"/"total"/"count" mean a metric unless they are an attribute name like "rate limit"
     metric = bool(token_set & _METRIC_WORDS) or ("rate" in token_set and "limit" not in token_set)
-    if metric:
+    if metric or any(cue in query for cue in _ZH_METRIC_CUES):
         return "metric"
-    if token_set & _RELATIONAL_CUES:
+    if token_set & _RELATIONAL_CUES or any(cue in query for cue in _ZH_RELATIONAL_CUES):
         return "relational"
-    if token_set & _QUALITATIVE_CUES:
+    if token_set & _QUALITATIVE_CUES or any(cue in query for cue in _ZH_QUALITATIVE_CUES):
         return "qualitative"
     return "factual"
 

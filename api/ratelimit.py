@@ -2,6 +2,7 @@
 swap for Redis behind the same interface at scale."""
 from __future__ import annotations
 
+import os
 import time
 
 _UNITS = {"second": 1.0, "minute": 60.0, "hour": 3600.0}
@@ -45,3 +46,38 @@ class RateLimiter:
             return False
         self._buckets[key] = (tokens - 1.0, now)
         return True
+
+
+class RedisRateLimiter:
+    """Shared fixed-window limiter using one atomic Redis script."""
+    _ALLOW = """
+local n = redis.call('INCR', KEYS[1])
+if n == 1 then redis.call('EXPIRE', KEYS[1], tonumber(ARGV[1])) end
+if n > tonumber(ARGV[2]) then return 0 else return 1 end
+"""
+
+    def __init__(self, client, spec: str, *, namespace: str = "shopping:rate") -> None:
+        self.capacity, self.window = parse_rate(spec)
+        self.client = client
+        self.namespace = namespace
+
+    def allow(self, key: str, now: float | None = None) -> bool:
+        timestamp = time.time() if now is None else now
+        bucket = int(timestamp // self.window) if self.window else int(timestamp)
+        redis_key = f"{self.namespace}:{key}:{bucket}"
+        return bool(self.client.eval(self._ALLOW, 1, redis_key, int(self.window) + 1,
+                                     self.capacity))
+
+
+def make_rate_limiter(spec: str, *, namespace: str = "shopping:rate"):
+    backend = os.getenv("RATE_LIMIT_BACKEND", "memory").strip().lower()
+    if backend == "memory":
+        return RateLimiter(spec)
+    if backend == "redis":
+        try:
+            import redis
+        except ImportError as exc:
+            raise RuntimeError("RATE_LIMIT_BACKEND=redis requires the production extra") from exc
+        client = redis.Redis.from_url(os.getenv("REDIS_URL", "redis://localhost:6379/0"))
+        return RedisRateLimiter(client, spec, namespace=namespace)
+    raise ValueError(f"unknown rate-limit backend: {backend}")

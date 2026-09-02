@@ -177,10 +177,14 @@ def evaluate_ragas(items: list[dict], judge, embedder=None) -> dict:
     overall: dict = defaultdict(list)
     by_language: dict[str, dict] = defaultdict(lambda: defaultdict(list))
     by_difficulty: dict[str, dict] = defaultdict(lambda: defaultdict(list))
+    item_scores: list[dict] = []
     for item in items:
         lang = item.get("lang") or "unknown"
         difficulty = item.get("difficulty") or "untagged"
-        for metric, score in ragas_scores(item, judge, embedder).items():
+        scores = ragas_scores(item, judge, embedder)
+        item_scores.append({"id": item.get("id"), "question": item.get("question"),
+                            "scores": scores})
+        for metric, score in scores.items():
             if score is not None:
                 overall[metric].append(score)
                 by_language[lang][metric].append(score)
@@ -190,5 +194,7 @@ def evaluate_ragas(items: list[dict], judge, embedder=None) -> dict:
         return {metric: round(mean(values), 3) for metric, values in b.items() if values}
 
     return {"count": len(items), "overall": finalize(overall),
+            "valid_counts": {metric: len(values) for metric, values in overall.items()},
+            "item_scores": item_scores,
             "by_language": {lang: finalize(b) for lang, b in sorted(by_language.items())},
             "by_difficulty": {d: finalize(b) for d, b in sorted(by_difficulty.items())}}
